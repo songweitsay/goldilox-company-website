@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goldilox - Automated Snowflake Performance Optimization</title>
+    <meta name="description" content="Optimize workloads, reduce spend, and never worry about tuning again with Goldilox KeyPilot for Snowflake.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#faqs">FAQs</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Automated Snowflake Performance Optimization</h1>
+            <p class="hero-subtitle">Optimize workloads, reduce spend, and never worry about tuning again</p>
+            <a href="#products" class="btn btn-primary">Learn more</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <div class="product-header">
+                <span class="product-badge">KeyPilot</span>
+                <h2>Steer your Snowflake performance with just-right clustering keys</h2>
+                <p>KeyPilot is your intelligent assistant that examines query patterns and recommends optimal clustering keys to enhance query speed and lower compute expenses. Our platform monitors evolving workloads and provides actionable insights, allowing your team to maintain control while making data-backed decisions.</p>
+            </div>
+
+            <div class="product-features-wrapper">
+                <!-- Product Feature 1 -->
+                <div class="product-feature">
+                    <div class="product-feature-content">
+                        <h3>Quick Insights into Data Efficiency</h3>
+                        <p>Unlock instant visibility into how efficiently your Snowflake queries are pruning partitions. Our platform continuously monitors and surfaces actionable insights — helping you optimize performance, reduce costs, and maximize the impact of every scan.</p>
+                        <ul class="feature-list">
+                            <li>Track partition pruning coverage and efficiency</li>
+                            <li>Boost query performance with data-driven insights</li>
+                        </ul>
+                        <p>Experience a smarter, faster way to manage your Snowflake workloads.</p>
+                    </div>
+                    <div class="product-feature-image">
+                        <img src="screenshot-overview-1.png" alt="Partition Pruning Efficiency Dashboard">
+                    </div>
+                </div>
+
+                <!-- Product Feature 2 -->
+                <div class="product-feature reverse">
+                    <div class="product-feature-content">
+                        <h3>Identify optimization opportunities across all tables</h3>
+                        <p>Pinpoint underperforming tables with low partition pruning efficiency. Our analysis highlights which tables are causing excessive scans, helping you prioritize optimization efforts where they matter most.</p>
+                        <ul class="feature-list">
+                            <li>Surface tables with poor pruning performance</li>
+                            <li>Prioritize high-impact optimization targets</li>
+                        </ul>
+                    </div>
+                    <div class="product-feature-image">
+                        <img src="screenshot-overview-2.png" alt="Table Optimization Analysis">
+                    </div>
+                </div>
+
+                <!-- Product Feature 3 -->
+                <div class="product-feature">
+                    <div class="product-feature-content">
+                        <h3>Intelligent Clustering Key Recommendations</h3>
+                        <p>Get AI-powered recommendations for optimal clustering keys based on your actual query patterns. KeyPilot analyzes how your data is accessed and suggests the most effective clustering strategy.</p>
+                        <ul class="feature-list">
+                            <li>Data-driven clustering key suggestions</li>
+                            <li>Recommendations based on real query patterns</li>
+                            <li>Easy-to-implement optimization strategies</li>
+                        </ul>
+                    </div>
+                    <div class="product-feature-image">
+                        <img src="screenshot-recommendation.png" alt="Clustering Key Recommendations">
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>Telemetry-Driven Insights</h3>
+                    <p>Leverage deep query telemetry to understand exactly how your data is being accessed and optimize accordingly.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                    </div>
+                    <h3>Continuous Monitoring</h3>
+                    <p>KeyPilot continuously monitors your workloads and adapts recommendations as your query patterns evolve.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
+                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                    </div>
+                    <h3>Partition Pruning Coverage</h3>
+                    <p>Track and optimize partition pruning to ensure queries scan only the data they need.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                    </div>
+                    <h3>Table Efficiency</h3>
+                    <p>Identify which tables would benefit most from clustering and prioritize optimization efforts.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 20h9"/>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                        </svg>
+                    </div>
+                    <h3>Zero Manual Tuning</h3>
+                    <p>Get automated clustering key recommendations without spending hours analyzing query patterns yourself.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <h3>Cost Savings</h3>
+                    <p>Reduce query costs by 10-50% through intelligent clustering optimization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>Getting Started is Easy</h2>
+            <p class="section-subtitle">Get up and running in 5 simple steps</p>
+
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Initial Consultation</h3>
+                    <p>Schedule a call to discuss your Snowflake environment and optimization goals.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Install the App</h3>
+                    <p>Install KeyPilot directly from the Snowflake Marketplace - no external deployments needed.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Configure Permissions</h3>
+                    <p>Grant the necessary permissions for KeyPilot to analyze your query patterns.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Automated Analysis</h3>
+                    <p>KeyPilot begins analyzing your workloads and generating optimization recommendations.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Reduce Costs</h3>
+                    <p>Implement recommendations and start seeing cost reductions within days.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="benefits-content">
+                <h2>Why Choose KeyPilot?</h2>
+                <ul class="benefits-list">
+                    <li>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"/>
+                        </svg>
+                        <span><strong>Faster Queries</strong> - Optimize query performance without code changes</span>
+                    </li>
+                    <li>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"/>
+                        </svg>
+                        <span><strong>10-50% Cost Savings</strong> - Reduce compute costs with intelligent optimization</span>
+                    </li>
+                    <li>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"/>
+                        </svg>
+                        <span><strong>Native App Deployment</strong> - Runs entirely within your Snowflake environment</span>
+                    </li>
+                    <li>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"/>
+                        </svg>
+                        <span><strong>Data Security</strong> - Your data never leaves your Snowflake account</span>
+                    </li>
+                    <li>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"/>
+                        </svg>
+                        <span><strong>Quick Results</strong> - See improvements within days, not months</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section id="faqs" class="faqs">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How does KeyPilot improve performance?
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>KeyPilot analyzes your query patterns and telemetry data to identify optimal clustering keys for your tables. By improving partition pruning, queries scan less data, resulting in faster execution times and lower compute costs.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Do I need to install anything outside of Snowflake?
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No! KeyPilot is a Snowflake Native App, which means it runs entirely within your Snowflake environment. Simply install it from the Snowflake Marketplace and you're ready to go.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How much can I expect to save?
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Typical savings range from 10% to 50% reduction in query costs, depending on your current clustering configuration and query patterns. We'll provide a detailed analysis during your consultation.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is my data secure?
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely. KeyPilot operates entirely within your Snowflake environment. Your data never leaves your account, and we only analyze query metadata and telemetry - not your actual data.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How long until I see results?
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Most customers see improvements within days of implementing KeyPilot's recommendations. The analysis begins immediately after installation, and you'll receive actionable insights as soon as we've gathered enough data.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How is KeyPilot priced?
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>KeyPilot offers flexible pricing based on the number of tables and queries analyzed. Contact us for a customized quote based on your specific needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to optimize your Snowflake performance?</h2>
+            <p>Get started with KeyPilot today and see results within days.</p>
+            <a href="#contact" class="btn btn-primary btn-large">Request a Demo</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p class="section-subtitle">Interested in partnering with us or learning more? Get in touch.</p>
+
+            <!-- Replace YOUR_FORMSPREE_ID with your Formspree endpoint from https://formspree.io -->
+            <form class="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="terms.html">Terms</a>
+                    <a href="#products">Products</a>
+                    <a href="#faqs">FAQs</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+
+        // FAQ accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isOpen = faqItem.classList.contains('open');
+
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('open');
+                });
+
+                // Open clicked item if it wasn't already open
+                if (!isOpen) {
+                    faqItem.classList.add('open');
+                }
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                }
+            });
+        });
+
+        // Header scroll effect
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations with Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const animateOnScroll = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+
+        const scrollObserver = new IntersectionObserver(animateOnScroll, observerOptions);
+
+        // Observe product features
+        document.querySelectorAll('.product-feature').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // Observe feature cards
+        document.querySelectorAll('.feature-card').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // Observe steps
+        document.querySelectorAll('.step').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // Observe FAQ items
+        document.querySelectorAll('.faq-item').forEach(el => {
+            scrollObserver.observe(el);
+        });
+    </script>
+</body>
+</html>
