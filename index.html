@@ -45,8 +45,9 @@
     <section id="products" class="products">
         <div class="container">
             <div class="product-header">
-                <span class="product-badge">KeyPilot</span>
-                <h2>Steer your Snowflake performance with just-right clustering keys</h2>
+                <span class="product-badge">Introducing</span>
+                <h2 class="product-title"><span class="product-name">KeyPilot</span> by Goldilox</h2>
+                <p class="product-tagline"><em>"Steer your Snowflake performance with just-right clustering keys."</em></p>
                 <p>KeyPilot is your intelligent assistant that examines query patterns and recommends optimal clustering keys to enhance query speed and lower compute expenses. Our platform monitors evolving workloads and provides actionable insights, allowing your team to maintain control while making data-backed decisions.</p>
             </div>
 
@@ -166,6 +167,25 @@
                     <h3>Cost Savings</h3>
                     <p>Reduce query costs by 10-50% through intelligent clustering optimization.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- See KeyPilot in Real Action -->
+    <section class="real-action-section">
+        <div class="container">
+            <h2>See KeyPilot in real action</h2>
+            <div class="linkedin-card">
+                <div class="linkedin-card-content">
+                    <svg class="linkedin-icon" viewBox="0 0 24 24" fill="#0A66C2" width="48" height="48">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <div class="linkedin-text">
+                        <p class="linkedin-label">Featured Article</p>
+                        <p class="linkedin-quote">"Optimizing Snowflake Table Clustering Keys Automatically: First Results from KeyPilot"</p>
+                    </div>
+                </div>
+                <a href="https://www.linkedin.com/pulse/optimizing-snowflake-table-clustering-keys-automatically-bezcc/" target="_blank" class="btn btn-primary">View Article</a>
             </div>
         </div>
     </section>
@@ -389,6 +409,12 @@
     </footer>
 
     <script>
+        // Random hero background
+        const heroImages = ['hero-1.jpg', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg', 'hero-5.jpg'];
+        const randomImage = heroImages[Math.floor(Math.random() * heroImages.length)];
+        const hero = document.querySelector('.hero');
+        hero.style.backgroundImage = `linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%), url('${randomImage}')`;
+
         // Mobile menu toggle
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');

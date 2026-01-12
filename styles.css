@@ -6,15 +6,15 @@
 }
 
 :root {
-    --color-primary: #29B5E8;
-    --color-primary-dark: #1a9fd4;
-    --color-accent: #E85C4A;
-    --color-text: #1d1d22;
+    --color-primary: #0066ff;
+    --color-primary-dark: #0052cc;
+    --color-accent: #0066ff;
+    --color-text: #121217;
     --color-text-light: #6b7280;
     --color-background: #ffffff;
-    --color-background-alt: #f8fafc;
-    --color-background-dark: #0f172a;
-    --color-border: #e5e7eb;
+    --color-background-alt: #f7f7f8;
+    --color-background-dark: #121217;
+    --color-border: #e5e5e9;
     --font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --container-max-width: 1200px;
     --header-height: 72px;
@@ -187,31 +187,29 @@ img {
     position: relative;
     padding: 180px 0 140px;
     text-align: center;
-    background: linear-gradient(135deg, var(--color-background-dark) 0%, #1e293b 100%);
+    background-color: #0f172a;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     overflow: hidden;
-}
-
-.hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('hero-bg.jpg') center/cover no-repeat;
-    opacity: 0.15;
-    z-index: 0;
 }
 
 .hero::after {
     content: "";
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center, transparent 0%, var(--color-background-dark) 70%);
+    height: 50%;
+    background: linear-gradient(to top,
+        #ffffff 0%,
+        rgba(255, 255, 255, 0.95) 20%,
+        rgba(255, 255, 255, 0.7) 40%,
+        rgba(255, 255, 255, 0.3) 60%,
+        rgba(255, 255, 255, 0.1) 80%,
+        transparent 100%);
     z-index: 1;
+    pointer-events: none;
 }
 
 .hero .container {
@@ -247,17 +245,32 @@ img {
 
 .product-badge {
     display: inline-block;
-    padding: 6px 16px;
-    background-color: var(--color-accent);
+    padding: 8px 20px;
+    background-color: var(--color-primary);
     color: white;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
 }
 
-.product-header h2 {
-    margin-bottom: 1.5rem;
+.product-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.product-name {
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.product-tagline {
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
 }
 
 .product-header p {
@@ -328,7 +341,7 @@ img {
     list-style: none;
     margin: 1.5rem 0;
     padding: 1.25rem;
-    background: var(--color-background-alt);
+    background-color: var(--color-background-alt);
     border-radius: 12px;
     border-left: 3px solid var(--color-primary);
 }
@@ -353,7 +366,7 @@ img {
     top: 6px;
     width: 16px;
     height: 16px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2329B5E8' stroke-width='3'%3E%3Cpolyline points='20,6 9,17 4,12'/%3E%3C/svg%3E") center/contain no-repeat;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230066ff' stroke-width='3'%3E%3Cpolyline points='20,6 9,17 4,12'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 
 .product-feature-image {
@@ -490,6 +503,84 @@ img {
 .step:nth-child(4) { transition-delay: 0.2s; }
 .step:nth-child(5) { transition-delay: 0.25s; }
 
+/* See KeyPilot in Real Action */
+.real-action-section {
+    padding: 100px 0;
+    background-color: var(--color-background);
+}
+
+.real-action-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.linkedin-card {
+    max-width: 700px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 16px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.linkedin-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.linkedin-card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.linkedin-icon {
+    flex-shrink: 0;
+}
+
+.linkedin-text {
+    flex: 1;
+}
+
+.linkedin-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #0A66C2;
+    margin-bottom: 0.5rem;
+}
+
+.linkedin-quote {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .linkedin-card {
+        padding: 24px;
+    }
+
+    .linkedin-card-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .linkedin-quote {
+        font-size: 1.125rem;
+    }
+}
+
 /* Features Grid */
 .features-grid {
     display: grid;
@@ -499,9 +590,10 @@ img {
 
 .feature-card {
     padding: 32px;
-    background-color: var(--color-background-alt);
+    background-color: var(--color-background);
     border-radius: 12px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--color-border);
 }
 
 .feature-card:hover {
@@ -612,8 +704,8 @@ img {
 
 .benefits-list svg {
     flex-shrink: 0;
-    color: var(--color-primary);
     margin-top: 2px;
+    color: var(--color-primary);
 }
 
 .benefits-list span {
@@ -708,21 +800,8 @@ img {
 .cta {
     padding: 100px 0;
     text-align: center;
-    background: linear-gradient(135deg, var(--color-background-dark) 0%, #1e293b 100%);
+    background-color: var(--color-background-dark);
     color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, var(--color-primary) 0%, transparent 50%);
-    opacity: 0.1;
 }
 
 .cta h2 {
