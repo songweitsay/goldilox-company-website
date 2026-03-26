@@ -67,54 +67,95 @@
 
             <div class="product-features-wrapper">
                 <!-- Product Feature 1 -->
-                <div class="product-feature">
-                    <div class="product-feature-content">
-                        <h3>Quick Insights into Data Efficiency</h3>
+                <h3 class="bento-section-title">Quick Insights into Data Efficiency</h3>
+                <div class="bento-feature-grid">
+                    <div class="bento-feature bento-feature-main">
                         <p>Unlock instant visibility into how efficiently your Snowflake queries are pruning partitions. Our platform continuously monitors and surfaces actionable insights — helping you optimize performance, reduce costs, and maximize the impact of every scan.</p>
-                        <ul class="feature-list">
+                        <div class="bento-feature-image bento-feature-image-cropped">
+                            <img src="screenshot-overview-1.png" alt="Partition Pruning Efficiency Dashboard">
+                        </div>
+                    </div>
+                    <div class="bento-feature bento-feature-single-side">
+                        <div class="bento-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                        <h4>Partition Pruning Coverage</h4>
+                        <ul class="bento-bullet-list">
                             <li>Track partition pruning coverage and efficiency</li>
                             <li>Boost query performance with data-driven insights</li>
+                            <li>A smarter, faster way to manage your Snowflake workloads</li>
                         </ul>
-                        <p>Experience a smarter, faster way to manage your Snowflake workloads.</p>
-                    </div>
-                    <div class="product-feature-image">
-                        <img src="screenshot-overview-1.png" alt="Partition Pruning Efficiency Dashboard">
                     </div>
                 </div>
 
                 <!-- Product Feature 2 -->
-                <div class="product-feature reverse">
-                    <div class="product-feature-content">
-                        <h3>Identify optimization opportunities across all tables</h3>
+                <h3 class="bento-section-title">Identify optimization opportunities across all tables</h3>
+                <div class="bento-feature-grid bento-alt">
+                    <div class="bento-feature bento-feature-main">
                         <p>Pinpoint underperforming tables with low partition pruning efficiency. Our analysis highlights which tables are causing excessive scans, helping you prioritize optimization efforts where they matter most.</p>
-                        <ul class="feature-list">
-                            <li>Surface tables with poor pruning performance</li>
-                            <li>Prioritize high-impact optimization targets</li>
-                        </ul>
+                        <div class="bento-feature-image">
+                            <img src="screenshot-overview-2.png" alt="Table Optimization Analysis">
+                        </div>
                     </div>
-                    <div class="product-feature-image">
-                        <img src="screenshot-overview-2.png" alt="Table Optimization Analysis">
+                    <div class="bento-feature-side">
+                        <div class="bento-feature bento-feature-small">
+                            <div class="bento-feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21H3V3"/><path d="M21 7l-5 5-4-4-3 3"/></svg>
+                            </div>
+                            <h4>Pruning Performance</h4>
+                            <ul class="bento-bullet-list">
+                                <li>Surface tables with poor pruning performance</li>
+                                <li>Identify excessive full-table scans</li>
+                            </ul>
+                        </div>
+                        <div class="bento-feature bento-feature-small">
+                            <div class="bento-feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                            </div>
+                            <h4>Smart Prioritization</h4>
+                            <ul class="bento-bullet-list">
+                                <li>Prioritize high-impact optimization targets</li>
+                                <li>Focus efforts where they matter most</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Product Feature 3 -->
-                <div class="product-feature">
-                    <div class="product-feature-content">
-                        <h3>Intelligent Clustering Key Recommendations</h3>
+                <h3 class="bento-section-title">Intelligent Clustering Key Recommendations</h3>
+                <div class="bento-feature-grid bento-warm">
+                    <div class="bento-feature bento-feature-main">
                         <p>Get AI/ML-powered recommendations for optimal clustering keys based on your actual query patterns. Each recommendation includes estimated credit and dollar savings so you can prioritize the changes that matter most.</p>
-                        <ul class="feature-list">
-                            <li>Data-driven clustering key suggestions</li>
-                            <li>Recommendations based on real query patterns</li>
-                            <li>Estimated credit and cost savings per recommendation</li>
-                            <li>Ready-to-run ALTER TABLE SQL for each table</li>
-                        </ul>
+                        <div class="bento-feature-image bento-feature-image-cropped">
+                            <img src="screenshot-recommendation.png" alt="Clustering Key Recommendations">
+                        </div>
                     </div>
-                    <div class="product-feature-image">
-                        <img src="screenshot-recommendation.png" alt="Clustering Key Recommendations">
+                    <div class="bento-feature-side">
+                        <div class="bento-feature bento-feature-small">
+                            <div class="bento-feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            </div>
+                            <h4>AI-Powered Suggestions</h4>
+                            <ul class="bento-bullet-list">
+                                <li>Data-driven clustering key suggestions</li>
+                                <li>Recommendations based on real query patterns</li>
+                            </ul>
+                        </div>
+                        <div class="bento-feature bento-feature-small">
+                            <div class="bento-feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </div>
+                            <h4>Actionable Results</h4>
+                            <ul class="bento-bullet-list">
+                                <li>Estimated credit and cost savings per recommendation</li>
+                                <li>Ready-to-run ALTER TABLE SQL for each table</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <h3 class="bento-section-title">Key Features</h3>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -209,36 +250,31 @@
     <section class="how-it-works">
         <div class="container">
             <h2>Getting Started is Easy</h2>
-            <p class="section-subtitle">Get up and running in 5 simple steps</p>
+            <p class="section-subtitle">Fully self-service — get up and running in 5 simple steps</p>
 
             <div class="steps-grid">
                 <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Initial Consultation</h3>
-                    <p>Schedule a call to discuss your Snowflake environment and optimization goals.</p>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Install the App</h3>
+                    <div class="step-header"><div class="step-number">1</div><h3>Install the GOLDILOX Insights App</h3></div>
                     <p>Install Insights directly from the <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank">Snowflake Marketplace</a> - no external deployments needed.</p>
                 </div>
 
                 <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Configure Permissions</h3>
+                    <div class="step-header"><div class="step-number">2</div><h3>Configure Permissions</h3></div>
                     <p>Grant the necessary permissions for Insights to analyze your query patterns.</p>
                 </div>
 
                 <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>Automated Analysis</h3>
+                    <div class="step-header"><div class="step-number">3</div><h3>Select High-Impact Tables</h3></div>
+                    <p>Review and select recommended high impact tables to monitor and optimize.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-header"><div class="step-number">4</div><h3>Automated Analysis</h3></div>
                     <p>Insights begins analyzing your workloads and generating optimization recommendations.</p>
                 </div>
 
                 <div class="step">
-                    <div class="step-number">5</div>
-                    <h3>Reduce Costs</h3>
+                    <div class="step-header"><div class="step-number">5</div><h3>Reduce Costs</h3></div>
                     <p>Implement recommendations and start seeing cost reductions within days.</p>
                 </div>
             </div>
@@ -370,11 +406,13 @@
     <!-- CTA Section -->
     <section class="cta">
         <div class="container">
-            <h2>Ready to optimize your Snowflake performance?</h2>
-            <p>Get started with Insights today and see results within days.</p>
-            <div class="cta-buttons">
-                <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" class="btn btn-primary btn-large">Request a Demo</a>
-                <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary btn-large">Get it on Marketplace</a>
+            <div class="cta-card">
+                <h2>Ready to optimize your Snowflake performance?</h2>
+                <p>Get started with Insights today and see results within days.</p>
+                <div class="cta-buttons">
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" class="btn btn-primary btn-large">Request a Demo</a>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary btn-large">Get it on Marketplace</a>
+                </div>
             </div>
         </div>
     </section>
@@ -487,23 +525,8 @@
 
         const scrollObserver = new IntersectionObserver(animateOnScroll, observerOptions);
 
-        // Observe product features
-        document.querySelectorAll('.product-feature').forEach(el => {
-            scrollObserver.observe(el);
-        });
-
-        // Observe feature cards
-        document.querySelectorAll('.feature-card').forEach(el => {
-            scrollObserver.observe(el);
-        });
-
-        // Observe steps
-        document.querySelectorAll('.step').forEach(el => {
-            scrollObserver.observe(el);
-        });
-
-        // Observe FAQ items
-        document.querySelectorAll('.faq-item').forEach(el => {
+        // Observe all animated elements
+        document.querySelectorAll('.product-feature, .feature-card, .step, .faq-item, .bento-section-title, .bento-feature-main, .bento-feature-small, .bento-feature-single-side, .linkedin-card, .benefits-list li, .cta .container, .product-header').forEach(el => {
             scrollObserver.observe(el);
         });
     </script>
