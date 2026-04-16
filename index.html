@@ -30,6 +30,9 @@
                 </a>
                 <ul class="nav-links">
                     <li><a href="#products">Products</a></li>
+                    <li><a href="#benchmarks">Benchmarks</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#about">About</a></li>
                     <li><a href="#faqs">FAQs</a></li>
                     <li><a href="#contact">Contact</a></li>
                     <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
@@ -59,10 +62,8 @@
                 <span class="product-badge">Introducing</span>
                 <h2 class="product-title"><span class="product-name">Insights</span> by Goldilox</h2>
                 <p class="product-tagline"><em>"See what's costing you — and exactly how to fix it."</em></p>
-                <p>Insights uses trained prediction models to analyze your Snowflake query patterns and recommend optimal clustering keys — complete with estimated credit and cost savings for every table. No guesswork, no static tuning.</p>
-                <p>As workloads shift over time, so do the ideal keys for performance. Insights continuously monitors how your data is being queried and surfaces actionable recommendations tailored to each table. You stay in control — with clear data on what each change is worth — and apply changes when the time is right.</p>
-                <p>Built for data engineers and platform teams, Insights brings visibility and precision to Snowflake optimization. Whether you're managing massive tables or trying to rein in spend, Insights shows you exactly where the savings are and what to do about them.</p>
-                <p><strong>Know exactly when, how, and why to cluster — powered by AI/ML, backed by data.</strong></p>
+                <p>Insights analyzes your Snowflake query patterns and recommends optimal clustering keys for every table &mdash; each with estimated credit and cost savings, so you know the impact before making a change.</p>
+                <p class="product-tagline-strong">Know exactly when, how, and why to cluster. Powered by AI/ML, backed by your own query data.</p>
             </div>
 
             <div class="product-features-wrapper">
@@ -227,6 +228,94 @@
         </div>
     </section>
 
+    <!-- Benchmark Results Section -->
+    <section id="benchmarks" class="benchmarks">
+        <div class="container">
+            <div class="benchmark-header">
+                <span class="product-badge">Benchmarks</span>
+                <h2>Proven results on industry-standard benchmarks</h2>
+                <p class="section-subtitle">Measured on <span class="nowrap">TPC-H</span> &mdash; the standard benchmark for decision-support query performance &mdash; and <span class="nowrap">TPC-DS</span>, the industry's most demanding test for large-scale analytics workloads. Real numbers from actual partition pruning and query execution, not projections.</p>
+            </div>
+
+            <div class="benchmark-highlights">
+                <div class="benchmark-card">
+                    <div class="benchmark-card-header">
+                        <div>
+                            <div class="benchmark-label">TPC-DS <span class="benchmark-scale-tag">10 TB scale (SF10TCL)</span></div>
+                            <div class="benchmark-scale">57 billion rows &middot; 24 tables &middot; 99 queries</div>
+                        </div>
+                        <div class="benchmark-scale-chip">2X-Large warehouse</div>
+                    </div>
+                    <div class="benchmark-metrics">
+                        <div class="metric">
+                            <div class="metric-value">51%</div>
+                            <div class="metric-label">Faster query time</div>
+                            <div class="metric-detail">32.1 min &rarr; 15.7 min</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">76%</div>
+                            <div class="metric-label">Fewer partitions scanned</div>
+                            <div class="metric-detail">11.2M &rarr; 2.7M</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">81%</div>
+                            <div class="metric-label">Fewer bytes scanned</div>
+                            <div class="metric-detail">30.9 TB &rarr; 5.8 TB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card">
+                    <div class="benchmark-card-header">
+                        <div>
+                            <div class="benchmark-label">TPC-H <span class="benchmark-scale-tag">100 GB scale (SF100)</span></div>
+                            <div class="benchmark-scale">866M rows &middot; 8 tables &middot; 22 queries</div>
+                        </div>
+                        <div class="benchmark-scale-chip">Small warehouse</div>
+                    </div>
+                    <div class="benchmark-metrics">
+                        <div class="metric">
+                            <div class="metric-value">15%</div>
+                            <div class="metric-label">Faster query time</div>
+                            <div class="metric-detail">104.6s &rarr; 91.6s</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">39%</div>
+                            <div class="metric-label">Fewer partitions scanned</div>
+                            <div class="metric-detail">27.5K &rarr; 16.7K</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">37%</div>
+                            <div class="metric-label">Fewer bytes scanned</div>
+                            <div class="metric-detail">128.7 GB &rarr; 80.1 GB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="bento-section-title">Per-table pruning improvement</h3>
+            <p class="pruning-summary-subtitle">Across the largest tables in both benchmarks, Goldilox consistently removes <strong>60&ndash;80% of unnecessary partition scans</strong>. Bigger tables see bigger wins &mdash; and they're the ones that cost the most to scan.</p>
+            <div class="pruning-summary-grid">
+                <div class="pruning-summary-card">
+                    <div class="pruning-summary-value">75%</div>
+                    <div class="pruning-summary-label">Median partitions pruned</div>
+                    <div class="pruning-summary-detail">Across the 7 largest fact tables in TPC-DS</div>
+                </div>
+                <div class="pruning-summary-card">
+                    <div class="pruning-summary-value">60&ndash;80%</div>
+                    <div class="pruning-summary-label">Typical range per table</div>
+                    <div class="pruning-summary-detail">Multi-billion-row tables like STORE_SALES, CATALOG_SALES, WEB_SALES</div>
+                </div>
+                <div class="pruning-summary-card">
+                    <div class="pruning-summary-value">71%</div>
+                    <div class="pruning-summary-label">Average scan time reduction</div>
+                    <div class="pruning-summary-detail">STORE_SALES (28.8B rows) &mdash; fewer partitions read, faster queries</div>
+                </div>
+            </div>
+            <p class="pruning-summary-baseline">Measured against unclustered baseline tables (shuffled to ~0% pruning, forcing full scans) &mdash; the worst-case scenario Goldilox is designed to fix.</p>
+        </div>
+    </section>
+
     <!-- See Insights in Real Action -->
     <section class="real-action-section">
         <div class="container">
@@ -322,6 +411,107 @@
         </div>
     </section>
 
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="pricing-header">
+                <h2>Simple, transparent pricing</h2>
+                <p class="section-subtitle">Start free. Scale as you save. 10% discount when billed annually.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card pricing-card-promo">
+                    <div class="pricing-badge-promo">Limited Time</div>
+                    <div class="pricing-name">Promotion</div>
+                    <div class="pricing-price"><span class="pricing-amount">Free</span></div>
+                    <div class="pricing-tables">Up to 5 tables</div>
+                    <div class="pricing-best-for">Full recommendations &mdash; no payment required while the offer is running.</div>
+                    <ul class="pricing-features">
+                        <li>Full clustering key recommendations</li>
+                        <li>Dollar &amp; credit savings per table</li>
+                        <li>Apply changes at your own pace</li>
+                    </ul>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary pricing-cta">Contact Sales</a>
+                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-name">Small</div>
+                    <div class="pricing-price"><span class="pricing-amount">$100</span><span class="pricing-period">/ month</span></div>
+                    <div class="pricing-tables">Up to 3 tables</div>
+                    <div class="pricing-best-for">Ideal for proof of concept and validating ROI.</div>
+                    <ul class="pricing-features">
+                        <li>Automated clustering key recommendations</li>
+                        <li>Dashboard with partition pruning metrics</li>
+                        <li>Continuous monitoring as workloads shift</li>
+                    </ul>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary pricing-cta">Get Started</a>
+                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                </div>
+
+                <div class="pricing-card pricing-card-featured">
+                    <div class="pricing-badge-popular">Most popular</div>
+                    <div class="pricing-name">Medium</div>
+                    <div class="pricing-price"><span class="pricing-amount">$300</span><span class="pricing-period">/ month</span></div>
+                    <div class="pricing-tables">Up to 10 tables</div>
+                    <div class="pricing-best-for">Best for growing data teams scaling Snowflake spend.</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Small, for up to 10 tables</li>
+                        <li>Continuous monitoring with savings estimates</li>
+                        <li>Priority email support</li>
+                    </ul>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary pricing-cta">Get Started</a>
+                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-name">Large &amp; Enterprise</div>
+                    <div class="pricing-price"><span class="pricing-amount">$1,000+</span><span class="pricing-period">/ month</span></div>
+                    <div class="pricing-tables">40 tables to unlimited</div>
+                    <div class="pricing-best-for">Best value at scale &mdash; plus custom terms for accounts spending $1M+ on Snowflake compute.</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Medium, scaled to 40+ tables</li>
+                        <li>Unlimited table coverage on custom plans</li>
+                        <li>Volume discounts &amp; dedicated support</li>
+                    </ul>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary pricing-cta">Contact Sales</a>
+                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                </div>
+            </div>
+
+            <div class="pricing-footnote">
+                Install the app from the Snowflake Marketplace to preview the Insights dashboard for free &mdash; no recommendations, no payment required. Promotion and paid tiers unlock full clustering key recommendations with estimated savings. 10% discount when billed annually. Upgrade, downgrade, or cancel anytime.
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-card">
+                <img src="songwei.jpg" alt="Songwei Tsay" class="about-avatar about-avatar-photo" width="180" height="180">
+                <div class="about-body">
+                    <div class="about-eyebrow">About Goldilox</div>
+                    <h2>Decades of data platform experience, one focused product.</h2>
+                    <p class="about-lede">Goldilox is focused on one job: making Snowflake optimization automatic, measurable, and trustworthy &mdash; a problem every serious data team hits, and one that deserves a real engineering answer.</p>
+                    <div class="about-profile">
+                        <div class="about-profile-name">
+                            <strong>Songwei Tsay</strong>
+                            <span>Founder &amp; Chief Architect</span>
+                        </div>
+                        <p>Two decades of experience designing and building data, cloud, and platform systems &mdash; from query engines to large-scale financial planning platforms.</p>
+                        <a href="https://www.linkedin.com/in/songweitsay/" target="_blank" rel="noopener" class="about-linkedin">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                            <span>Connect on LinkedIn</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- FAQs Section -->
     <section id="faqs" class="faqs">
         <div class="container">
@@ -396,7 +586,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer">
-                        <p>Insights offers flexible pricing based on the number of tables and queries analyzed. Contact us for a customized quote based on your specific needs.</p>
+                        <p>Insights has four public tiers based on the number of monitored tables: <strong>Small ($100/mo, up to 3 tables)</strong>, <strong>Medium ($300/mo, up to 10)</strong>, <strong>Large ($1,000/mo, up to 40)</strong>, and custom <strong>Enterprise</strong> pricing for larger workloads. Every plan starts with a 30-day free trial. See the <a href="#pricing">pricing section</a> for details.</p>
                     </div>
                 </div>
             </div>
@@ -526,7 +716,7 @@
         const scrollObserver = new IntersectionObserver(animateOnScroll, observerOptions);
 
         // Observe all animated elements
-        document.querySelectorAll('.product-feature, .feature-card, .step, .faq-item, .bento-section-title, .bento-feature-main, .bento-feature-small, .bento-feature-single-side, .linkedin-card, .benefits-list li, .cta .container, .product-header').forEach(el => {
+        document.querySelectorAll('.product-feature, .feature-card, .step, .faq-item, .bento-section-title, .bento-feature-main, .bento-feature-small, .bento-feature-single-side, .linkedin-card, .benefits-list li, .cta .container, .product-header, .benchmark-card, .pruning-summary-card, .pricing-card, .pricing-enterprise, .about-card').forEach(el => {
             scrollObserver.observe(el);
         });
     </script>
