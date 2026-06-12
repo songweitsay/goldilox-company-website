@@ -241,58 +241,6 @@ img {
 }
 
 /* Hero Section */
-.hero {
-    position: relative;
-    padding: 160px 0 120px;
-    text-align: center;
-    background-color: #0f172a;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
-}
-
-.hero::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: linear-gradient(to top,
-        #eef3fb 0%,
-        #eef3fb 5%,
-        rgba(238, 243, 251, 0.95) 20%,
-        rgba(238, 243, 251, 0.7) 40%,
-        rgba(238, 243, 251, 0.3) 60%,
-        rgba(238, 243, 251, 0.1) 80%,
-        transparent 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.hero .container {
-    position: relative;
-    z-index: 2;
-}
-
-.hero h1 {
-    margin-bottom: 1.25rem;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-    font-size: clamp(1.0625rem, 2vw, 1.25rem);
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 2rem;
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-}
-
 /* Products Section */
 .products {
     padding: 80px 0;
@@ -1482,10 +1430,6 @@ img {
         display: flex;
     }
 
-    .hero {
-        padding: 120px 0 80px;
-    }
-
     .products,
     .how-it-works,
     .benefits,
@@ -1996,18 +1940,6 @@ img {
     border-color: #d5dce5;
 }
 
-.pricing-card-featured {
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 16px rgba(35, 131, 226, 0.12);
-    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
-}
-
-.pricing-card-featured:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(35, 131, 226, 0.18);
-    border-color: var(--color-primary);
-}
-
 .pricing-card-promo {
     border-color: #f59e0b;
     background: linear-gradient(180deg, #fffbeb 0%, #ffffff 60%);
@@ -2019,7 +1951,6 @@ img {
     box-shadow: 0 16px 40px rgba(245, 158, 11, 0.2);
 }
 
-.pricing-badge-popular,
 .pricing-badge-promo {
     position: absolute;
     top: -12px;
@@ -2033,11 +1964,6 @@ img {
     padding: 5px 12px;
     border-radius: 9999px;
     white-space: nowrap;
-}
-
-.pricing-badge-popular {
-    background: var(--color-primary);
-    box-shadow: 0 2px 8px rgba(35, 131, 226, 0.3);
 }
 
 .pricing-badge-promo {
@@ -2087,10 +2013,6 @@ img {
     letter-spacing: 0.1em;
     color: var(--color-text-light);
     margin-bottom: 12px;
-}
-
-.pricing-card-featured .pricing-name {
-    color: var(--color-primary);
 }
 
 .pricing-price {
@@ -2467,48 +2389,6 @@ img {
    Audit-fix additions (issue #1)
    ============================================================ */
 
-/* --- TEMPORARY hero variant picker — remove with the unused hero variants before merging --- */
-.hero-picker {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 10px;
-    background: rgba(15, 23, 42, 0.92);
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-}
-
-.hero-picker-label {
-    color: #94a3b8;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-right: 2px;
-}
-
-.hero-picker button {
-    font-family: var(--font-family);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #e2e8f0;
-    background: transparent;
-    border: 1px solid #334a66;
-    border-radius: 8px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.hero-picker button.active {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #fff;
-}
-
 /* --- Hero shared --- */
 .hero-eyebrow {
     display: inline-block;
@@ -2530,52 +2410,7 @@ img {
     gap: 14px;
 }
 
-.hero-ctas-center {
-    justify-content: center;
-}
-
-/* --- Hero variant A: light --- */
-.hero-light {
-    position: relative;
-    padding: calc(var(--header-height) + 64px) 0 88px;
-    background: linear-gradient(160deg, #f0f4fa 0%, #eef3fb 40%, #ffffff 100%);
-    overflow: hidden;
-}
-
-.hero-light-inner {
-    position: relative;
-}
-
-.hero-light-copy {
-    position: relative;
-    z-index: 2;
-    max-width: 620px;
-}
-
-.hero-light h1 {
-    color: var(--color-text);
-    margin-bottom: 1.25rem;
-    letter-spacing: -0.02em;
-}
-
-.hero-light-subtitle {
-    font-size: clamp(1.0625rem, 2vw, 1.1875rem);
-    color: #475569;
-    line-height: 1.6;
-    max-width: 540px;
-    margin-bottom: 2rem;
-}
-
-.hero-motif {
-    position: absolute;
-    top: 50%;
-    right: -180px;
-    transform: translateY(-50%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* --- Hero variant B: dark --- */
+/* --- Hero --- */
 .hero-dark {
     position: relative;
     padding: calc(var(--header-height) + 72px) 0 88px;
@@ -2724,40 +2559,9 @@ img {
     text-decoration: underline;
 }
 
-/* --- Hero responsive --- */
-@media (max-width: 960px) {
-    .hero-motif {
-        display: none;
-    }
-
-    .hero-light-copy {
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .hero-light .hero-ctas {
-        justify-content: center;
-    }
-
-    .hero-light-subtitle {
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
 @media (max-width: 600px) {
     .hero-dark-stats {
         gap: 24px;
-    }
-
-    .hero-picker {
-        bottom: 10px;
-        right: 10px;
-        padding: 6px 8px;
-    }
-
-    .hero-picker-label {
-        display: none;
     }
 }
 

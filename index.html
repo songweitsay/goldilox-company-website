@@ -58,46 +58,17 @@
         </div>
     </header>
 
-    <!-- TEMPORARY: hero variant picker for design review — remove before merging -->
-    <div class="hero-picker" id="heroPicker" aria-hidden="true">
-        <span class="hero-picker-label">Hero (temp)</span>
-        <button type="button" data-hero="light">A · Light</button>
-        <button type="button" data-hero="dark">B · Dark</button>
-        <button type="button" data-hero="photo">C · Photo</button>
-    </div>
 
-    <!-- Hero variant A: light, partition-pruning motif -->
-    <section class="hero-light" data-hero-variant="light" hidden>
-        <div class="container hero-light-inner">
-            <div class="hero-light-copy">
-                <span class="hero-eyebrow">Snowflake Native App</span>
-                <h1>Automated Snowflake Performance Optimization</h1>
-                <p class="hero-light-subtitle">Insights finds the clustering keys your queries actually need &mdash; <strong>51% faster queries on TPC-DS, which means ~51% less compute spend</strong> on that workload. Never worry about tuning again.</p>
-                <div class="hero-ctas">
-                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
-                    <a href="#benchmarks" class="btn btn-secondary">View Benchmarks</a>
-                </div>
-            </div>
-            <svg class="hero-motif" width="700" height="580" viewBox="0 0 700 580" fill="none" aria-hidden="true">
-                <defs>
-                    <linearGradient id="motifScan" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#2383e2"/><stop offset="100%" stop-color="#5ea8ef"/>
-                    </linearGradient>
-                </defs>
-                <g id="heroMotifGrid"></g>
-            </svg>
-        </div>
-    </section>
 
-    <!-- Hero variant B: dark, stat-led -->
-    <section class="hero-dark" data-hero-variant="dark" hidden>
+    <!-- Hero -->
+    <section class="hero-dark">
         <svg class="hero-dark-bg" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <g id="heroDarkGrid"></g>
         </svg>
         <div class="container hero-dark-inner">
             <span class="hero-eyebrow hero-eyebrow-dark">Snowflake Native App</span>
             <h1>Stop scanning data your queries <span class="hero-dark-accent">never needed</span></h1>
-            <p class="hero-dark-subtitle">Insights recommends the clustering keys your workload actually wants &mdash; with estimated dollar savings per table, before you change anything.</p>
+            <p class="hero-dark-subtitle">Insights finds the clustering keys your queries actually need &mdash; <strong>51% faster queries on TPC-DS, which means ~51% less compute spend</strong> on that workload. Never worry about tuning again.</p>
             <div class="hero-ctas">
                 <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
                 <a href="#benchmarks" class="btn btn-ghost-dark">View Benchmarks</a>
@@ -107,19 +78,7 @@
                 <div class="hero-stat"><div class="hero-stat-n">76%</div><div class="hero-stat-l">Fewer partitions scanned</div></div>
                 <div class="hero-stat"><div class="hero-stat-n">81%</div><div class="hero-stat-l">Fewer bytes scanned</div></div>
             </div>
-            <p class="hero-stats-note">Compute is billed by warehouse runtime &mdash; 51% faster means ~51% cheaper for this workload. TPC-DS 10&nbsp;TB benchmark.</p>
-        </div>
-    </section>
-
-    <!-- Hero variant C: current photo hero -->
-    <section class="hero" data-hero-variant="photo" hidden>
-        <div class="container">
-            <h1>Automated Snowflake Performance Optimization</h1>
-            <p class="hero-subtitle">Optimize workloads, reduce spend, and never worry about tuning again</p>
-            <div class="hero-ctas hero-ctas-center">
-                <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
-                <a href="#benchmarks" class="btn btn-secondary">View Benchmarks</a>
-            </div>
+            <p class="hero-stats-note">Measured on the TPC-DS 10&nbsp;TB benchmark &mdash; real execution, not projections.</p>
         </div>
     </section>
 
@@ -442,8 +401,7 @@
                     <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary pricing-cta">Get Started</a>
                 </div>
 
-                <div class="pricing-card pricing-card-featured">
-                    <div class="pricing-badge-popular">Most popular</div>
+                <div class="pricing-card">
                     <div class="pricing-name">Medium</div>
                     <div class="pricing-price"><span class="pricing-amount">$300</span><span class="pricing-period">/ month</span></div>
                     <div class="pricing-tables">Up to 10 tables</div>
@@ -618,25 +576,7 @@
     </footer>
 
     <script>
-        // TEMPORARY: hero variant picker for design review — remove (and keep one hero) before merging
-        const heroVariants = document.querySelectorAll('[data-hero-variant]');
-        function showHero(variant) {
-            heroVariants.forEach(s => { s.hidden = s.dataset.heroVariant !== variant; });
-            document.querySelectorAll('#heroPicker button').forEach(b => {
-                b.classList.toggle('active', b.dataset.hero === variant);
-            });
-            try { localStorage.setItem('heroVariant', variant); } catch (e) {}
-        }
-        document.querySelectorAll('#heroPicker button').forEach(b => {
-            b.addEventListener('click', () => showHero(b.dataset.hero));
-        });
-        let savedVariant = 'light';
-        try { savedVariant = localStorage.getItem('heroVariant') || 'light'; } catch (e) {}
-        const urlVariant = new URLSearchParams(location.search).get('hero');
-        if (urlVariant && ['light', 'dark', 'photo'].includes(urlVariant)) savedVariant = urlVariant;
-        showHero(savedVariant);
-
-        // Hero A motif: micro-partition grid, most cells pruned (faded), few scanned (highlighted)
+        // Hero motif: micro-partition grid, most cells pruned (faded), few scanned (highlighted)
         function buildMotif(groupId, cols, rows, size, gap, scanned, pruned) {
             const g = document.getElementById(groupId);
             if (!g) return;
@@ -656,10 +596,6 @@
                 }
             }
         }
-        buildMotif('heroMotifGrid', 10, 8, 56, 14,
-            new Set(['2,1', '3,1', '2,2', '3,2', '6,4', '7,4', '6,5']),
-            { scanFill: 'url(#motifScan)', scanOpacity: 0.95,
-              opacity: (c, r, cols) => Math.max(0.04, 0.16 - (cols - c) * 0.018 + r * 0.004).toFixed(3) });
         buildMotif('heroDarkGrid', 26, 13, 44, 12,
             new Set(['3,3', '4,3', '3,4', '21,9', '22,9', '21,10', '11,1', '12,1']),
             { fill: '#2e4a72', scanOpacity: 0.55,
@@ -667,14 +603,6 @@
                   const dx = Math.abs(c - cols / 2) / (cols / 2), dy = Math.abs(r - rows / 2) / (rows / 2);
                   return (0.05 + Math.min(1, Math.sqrt(dx * dx + dy * dy)) * 0.10).toFixed(3);
               } });
-
-        // Random hero background (photo variant only)
-        const heroImages = ['hero-1.jpg', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg', 'hero-5.jpg'];
-        const randomImage = heroImages[Math.floor(Math.random() * heroImages.length)];
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            hero.style.backgroundImage = `linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%), url('${randomImage}')`;
-        }
 
         // Mobile menu toggle
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
