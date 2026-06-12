@@ -2760,3 +2760,34 @@ img {
         display: none;
     }
 }
+
+/* --- Cost-equivalence messaging (51% faster = ~51% cheaper) --- */
+.metric-cost-note {
+    margin-top: 6px;
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(35, 131, 226, 0.08);
+    color: var(--color-primary);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.benchmark-cost-callout {
+    max-width: 720px;
+    margin: 32px auto 48px;
+    padding: 18px 24px;
+    background: rgba(35, 131, 226, 0.06);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 12px 12px 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+.hero-stats-note {
+    margin-top: 20px;
+    font-size: 0.875rem;
+    color: #7d8ca3;
+    max-width: 560px;
+}

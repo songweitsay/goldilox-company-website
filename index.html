@@ -72,7 +72,7 @@
             <div class="hero-light-copy">
                 <span class="hero-eyebrow">Snowflake Native App</span>
                 <h1>Automated Snowflake Performance Optimization</h1>
-                <p class="hero-light-subtitle">Insights finds the clustering keys your queries actually need &mdash; <strong>51% faster queries, 76% fewer partitions scanned</strong> on TPC-DS. Never worry about tuning again.</p>
+                <p class="hero-light-subtitle">Insights finds the clustering keys your queries actually need &mdash; <strong>51% faster queries on TPC-DS, which means ~51% less compute spend</strong> on that workload. Never worry about tuning again.</p>
                 <div class="hero-ctas">
                     <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
                     <a href="#benchmarks" class="btn btn-secondary">View Benchmarks</a>
@@ -107,6 +107,7 @@
                 <div class="hero-stat"><div class="hero-stat-n">76%</div><div class="hero-stat-l">Fewer partitions scanned</div></div>
                 <div class="hero-stat"><div class="hero-stat-n">81%</div><div class="hero-stat-l">Fewer bytes scanned</div></div>
             </div>
+            <p class="hero-stats-note">Compute is billed by warehouse runtime &mdash; 51% faster means ~51% cheaper for this workload. TPC-DS 10&nbsp;TB benchmark.</p>
         </div>
     </section>
 
@@ -248,6 +249,7 @@
                             <div class="metric-value">51%</div>
                             <div class="metric-label">Faster query time</div>
                             <div class="metric-detail">32.1 min &rarr; 15.7 min</div>
+                            <div class="metric-cost-note">&asymp; 51% lower compute cost</div>
                         </div>
                         <div class="metric">
                             <div class="metric-value">76%</div>
@@ -275,6 +277,7 @@
                             <div class="metric-value">15%</div>
                             <div class="metric-label">Faster query time</div>
                             <div class="metric-detail">104.6s &rarr; 91.6s</div>
+                            <div class="metric-cost-note">&asymp; 15% lower compute cost</div>
                         </div>
                         <div class="metric">
                             <div class="metric-value">39%</div>
@@ -289,6 +292,8 @@
                     </div>
                 </div>
             </div>
+
+            <p class="benchmark-cost-callout"><strong>Faster queries are cheaper queries.</strong> Snowflake compute is billed by warehouse runtime &mdash; so cutting query time 51% cuts the compute cost of that workload by roughly half. No discounts to negotiate, just less warehouse time burned.</p>
 
             <h3 class="bento-section-title">Per-table pruning improvement</h3>
             <p class="pruning-summary-subtitle">Across the largest tables in both benchmarks, Goldilox consistently removes <strong>60&ndash;80% of unnecessary partition scans</strong>. Bigger tables see bigger wins &mdash; and they're the ones that cost the most to scan.</p>
