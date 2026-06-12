@@ -25,6 +25,10 @@ html {
     scroll-behavior: smooth;
 }
 
+html, body {
+    overflow-x: hidden;
+}
+
 body {
     font-family: var(--font-family);
     font-size: 16px;
@@ -607,17 +611,19 @@ img {
     transform: translateY(0);
 }
 
+/* Pre-animation offset is vertical: horizontal offsets widen the page on
+   mobile and cause viewport overflow before the cards animate in. */
 .bento-feature-small,
 .bento-feature-single-side {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateY(24px);
     transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
 }
 
 .bento-feature-small.animate-in,
 .bento-feature-single-side.animate-in {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
 }
 
 .bento-feature-side .bento-feature-small:nth-child(2) {
@@ -1032,7 +1038,7 @@ img {
 }
 
 .cta-card {
-    background: linear-gradient(135deg, #1a365d 0%, #1e4d78 50%, #1a5c5a 100%);
+    background: linear-gradient(135deg, #11335f 0%, #1a4f86 55%, #2474c9 100%);
     border-radius: 24px;
     padding: 64px 48px;
     color: white;
@@ -2454,5 +2460,303 @@ img {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
+    }
+}
+
+/* ============================================================
+   Audit-fix additions (issue #1)
+   ============================================================ */
+
+/* --- TEMPORARY hero variant picker — remove with the unused hero variants before merging --- */
+.hero-picker {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    background: rgba(15, 23, 42, 0.92);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero-picker-label {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-right: 2px;
+}
+
+.hero-picker button {
+    font-family: var(--font-family);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #e2e8f0;
+    background: transparent;
+    border: 1px solid #334a66;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.hero-picker button.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+/* --- Hero shared --- */
+.hero-eyebrow {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(35, 131, 226, 0.08);
+    border: 1px solid rgba(35, 131, 226, 0.25);
+    color: var(--color-primary);
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
+
+.hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.hero-ctas-center {
+    justify-content: center;
+}
+
+/* --- Hero variant A: light --- */
+.hero-light {
+    position: relative;
+    padding: calc(var(--header-height) + 64px) 0 88px;
+    background: linear-gradient(160deg, #f0f4fa 0%, #eef3fb 40%, #ffffff 100%);
+    overflow: hidden;
+}
+
+.hero-light-inner {
+    position: relative;
+}
+
+.hero-light-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+}
+
+.hero-light h1 {
+    color: var(--color-text);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-light-subtitle {
+    font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+    color: #475569;
+    line-height: 1.6;
+    max-width: 540px;
+    margin-bottom: 2rem;
+}
+
+.hero-motif {
+    position: absolute;
+    top: 50%;
+    right: -180px;
+    transform: translateY(-50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* --- Hero variant B: dark --- */
+.hero-dark {
+    position: relative;
+    padding: calc(var(--header-height) + 72px) 0 88px;
+    text-align: center;
+    background: radial-gradient(1200px 600px at 50% -10%, #1a365d 0%, #0f172a 60%, #0b1120 100%);
+    overflow: hidden;
+}
+
+.hero-dark-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-dark-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-eyebrow-dark {
+    background: rgba(35, 131, 226, 0.14);
+    border-color: rgba(94, 168, 239, 0.35);
+    color: #7db8f2;
+}
+
+.hero-dark h1 {
+    color: #ffffff;
+    max-width: 880px;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-dark-accent {
+    background: linear-gradient(90deg, #5ea8ef, #8cc5f5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-dark-subtitle {
+    font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+    color: #a7b6cc;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-bottom: 2rem;
+}
+
+.hero-dark .hero-ctas {
+    justify-content: center;
+}
+
+.btn-ghost-dark {
+    color: #e2e8f0;
+    border: 1px solid #334a66;
+    background: transparent;
+}
+
+.btn-ghost-dark:hover {
+    border-color: #5ea8ef;
+    color: #ffffff;
+}
+
+.hero-dark-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 48px;
+}
+
+.hero-stat-n {
+    font-size: 2.125rem;
+    font-weight: 700;
+    color: #5ea8ef;
+    line-height: 1.2;
+}
+
+.hero-stat-l {
+    font-size: 0.8125rem;
+    color: #7d8ca3;
+    letter-spacing: 0.03em;
+}
+
+/* --- Screenshot browser frame --- */
+.bento-feature-image {
+    position: relative;
+    border: 1px solid var(--color-border);
+    padding-top: 28px;
+    background: #f1f5f9;
+}
+
+.bento-feature-image::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fca5a5;
+    box-shadow: 14px 0 0 #fcd34d, 28px 0 0 #86efac;
+}
+
+/* --- Benefits as card grid --- */
+.benefits-content-wide {
+    max-width: 100%;
+}
+
+.benefits-grid .feature-card {
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+}
+
+.benefits-grid .feature-card:hover {
+    background-color: #fbfcfe;
+}
+
+/* --- Final CTA contact line --- */
+.cta-contact-line {
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.65) !important;
+    margin-bottom: 0 !important;
+}
+
+.cta-contact-line a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* --- Benchmarks article link --- */
+.benchmark-article-link {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.benchmark-article-link:hover {
+    text-decoration: underline;
+}
+
+/* --- Hero responsive --- */
+@media (max-width: 960px) {
+    .hero-motif {
+        display: none;
+    }
+
+    .hero-light-copy {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .hero-light .hero-ctas {
+        justify-content: center;
+    }
+
+    .hero-light-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-dark-stats {
+        gap: 24px;
+    }
+
+    .hero-picker {
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 8px;
+    }
+
+    .hero-picker-label {
+        display: none;
     }
 }
