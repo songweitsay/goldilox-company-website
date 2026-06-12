@@ -14,6 +14,18 @@
     </script>
     <title>Goldilox - Automated Snowflake Performance Optimization</title>
     <meta name="description" content="Optimize workloads, reduce spend, and never worry about tuning again with Goldilox Insights for Snowflake.">
+    <link rel="canonical" href="https://www.goldilox.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.goldilox.com/">
+    <meta property="og:title" content="Goldilox - Automated Snowflake Performance Optimization">
+    <meta property="og:description" content="Clustering key recommendations with estimated savings per table — runs entirely in your Snowflake account. 51% faster queries on TPC-DS.">
+    <meta property="og:image" content="https://www.goldilox.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Goldilox - Automated Snowflake Performance Optimization">
+    <meta name="twitter:description" content="Clustering key recommendations with estimated savings per table — runs entirely in your Snowflake account.">
+    <meta name="twitter:image" content="https://www.goldilox.com/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -34,7 +46,7 @@
                     <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#faqs">FAQs</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a></li>
                     <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
                 </ul>
                 <button class="mobile-menu-btn" aria-label="Toggle menu">
@@ -46,12 +58,27 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Automated Snowflake Performance Optimization</h1>
-            <p class="hero-subtitle">Optimize workloads, reduce spend, and never worry about tuning again</p>
-            <a href="#products" class="btn btn-primary">Learn more</a>
+
+
+    <!-- Hero -->
+    <section class="hero-dark">
+        <svg class="hero-dark-bg" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g id="heroDarkGrid"></g>
+        </svg>
+        <div class="container hero-dark-inner">
+            <span class="hero-eyebrow hero-eyebrow-dark">Snowflake Native App</span>
+            <h1>Stop scanning data your queries <span class="hero-dark-accent">never needed</span></h1>
+            <p class="hero-dark-subtitle">Insights finds the clustering keys your queries actually need &mdash; <strong>51% faster queries on TPC-DS, which means ~51% less compute spend</strong> on that workload. Never worry about tuning again.</p>
+            <div class="hero-ctas">
+                <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
+                <a href="#benchmarks" class="btn btn-ghost-dark">View Benchmarks</a>
+            </div>
+            <div class="hero-dark-stats">
+                <div class="hero-stat"><div class="hero-stat-n">51%</div><div class="hero-stat-l">Faster queries</div></div>
+                <div class="hero-stat"><div class="hero-stat-n">76%</div><div class="hero-stat-l">Fewer partitions scanned</div></div>
+                <div class="hero-stat"><div class="hero-stat-n">81%</div><div class="hero-stat-l">Fewer bytes scanned</div></div>
+            </div>
+            <p class="hero-stats-note">Measured on the TPC-DS 10&nbsp;TB benchmark &mdash; real execution, not projections.</p>
         </div>
     </section>
 
@@ -61,7 +88,7 @@
             <div class="product-header">
                 <span class="product-badge">Introducing</span>
                 <h2 class="product-title"><span class="product-name">Insights</span> by Goldilox</h2>
-                <p class="product-tagline"><em>"See what's costing you — and exactly how to fix it."</em></p>
+                <p class="product-tagline">See what's costing you &mdash; and exactly how to fix it.</p>
                 <p>Insights analyzes your Snowflake query patterns and recommends optimal clustering keys for every table &mdash; each with estimated credit and cost savings, so you know the impact before making a change.</p>
                 <p class="product-tagline-strong">Know exactly when, how, and why to cluster. Powered by AI/ML, backed by your own query data.</p>
             </div>
@@ -83,8 +110,7 @@
                         <h4>Partition Pruning Coverage</h4>
                         <ul class="bento-bullet-list">
                             <li>Track partition pruning coverage and efficiency</li>
-                            <li>Boost query performance with data-driven insights</li>
-                            <li>A smarter, faster way to manage your Snowflake workloads</li>
+                            <li>Spot excessive scanning before it inflates your bill</li>
                         </ul>
                     </div>
                 </div>
@@ -116,7 +142,7 @@
                             <h4>Smart Prioritization</h4>
                             <ul class="bento-bullet-list">
                                 <li>Prioritize high-impact optimization targets</li>
-                                <li>Focus efforts where they matter most</li>
+                                <li>Rank tables by estimated savings</li>
                             </ul>
                         </div>
                     </div>
@@ -124,7 +150,7 @@
 
                 <!-- Product Feature 3 -->
                 <h3 class="bento-section-title">Intelligent Clustering Key Recommendations</h3>
-                <div class="bento-feature-grid bento-warm">
+                <div class="bento-feature-grid bento-alt">
                     <div class="bento-feature bento-feature-main">
                         <p>Get AI/ML-powered recommendations for optimal clustering keys based on your actual query patterns. Each recommendation includes estimated credit and dollar savings so you can prioritize the changes that matter most.</p>
                         <div class="bento-feature-image bento-feature-image-cropped">
@@ -156,75 +182,6 @@
                 </div>
             </div>
 
-            <h3 class="bento-section-title">Key Features</h3>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                        </svg>
-                    </div>
-                    <h3>Telemetry-Driven Insights</h3>
-                    <p>Leverage deep query telemetry to understand exactly how your data is being accessed and optimize accordingly.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12,6 12,12 16,14"/>
-                        </svg>
-                    </div>
-                    <h3>Continuous Monitoring</h3>
-                    <p>Insights continuously monitors your workloads and adapts recommendations as your query patterns evolve.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                            <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
-                            <line x1="12" y1="22.08" x2="12" y2="12"/>
-                        </svg>
-                    </div>
-                    <h3>Partition Pruning Coverage</h3>
-                    <p>Track and optimize partition pruning to ensure queries scan only the data they need.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="3" y1="9" x2="21" y2="9"/>
-                            <line x1="9" y1="21" x2="9" y2="9"/>
-                        </svg>
-                    </div>
-                    <h3>Table Efficiency</h3>
-                    <p>Identify which tables would benefit most from clustering and prioritize optimization efforts.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 20h9"/>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                        </svg>
-                    </div>
-                    <h3>Zero Manual Analysis</h3>
-                    <p>Insights automates the analysis and generates clustering key recommendations — you review and apply changes at your discretion.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="1" x2="12" y2="23"/>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                    </div>
-                    <h3>Cost Savings</h3>
-                    <p>See exactly how much you can save — Insights calculates estimated credit and dollar savings per table based on your historical query costs.</p>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -251,6 +208,7 @@
                             <div class="metric-value">51%</div>
                             <div class="metric-label">Faster query time</div>
                             <div class="metric-detail">32.1 min &rarr; 15.7 min</div>
+                            <div class="metric-cost-note">&asymp; 51% lower compute cost</div>
                         </div>
                         <div class="metric">
                             <div class="metric-value">76%</div>
@@ -278,6 +236,7 @@
                             <div class="metric-value">15%</div>
                             <div class="metric-label">Faster query time</div>
                             <div class="metric-detail">104.6s &rarr; 91.6s</div>
+                            <div class="metric-cost-note">&asymp; 15% lower compute cost</div>
                         </div>
                         <div class="metric">
                             <div class="metric-value">39%</div>
@@ -292,6 +251,8 @@
                     </div>
                 </div>
             </div>
+
+            <p class="benchmark-cost-callout"><strong>Faster queries are cheaper queries.</strong> Snowflake compute is billed by warehouse runtime &mdash; so cutting query time 51% cuts the compute cost of that workload by roughly half. No discounts to negotiate, just less warehouse time burned.</p>
 
             <h3 class="bento-section-title">Per-table pruning improvement</h3>
             <p class="pruning-summary-subtitle">Across the largest tables in both benchmarks, Goldilox consistently removes <strong>60&ndash;80% of unnecessary partition scans</strong>. Bigger tables see bigger wins &mdash; and they're the ones that cost the most to scan.</p>
@@ -312,26 +273,7 @@
                     <div class="pruning-summary-detail">STORE_SALES (28.8B rows) &mdash; fewer partitions read, faster queries</div>
                 </div>
             </div>
-            <p class="pruning-summary-baseline">Measured against unclustered baseline tables (shuffled to ~0% pruning, forcing full scans) &mdash; the worst-case scenario Goldilox is designed to fix.</p>
-        </div>
-    </section>
-
-    <!-- See Insights in Real Action -->
-    <section class="real-action-section">
-        <div class="container">
-            <h2>See Insights in real action</h2>
-            <div class="linkedin-card">
-                <div class="linkedin-card-content">
-                    <svg class="linkedin-icon" viewBox="0 0 24 24" fill="#0A66C2" width="48" height="48">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                    <div class="linkedin-text">
-                        <p class="linkedin-label">Featured Article</p>
-                        <p class="linkedin-quote">"Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights"</p>
-                    </div>
-                </div>
-                <a href="https://www.linkedin.com/pulse/optimizing-snowflake-table-clustering-keys-automatically-bezcc/" target="_blank" class="btn btn-primary">View Article</a>
-            </div>
+            <p class="pruning-summary-baseline">Baseline: fully unclustered tables (~0% pruning) &mdash; the starting point for tables with no clustering strategy. <a href="https://www.linkedin.com/pulse/optimizing-snowflake-table-clustering-keys-automatically-bezcc/" target="_blank" rel="noopener" class="benchmark-article-link">Read the full write-up &rarr;</a></p>
         </div>
     </section>
 
@@ -373,40 +315,52 @@
     <!-- Benefits Section -->
     <section class="benefits">
         <div class="container">
-            <div class="benefits-content">
+            <div class="benefits-content benefits-content-wide">
                 <h2>Why Choose Insights?</h2>
-                <ul class="benefits-list">
-                    <li>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20,6 9,17 4,12"/>
-                        </svg>
-                        <span><strong>Faster Queries</strong> - Optimize query performance without code changes</span>
-                    </li>
-                    <li>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20,6 9,17 4,12"/>
-                        </svg>
-                        <span><strong>10-50% Cost Savings</strong> - Reduce compute costs with intelligent optimization</span>
-                    </li>
-                    <li>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20,6 9,17 4,12"/>
-                        </svg>
-                        <span><strong>Native App Deployment</strong> - Runs entirely within your Snowflake environment</span>
-                    </li>
-                    <li>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20,6 9,17 4,12"/>
-                        </svg>
-                        <span><strong>Data Security</strong> - Your data never leaves your Snowflake account</span>
-                    </li>
-                    <li>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20,6 9,17 4,12"/>
-                        </svg>
-                        <span><strong>Quick Results</strong> - See improvements within days, not months</span>
-                    </li>
-                </ul>
+                <div class="features-grid benefits-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
+                        <h3>Faster Queries</h3>
+                        <p>Optimize query performance without code changes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <h3>10&ndash;50% Cost Savings</h3>
+                        <p>Reduce compute costs with intelligent optimization, estimated per table before you commit.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <h3>Native App Deployment</h3>
+                        <p>Runs entirely within your Snowflake environment &mdash; nothing to host, no external deployments.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <h3>Data Security</h3>
+                        <p>Your data never leaves your Snowflake account &mdash; only query metadata and telemetry are analyzed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                        </div>
+                        <h3>Quick Results</h3>
+                        <p>See improvements within days, not months.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        </div>
+                        <h3>You Stay in Control</h3>
+                        <p>Insights automates the analysis and generates recommendations &mdash; you review and apply changes at your discretion.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -416,7 +370,7 @@
         <div class="container">
             <div class="pricing-header">
                 <h2>Simple, transparent pricing</h2>
-                <p class="section-subtitle">Start free. Scale as you save. 10% discount when billed annually.</p>
+                <p class="section-subtitle">Start free. Scale as you save.</p>
             </div>
 
             <div class="pricing-grid">
@@ -431,8 +385,7 @@
                         <li>Dollar &amp; credit savings per table</li>
                         <li>Apply changes at your own pace</li>
                     </ul>
-                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary pricing-cta">Contact Sales</a>
-                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary pricing-cta">Get Started</a>
                 </div>
 
                 <div class="pricing-card">
@@ -445,12 +398,10 @@
                         <li>Dashboard with partition pruning metrics</li>
                         <li>Continuous monitoring as workloads shift</li>
                     </ul>
-                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary pricing-cta">Get Started</a>
-                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary pricing-cta">Get Started</a>
                 </div>
 
-                <div class="pricing-card pricing-card-featured">
-                    <div class="pricing-badge-popular">Most popular</div>
+                <div class="pricing-card">
                     <div class="pricing-name">Medium</div>
                     <div class="pricing-price"><span class="pricing-amount">$300</span><span class="pricing-period">/ month</span></div>
                     <div class="pricing-tables">Up to 10 tables</div>
@@ -461,7 +412,6 @@
                         <li>Priority email support</li>
                     </ul>
                     <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary pricing-cta">Get Started</a>
-                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
                 </div>
 
                 <div class="pricing-card">
@@ -474,13 +424,12 @@
                         <li>Unlimited table coverage on custom plans</li>
                         <li>Volume discounts &amp; dedicated support</li>
                     </ul>
-                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary pricing-cta">Contact Sales</a>
-                    <p class="pricing-cta-note">Opens Snowflake Marketplace &mdash; sign-in required</p>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" class="btn btn-primary pricing-cta">Contact Sales</a>
                 </div>
             </div>
 
             <div class="pricing-footnote">
-                Install the app from the Snowflake Marketplace to preview the Insights dashboard for free &mdash; no recommendations, no payment required. Promotion and paid tiers unlock full clustering key recommendations with estimated savings. 10% discount when billed annually. Upgrade, downgrade, or cancel anytime.
+                All plans install via the <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank">Snowflake Marketplace</a> (sign-in required) &mdash; installing previews the Insights dashboard for free, and the promotion and paid tiers unlock full clustering key recommendations with estimated savings. 10% discount when billed annually. Upgrade, downgrade, or cancel anytime.
             </div>
         </div>
     </section>
@@ -586,7 +535,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer">
-                        <p>Insights has four public tiers based on the number of monitored tables: <strong>Small ($100/mo, up to 3 tables)</strong>, <strong>Medium ($300/mo, up to 10)</strong>, <strong>Large ($1,000/mo, up to 40)</strong>, and custom <strong>Enterprise</strong> pricing for larger workloads. Every plan starts with a 30-day free trial. See the <a href="#pricing">pricing section</a> for details.</p>
+                        <p>Pricing scales with the number of monitored tables, with plans starting at $100/month &mdash; and there's currently a limited-time free promotion. See the <a href="#pricing">pricing section</a> for current tiers.</p>
                     </div>
                 </div>
             </div>
@@ -600,19 +549,11 @@
                 <h2>Ready to optimize your Snowflake performance?</h2>
                 <p>Get started with Insights today and see results within days.</p>
                 <div class="cta-buttons">
-                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" class="btn btn-primary btn-large">Request a Demo</a>
-                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-secondary btn-large">Get it on Marketplace</a>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="btn btn-primary btn-large">Try Free on Snowflake Marketplace</a>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" class="btn btn-secondary btn-large">Request a Demo</a>
                 </div>
+                <p class="cta-contact-line">Partnership or press? <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Get in touch &rarr;</a></p>
             </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Contact Us</h2>
-            <p class="section-subtitle">Interested in partnering with us or learning more? Get in touch.</p>
-            <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" class="btn btn-primary btn-large">Get in Touch</a>
         </div>
     </section>
 
@@ -628,18 +569,40 @@
                     <a href="terms.html">Terms</a>
                     <a href="#products">Products</a>
                     <a href="#faqs">FAQs</a>
-                    <a href="#contact">Contact</a>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a>
                 </nav>
             </div>
         </div>
     </footer>
 
     <script>
-        // Random hero background
-        const heroImages = ['hero-1.jpg', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg', 'hero-5.jpg'];
-        const randomImage = heroImages[Math.floor(Math.random() * heroImages.length)];
-        const hero = document.querySelector('.hero');
-        hero.style.backgroundImage = `linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%), url('${randomImage}')`;
+        // Hero motif: micro-partition grid, most cells pruned (faded), few scanned (highlighted)
+        function buildMotif(groupId, cols, rows, size, gap, scanned, pruned) {
+            const g = document.getElementById(groupId);
+            if (!g) return;
+            const ns = 'http://www.w3.org/2000/svg';
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const rect = document.createElementNS(ns, 'rect');
+                    rect.setAttribute('x', c * (size + gap));
+                    rect.setAttribute('y', r * (size + gap));
+                    rect.setAttribute('width', size);
+                    rect.setAttribute('height', size);
+                    rect.setAttribute('rx', Math.round(size * 0.2));
+                    const isScanned = scanned.has(c + ',' + r);
+                    rect.setAttribute('fill', isScanned ? (pruned.scanFill || '#2383e2') : (pruned.fill || '#2383e2'));
+                    rect.setAttribute('opacity', isScanned ? pruned.scanOpacity : pruned.opacity(c, r, cols, rows));
+                    g.appendChild(rect);
+                }
+            }
+        }
+        buildMotif('heroDarkGrid', 26, 13, 44, 12,
+            new Set(['3,3', '4,3', '3,4', '21,9', '22,9', '21,10', '11,1', '12,1']),
+            { fill: '#2e4a72', scanOpacity: 0.55,
+              opacity: (c, r, cols, rows) => {
+                  const dx = Math.abs(c - cols / 2) / (cols / 2), dy = Math.abs(r - rows / 2) / (rows / 2);
+                  return (0.05 + Math.min(1, Math.sqrt(dx * dx + dy * dy)) * 0.10).toFixed(3);
+              } });
 
         // Mobile menu toggle
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
@@ -716,9 +679,66 @@
         const scrollObserver = new IntersectionObserver(animateOnScroll, observerOptions);
 
         // Observe all animated elements
-        document.querySelectorAll('.product-feature, .feature-card, .step, .faq-item, .bento-section-title, .bento-feature-main, .bento-feature-small, .bento-feature-single-side, .linkedin-card, .benefits-list li, .cta .container, .product-header, .benchmark-card, .pruning-summary-card, .pricing-card, .pricing-enterprise, .about-card').forEach(el => {
+        document.querySelectorAll('.product-feature, .feature-card, .step, .faq-item, .bento-section-title, .bento-feature-main, .bento-feature-small, .bento-feature-single-side, .cta .container, .product-header, .benchmark-card, .pruning-summary-card, .pricing-card, .pricing-enterprise, .about-card').forEach(el => {
             scrollObserver.observe(el);
         });
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Goldilox Technology LLC",
+          "url": "https://www.goldilox.com/",
+          "logo": "https://www.goldilox.com/logo.png",
+          "founder": { "@type": "Person", "name": "Songwei Tsay", "sameAs": "https://www.linkedin.com/in/songweitsay/" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Goldilox Insights",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Snowflake",
+          "url": "https://www.goldilox.com/",
+          "offers": { "@type": "Offer", "price": "100", "priceCurrency": "USD", "description": "Monthly plans from $100; limited-time free promotion" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does Insights improve performance?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Insights uses trained prediction models to analyze your query patterns and telemetry data, identifying optimal clustering keys for your tables. By improving partition pruning, queries scan less data — resulting in faster execution times and lower compute costs." }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to install anything outside of Snowflake?",
+              "acceptedAnswer": { "@type": "Answer", "text": "No. Insights is a Snowflake Native App that runs entirely within your Snowflake environment. Install it from the Snowflake Marketplace and you're ready to go." }
+            },
+            {
+              "@type": "Question",
+              "name": "How much can I expect to save?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Typical savings range from 10% to 50% reduction in query costs, depending on your current clustering configuration and query patterns. Insights calculates estimated credit and dollar savings per table based on your actual query history." }
+            },
+            {
+              "@type": "Question",
+              "name": "Is my data secure?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes. Insights operates entirely within your Snowflake environment. Your data never leaves your account; only query metadata and telemetry are analyzed — not your actual data." }
+            },
+            {
+              "@type": "Question",
+              "name": "How long until I see results?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Most customers see improvements within days of implementing Insights' recommendations. Analysis begins immediately after installation." }
+            },
+            {
+              "@type": "Question",
+              "name": "How is Insights priced?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Pricing scales with the number of monitored tables, with plans starting at $100/month, and there's currently a limited-time free promotion." }
+            }
+          ]
+        }
+      ]
+    }
     </script>
 </body>
 </html>

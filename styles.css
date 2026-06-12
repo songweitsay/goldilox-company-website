@@ -25,6 +25,10 @@ html {
     scroll-behavior: smooth;
 }
 
+html, body {
+    overflow-x: hidden;
+}
+
 body {
     font-family: var(--font-family);
     font-size: 16px;
@@ -237,58 +241,6 @@ img {
 }
 
 /* Hero Section */
-.hero {
-    position: relative;
-    padding: 160px 0 120px;
-    text-align: center;
-    background-color: #0f172a;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
-}
-
-.hero::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: linear-gradient(to top,
-        #eef3fb 0%,
-        #eef3fb 5%,
-        rgba(238, 243, 251, 0.95) 20%,
-        rgba(238, 243, 251, 0.7) 40%,
-        rgba(238, 243, 251, 0.3) 60%,
-        rgba(238, 243, 251, 0.1) 80%,
-        transparent 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.hero .container {
-    position: relative;
-    z-index: 2;
-}
-
-.hero h1 {
-    margin-bottom: 1.25rem;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-    font-size: clamp(1.0625rem, 2vw, 1.25rem);
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 2rem;
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-}
-
 /* Products Section */
 .products {
     padding: 80px 0;
@@ -607,17 +559,19 @@ img {
     transform: translateY(0);
 }
 
+/* Pre-animation offset is vertical: horizontal offsets widen the page on
+   mobile and cause viewport overflow before the cards animate in. */
 .bento-feature-small,
 .bento-feature-single-side {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateY(24px);
     transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
 }
 
 .bento-feature-small.animate-in,
 .bento-feature-single-side.animate-in {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
 }
 
 .bento-feature-side .bento-feature-small:nth-child(2) {
@@ -1032,7 +986,7 @@ img {
 }
 
 .cta-card {
-    background: linear-gradient(135deg, #1a365d 0%, #1e4d78 50%, #1a5c5a 100%);
+    background: linear-gradient(135deg, #11335f 0%, #1a4f86 55%, #2474c9 100%);
     border-radius: 24px;
     padding: 64px 48px;
     color: white;
@@ -1474,10 +1428,6 @@ img {
 
     .mobile-menu-btn {
         display: flex;
-    }
-
-    .hero {
-        padding: 120px 0 80px;
     }
 
     .products,
@@ -1990,18 +1940,6 @@ img {
     border-color: #d5dce5;
 }
 
-.pricing-card-featured {
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 16px rgba(35, 131, 226, 0.12);
-    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
-}
-
-.pricing-card-featured:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(35, 131, 226, 0.18);
-    border-color: var(--color-primary);
-}
-
 .pricing-card-promo {
     border-color: #f59e0b;
     background: linear-gradient(180deg, #fffbeb 0%, #ffffff 60%);
@@ -2013,7 +1951,6 @@ img {
     box-shadow: 0 16px 40px rgba(245, 158, 11, 0.2);
 }
 
-.pricing-badge-popular,
 .pricing-badge-promo {
     position: absolute;
     top: -12px;
@@ -2027,11 +1964,6 @@ img {
     padding: 5px 12px;
     border-radius: 9999px;
     white-space: nowrap;
-}
-
-.pricing-badge-popular {
-    background: var(--color-primary);
-    box-shadow: 0 2px 8px rgba(35, 131, 226, 0.3);
 }
 
 .pricing-badge-promo {
@@ -2081,10 +2013,6 @@ img {
     letter-spacing: 0.1em;
     color: var(--color-text-light);
     margin-bottom: 12px;
-}
-
-.pricing-card-featured .pricing-name {
-    color: var(--color-primary);
 }
 
 .pricing-price {
@@ -2455,4 +2383,215 @@ img {
         align-items: flex-start;
         gap: 12px;
     }
+}
+
+/* ============================================================
+   Audit-fix additions (issue #1)
+   ============================================================ */
+
+/* --- Hero shared --- */
+.hero-eyebrow {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(35, 131, 226, 0.08);
+    border: 1px solid rgba(35, 131, 226, 0.25);
+    color: var(--color-primary);
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
+
+.hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+/* --- Hero --- */
+.hero-dark {
+    position: relative;
+    padding: calc(var(--header-height) + 72px) 0 88px;
+    text-align: center;
+    background: radial-gradient(1200px 600px at 50% -10%, #1a365d 0%, #0f172a 60%, #0b1120 100%);
+    overflow: hidden;
+}
+
+.hero-dark-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-dark-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-eyebrow-dark {
+    background: rgba(35, 131, 226, 0.14);
+    border-color: rgba(94, 168, 239, 0.35);
+    color: #7db8f2;
+}
+
+.hero-dark h1 {
+    color: #ffffff;
+    max-width: 880px;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-dark-accent {
+    background: linear-gradient(90deg, #5ea8ef, #8cc5f5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-dark-subtitle {
+    font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+    color: #a7b6cc;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-bottom: 2rem;
+}
+
+.hero-dark .hero-ctas {
+    justify-content: center;
+}
+
+.btn-ghost-dark {
+    color: #e2e8f0;
+    border: 1px solid #334a66;
+    background: transparent;
+}
+
+.btn-ghost-dark:hover {
+    border-color: #5ea8ef;
+    color: #ffffff;
+}
+
+.hero-dark-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 48px;
+}
+
+.hero-stat-n {
+    font-size: 2.125rem;
+    font-weight: 700;
+    color: #5ea8ef;
+    line-height: 1.2;
+}
+
+.hero-stat-l {
+    font-size: 0.8125rem;
+    color: #7d8ca3;
+    letter-spacing: 0.03em;
+}
+
+/* --- Screenshot browser frame --- */
+.bento-feature-image {
+    position: relative;
+    border: 1px solid var(--color-border);
+    padding-top: 28px;
+    background: #f1f5f9;
+}
+
+.bento-feature-image::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fca5a5;
+    box-shadow: 14px 0 0 #fcd34d, 28px 0 0 #86efac;
+}
+
+/* --- Benefits as card grid --- */
+.benefits-content-wide {
+    max-width: 100%;
+}
+
+.benefits-grid .feature-card {
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+}
+
+.benefits-grid .feature-card:hover {
+    background-color: #fbfcfe;
+}
+
+/* --- Final CTA contact line --- */
+.cta-contact-line {
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.65) !important;
+    margin-bottom: 0 !important;
+}
+
+.cta-contact-line a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* --- Benchmarks article link --- */
+.benchmark-article-link {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.benchmark-article-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .hero-dark-stats {
+        gap: 24px;
+    }
+}
+
+/* --- Cost-equivalence messaging (51% faster = ~51% cheaper) --- */
+.metric-cost-note {
+    margin-top: 6px;
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(35, 131, 226, 0.08);
+    color: var(--color-primary);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.benchmark-cost-callout {
+    max-width: 720px;
+    margin: 32px auto 48px;
+    padding: 18px 24px;
+    background: rgba(35, 131, 226, 0.06);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 12px 12px 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+.hero-stats-note {
+    margin-top: 20px;
+    font-size: 0.875rem;
+    color: #7d8ca3;
+    max-width: 560px;
 }
