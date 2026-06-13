@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="analytics.js"></script>
+    <title>Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights - Goldilox</title>
+    <meta name="description" content="How Goldilox Insights automatically recommends Snowflake clustering keys — and the first TPC-DS benchmark results: partition pruning from 41% to 59% and 12% faster queries, with zero manual tuning.">
+    <link rel="canonical" href="https://www.goldilox.com/blog-optimizing-clustering-keys.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights">
+    <meta property="og:description" content="First TPC-DS benchmark results from Goldilox Insights: partition pruning from 41% to 59% and 12% faster queries, with zero manual tuning.">
+    <meta property="og:image" content="https://www.goldilox.com/og-image.png">
+    <meta property="og:url" content="https://www.goldilox.com/blog-optimizing-clustering-keys.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .article-page { padding: 120px 0 80px; }
+        .article { max-width: 740px; margin: 0 auto; }
+        .article-eyebrow { color: var(--color-primary); font-weight: 700; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .article h1 { font-size: 2.5rem; line-height: 1.2; margin: 0.75rem 0 1rem; }
+        .article-meta { color: var(--color-text-light); font-size: 0.9375rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
+        .article h2 { font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .article p { margin-bottom: 1.25rem; line-height: 1.85; font-size: 1.0625rem; }
+        .article ul, .article ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article li { margin-bottom: 0.625rem; line-height: 1.75; font-size: 1.0625rem; }
+        .article a { color: var(--color-primary); }
+        .article a:hover { text-decoration: underline; }
+        .editor-note { background: rgba(35, 131, 226, 0.06); border-left: 3px solid var(--color-primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 2.5rem; font-size: 0.9375rem; line-height: 1.7; color: var(--color-text-light); }
+        .editor-note strong { color: var(--color-text); }
+        .results-table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9375rem; }
+        .results-table th, .results-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--color-border); }
+        .results-table th { font-weight: 700; color: var(--color-text); background: var(--color-background-alt); }
+        .results-table td:last-child { color: var(--color-primary); font-weight: 600; }
+        .article-cta { margin-top: 3rem; padding: 28px; background: var(--color-background-alt); border-radius: 16px; text-align: center; }
+        .article-cta p { margin-bottom: 1rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 500; margin-bottom: 2rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="docs.html">Docs</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="index.html#faqs">FAQs</a></li>
+                    <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="article-page">
+        <div class="container">
+            <article class="article">
+                <a href="blog.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    All articles
+                </a>
+
+                <span class="article-eyebrow">Benchmark</span>
+                <h1>Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights</h1>
+                <p class="article-meta">By Goldilox Technology &middot; April 29, 2025</p>
+
+                <div class="editor-note">
+                    <strong>Editor's note:</strong> This was our first published benchmark, from April 2025. We've since improved the models considerably &mdash; our current TPC-DS results show 51% faster queries and 76% fewer partitions scanned. See the <a href="index.html#benchmarks">latest benchmarks</a>.
+                </div>
+
+                <p>Snowflake's micro-partition architecture rewards good clustering: when a table is organized along the columns your queries filter on, Snowflake can prune away the partitions a query doesn't need and scan only what matters. Less data scanned means faster queries and lower compute cost. The hard part is choosing the right clustering key &mdash; and keeping it right as your workload changes.</p>
+
+                <h2>Why manual tuning doesn't scale</h2>
+                <p>Picking clustering keys by hand runs into three problems:</p>
+                <ul>
+                    <li><strong>Workloads evolve.</strong> The key that was optimal last quarter can be wrong today as queries and dashboards change.</li>
+                    <li><strong>Visibility gaps.</strong> It's genuinely hard to know which columns your users filter on most across hundreds of tables and thousands of queries.</li>
+                    <li><strong>It takes expertise and time.</strong> Doing this well demands senior data engineers, and they have better things to do than re-tune clustering keys by hand.</li>
+                </ul>
+
+                <h2>What Insights does</h2>
+                <p>Goldilox Insights automates the work. It continuously monitors your live query patterns, analyzes how each table is actually accessed, and recommends the clustering key that would maximize partition pruning &mdash; and it adapts those recommendations over time as your workload shifts. Every recommendation comes with an estimated saving so you can prioritize by impact.</p>
+
+                <h2>The test</h2>
+                <p>To measure the effect, we ran against a TPC-DS dataset at 10&nbsp;TB scale: 24 tables, roughly 56 billion rows, and the full suite of 99 queries. The methodology was straightforward:</p>
+                <ol>
+                    <li>Run the benchmark to establish a baseline.</li>
+                    <li>Let Insights analyze the workload and produce clustering key recommendations.</li>
+                    <li>Apply the recommended keys to eight high-impact tables.</li>
+                    <li>Re-run the benchmark and compare.</li>
+                </ol>
+
+                <h2>Results</h2>
+                <p>With no manual tuning &mdash; just applying what Insights recommended &mdash; the workload improved across the board:</p>
+                <table class="results-table">
+                    <thead>
+                        <tr><th>Metric</th><th>Before</th><th>After</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Overall partition pruning</td><td>41%</td><td>59%</td></tr>
+                        <tr><td>Total query execution time</td><td>1,004 s</td><td>870 s (&minus;12%)</td></tr>
+                        <tr><td>STORE_SALES pruning</td><td>40%</td><td>69%</td></tr>
+                    </tbody>
+                </table>
+                <p>The biggest single win came from STORE_SALES, one of the largest fact tables in the schema, where pruning jumped from 40% to 69%. That pattern &mdash; the largest, most-scanned tables seeing the biggest gains &mdash; is exactly what you want, because those tables are the ones that cost the most to scan.</p>
+
+                <h2>A note on the benchmark</h2>
+                <p>Our TPC-DS dataset is a copy we loaded ourselves, so it may differ from Snowflake's officially tuned benchmark environment. We use it because it simulates a realistic customer scenario: real tables, real query patterns, and clustering that starts from an unoptimized state &mdash; the situation Insights is designed to fix.</p>
+
+                <h2>The takeaway</h2>
+                <p>Clustering optimization doesn't have to be a manual, expert-only chore that decays the moment your workload changes. With systematic automation, you can keep tables tuned as your data environment evolves &mdash; and capture the compute savings continuously, not just once.</p>
+
+                <div class="article-cta">
+                    <p><strong>Want to see what Insights recommends for your tables?</strong> Install from the Snowflake Marketplace and preview the dashboard for free.</p>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" rel="noopener" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="index.html#products">Products</a>
+                    <a href="docs.html">Docs</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="index.html#faqs">FAQs</a>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="analytics.js"></script>
+    <title>Documentation - Goldilox Insights</title>
+    <meta name="description" content="Set up and use Goldilox Insights: install from the Snowflake Marketplace, grant permissions, select tables, review clustering key recommendations, and apply changes.">
+    <link rel="canonical" href="https://www.goldilox.com/docs.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .docs-page { padding: 120px 0 80px; }
+        .docs-layout { display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+        .docs-toc { position: sticky; top: 100px; font-size: 0.9375rem; }
+        .docs-toc h4 { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; color: var(--color-text-light); margin-bottom: 12px; }
+        .docs-toc a { display: block; padding: 5px 0; color: var(--color-text-light); border-left: 2px solid transparent; padding-left: 12px; margin-left: -14px; }
+        .docs-toc a:hover { color: var(--color-primary); }
+        .docs-body { max-width: 760px; }
+        .docs-body h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .docs-lede { color: var(--color-text-light); font-size: 1.125rem; margin-bottom: 2.5rem; line-height: 1.7; }
+        .docs-body h2 { font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1rem; scroll-margin-top: 100px; }
+        .docs-body h3 { font-size: 1.125rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }
+        .docs-body p { margin-bottom: 1rem; line-height: 1.8; }
+        .docs-body ul, .docs-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .docs-body li { margin-bottom: 0.5rem; line-height: 1.7; }
+        .docs-body a { color: var(--color-primary); }
+        .docs-body a:hover { text-decoration: underline; }
+        .docs-step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 9999px; background: var(--color-primary); color: #fff; font-size: 0.875rem; font-weight: 700; margin-right: 10px; vertical-align: middle; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 16px 20px; border-radius: 10px; overflow-x: auto; font-size: 0.875rem; line-height: 1.6; margin: 1rem 0 1.5rem; }
+        pre code { font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; }
+        .docs-note { background: rgba(35, 131, 226, 0.06); border-left: 3px solid var(--color-primary); border-radius: 0 10px 10px 0; padding: 14px 20px; margin: 1.5rem 0; font-size: 0.9375rem; line-height: 1.7; }
+        .docs-cta { margin-top: 3rem; padding: 28px; background: var(--color-background-alt); border-radius: 16px; text-align: center; }
+        .docs-cta p { margin-bottom: 1rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 500; margin-bottom: 2rem; }
+        .back-link:hover { text-decoration: underline; }
+        @media (max-width: 860px) {
+            .docs-layout { grid-template-columns: 1fr; gap: 0; }
+            .docs-toc { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="docs.html">Docs</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="index.html#faqs">FAQs</a></li>
+                    <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="docs-page">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Home
+            </a>
+            <div class="docs-layout">
+                <aside class="docs-toc">
+                    <h4>On this page</h4>
+                    <a href="#overview">Overview</a>
+                    <a href="#requirements">Requirements</a>
+                    <a href="#install">1. Install the app</a>
+                    <a href="#permissions">2. Grant permissions</a>
+                    <a href="#select-tables">3. Select tables</a>
+                    <a href="#analysis">4. Automated analysis</a>
+                    <a href="#review">5. Review recommendations</a>
+                    <a href="#apply">6. Apply changes</a>
+                    <a href="#monitoring">Ongoing monitoring</a>
+                    <a href="#security">Data &amp; security</a>
+                    <a href="#troubleshooting">Troubleshooting</a>
+                    <a href="#support">Support</a>
+                </aside>
+
+                <div class="docs-body">
+                    <h1>Goldilox Insights Documentation</h1>
+                    <p class="docs-lede">Everything you need to install Insights, point it at the right tables, and start applying clustering key recommendations — typically in under 15 minutes, entirely inside your Snowflake account.</p>
+
+                    <h2 id="overview">Overview</h2>
+                    <p>Goldilox Insights is a Snowflake Native App. It studies how your queries actually read your tables, then recommends clustering keys that improve partition pruning — so queries scan less data, run faster, and cost less. Because compute is billed by warehouse runtime, a faster query is a cheaper query.</p>
+                    <p>Insights never moves your data. It runs as an app inside your Snowflake account and reads only query metadata and table statistics — never the contents of your tables.</p>
+
+                    <h2 id="requirements">Requirements</h2>
+                    <ul>
+                        <li>A Snowflake account on a supported cloud and region.</li>
+                        <li>Privileges to install a Native App from the Snowflake Marketplace (typically <code>ACCOUNTADMIN</code>, or a role granted the marketplace import privilege).</li>
+                        <li>A warehouse the app can use to run its analysis.</li>
+                        <li>Query history available for the tables you want to optimize — the more representative your recent workload, the better the recommendations.</li>
+                    </ul>
+
+                    <h2 id="install"><span class="docs-step-num">1</span>Install the app</h2>
+                    <p>Open the <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" rel="noopener">Goldilox Insights listing on the Snowflake Marketplace</a> and click Get. Installing the app gives you a free preview of the Insights dashboard — no recommendations or payment required. There are no external services to deploy and nothing to host.</p>
+                    <div class="docs-note">Installing only previews the dashboard. The free promotion and paid tiers unlock full clustering key recommendations with estimated savings.</div>
+
+                    <h2 id="permissions"><span class="docs-step-num">2</span>Grant permissions</h2>
+                    <p>On first launch, the app's setup screen requests the privileges it needs to analyze your workload. At a high level, Insights needs to:</p>
+                    <ul>
+                        <li>Read query history and access patterns, so it can see which columns your queries filter and join on.</li>
+                        <li>Read table and micro-partition metadata, so it can measure current pruning efficiency.</li>
+                        <li>Use a warehouse to run its analysis.</li>
+                    </ul>
+                    <p>Grant the privileges through the in-app prompts. Insights does not request access to the contents of your tables.</p>
+
+                    <h2 id="select-tables"><span class="docs-step-num">3</span>Select tables to monitor</h2>
+                    <p>Choose the tables you want Insights to watch. The best candidates are your largest, most-queried fact tables — the ones where excessive scanning costs the most. Insights highlights high-impact tables with low pruning efficiency so you can prioritize. Your plan determines how many tables you can monitor at once.</p>
+
+                    <h2 id="analysis"><span class="docs-step-num">4</span>Automated analysis</h2>
+                    <p>Once tables are selected, Insights begins analyzing your query telemetry. It uses trained prediction models to identify the clustering key that would maximize partition pruning for each table's real access pattern. As your workload shifts over time, recommendations adapt.</p>
+
+                    <h2 id="review"><span class="docs-step-num">5</span>Review recommendations</h2>
+                    <p>The dashboard shows, per table:</p>
+                    <ul>
+                        <li>The recommended clustering key.</li>
+                        <li>Current versus predicted partitions scanned.</li>
+                        <li>Estimated credit and dollar savings, based on your own historical query costs.</li>
+                        <li>Ready-to-run SQL to apply the change.</li>
+                    </ul>
+                    <p>Because every recommendation carries an estimated saving, you can sort by impact and apply the changes that matter most first.</p>
+
+                    <h2 id="apply"><span class="docs-step-num">6</span>Apply changes</h2>
+                    <p>Insights generates the SQL for each recommendation. Applying a clustering key in Snowflake looks like this:</p>
+                    <pre><code>ALTER TABLE my_db.my_schema.STORE_SALES
+  CLUSTER BY (SS_SOLD_DATE_SK, SS_STORE_SK);</code></pre>
+                    <p>You stay in full control: Insights recommends, you review and apply at your discretion. After Snowflake reclusters the table, new queries benefit from improved pruning automatically — no query rewrites needed.</p>
+                    <div class="docs-note">Snowflake performs automatic clustering as a background service, which consumes credits while it reorganizes a newly clustered table. Insights factors steady-state query savings into its estimates; for very large tables, apply during a window where some background reclustering cost is acceptable.</div>
+
+                    <h2 id="monitoring">Ongoing monitoring</h2>
+                    <p>Clustering is not one-and-done. As query patterns evolve, a key that was optimal can drift. Insights continuously monitors your selected tables and updates recommendations when a better key emerges, so your tables stay tuned without manual re-analysis.</p>
+
+                    <h2 id="security">Data &amp; security</h2>
+                    <p>Insights runs entirely within your Snowflake environment. Your data never leaves your account, and only query metadata and telemetry are analyzed — never the contents of your tables. See the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Use</a> for details.</p>
+
+                    <h2 id="troubleshooting">Troubleshooting</h2>
+                    <h3>I don't see recommendations yet</h3>
+                    <p>Insights needs enough query history on a selected table to model its access pattern. Give it a short window after installation to gather data, and make sure the table has been queried recently.</p>
+                    <h3>Recommendations look different from last month</h3>
+                    <p>That's expected — recommendations adapt to your current workload. If your queries have shifted, the optimal clustering key can shift with them.</p>
+                    <h3>Estimated savings seem conservative</h3>
+                    <p>Estimates are grounded in your actual historical query costs rather than best-case projections, so they tend to be realistic rather than optimistic.</p>
+
+                    <h2 id="support">Support</h2>
+                    <p>Questions or issues? Email <a href="mailto:support@goldilox.com">support@goldilox.com</a> or <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">request a demo</a>.</p>
+
+                    <div class="docs-cta">
+                        <p><strong>Ready to start?</strong> Install Insights and preview the dashboard for free.</p>
+                        <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" rel="noopener" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="index.html#products">Products</a>
+                    <a href="docs.html">Docs</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="index.html#faqs">FAQs</a>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>
