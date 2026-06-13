@@ -11,12 +11,12 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.goldilox.com/blog.html</loc>
+    <loc>https://www.goldilox.com/resources.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.goldilox.com/blog-optimizing-clustering-keys.html</loc>
+    <loc>https://www.goldilox.com/optimizing-clustering-keys.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
