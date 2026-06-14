@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="analytics.js"></script>
+    <title>Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights - Goldilox</title>
+    <meta name="description" content="How Goldilox Insights automatically recommends Snowflake clustering keys — and the first TPC-DS benchmark results: partition pruning from 41% to 59% and 12% faster queries, with zero manual tuning.">
+    <link rel="canonical" href="https://www.goldilox.com/optimizing-clustering-keys.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights">
+    <meta property="og:description" content="First TPC-DS benchmark results from Goldilox Insights: partition pruning from 41% to 59% and 12% faster queries, with zero manual tuning.">
+    <meta property="og:image" content="https://www.goldilox.com/og-image.png">
+    <meta property="og:url" content="https://www.goldilox.com/optimizing-clustering-keys.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .article-page { padding: 120px 0 80px; }
+        .article { max-width: 740px; margin: 0 auto; }
+        .article-eyebrow { color: var(--color-primary); font-weight: 700; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .article h1 { font-size: 2.5rem; line-height: 1.2; margin: 0.75rem 0 0.75rem; }
+        .article-lead { font-size: 1.1875rem; color: var(--color-text-light); line-height: 1.6; margin-bottom: 1.5rem; }
+        .article-meta { color: var(--color-text-light); font-size: 0.9375rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
+        .article h2 { font-size: 1.5rem; margin-top: 2.75rem; margin-bottom: 1rem; }
+        .article h3 { font-size: 1.125rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }
+        .article p { margin-bottom: 1.25rem; line-height: 1.85; font-size: 1.0625rem; }
+        .article ul, .article ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article li { margin-bottom: 0.625rem; line-height: 1.75; font-size: 1.0625rem; }
+        .article a:not(.btn) { color: var(--color-primary); }
+        .article a:hover { text-decoration: underline; }
+        .article pre { background: #0f172a; color: #e2e8f0; padding: 16px 20px; border-radius: 10px; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; margin: 1rem 0 1.5rem; }
+        .article pre code { font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; white-space: pre; }
+        .article :not(pre) > code { background: var(--color-background-alt); padding: 1px 6px; border-radius: 5px; font-size: 0.875em; font-family: 'SF Mono', Monaco, monospace; }
+        .article figure { margin: 1.5rem 0 2rem; }
+        .article figure img { width: 100%; border: 1px solid var(--color-border); border-radius: 12px; display: block; }
+        .article figcaption { color: var(--color-text-light); font-size: 0.875rem; text-align: center; margin-top: 10px; }
+        .editor-note { background: rgba(35, 131, 226, 0.06); border-left: 3px solid var(--color-primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 2.5rem; font-size: 0.9375rem; line-height: 1.7; color: var(--color-text-light); }
+        .editor-note strong { color: var(--color-text); }
+        .results-table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9375rem; }
+        .results-table th, .results-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--color-border); }
+        .results-table th { font-weight: 700; color: var(--color-text); background: var(--color-background-alt); }
+        .results-table td:last-child { color: var(--color-primary); font-weight: 600; }
+        .article-cta { margin-top: 3rem; padding: 28px; background: var(--color-background-alt); border-radius: 16px; text-align: center; }
+        .article-cta p { margin-bottom: 1rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 500; margin-bottom: 2rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#products">Products</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="index.html#faqs">FAQs</a></li>
+                    <li><a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a></li>
+                    <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="article-page">
+        <div class="container">
+            <article class="article">
+                <a href="resources.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    All resources
+                </a>
+
+                <span class="article-eyebrow">Benchmark</span>
+                <h1>Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights</h1>
+                <p class="article-lead">Automated Snowflake tuning to improve pruning and reduce cost &mdash; improving table partition pruning to 59% and speeding up queries by 12% on a TPC-DS benchmark dataset.</p>
+                <p class="article-meta">By Goldilox Technology &middot; April 29, 2025</p>
+
+                <div class="editor-note">
+                    <strong>Editor's note:</strong> This was our first published benchmark, from April 2025. We've since improved the models considerably &mdash; our current TPC-DS results show 51% faster queries and 76% fewer partitions scanned. See the <a href="index.html#benchmarks">latest benchmarks</a>.
+                </div>
+
+                <p>At Goldilox Technology, we believe Snowflake optimization should be <strong>smarter, simpler, scalable, and automatic</strong>. Today, we're excited to introduce Insights &mdash; our first product for automated Snowflake performance optimization &mdash; and share the first real-world results it achieved.</p>
+
+                <h2>Why table clustering keys matter</h2>
+                <p>Table scanning is the most expensive part of query execution &mdash; often <strong>over 60% of the total cost and time</strong>. When queries have to scan large numbers of micro-partitions unnecessarily, performance suffers and compute costs spike.</p>
+                <p>This is where Snowflake's table clustering keys come in. Cluster keys control how data is physically organized inside Snowflake tables, dramatically impacting how many micro-partitions a query needs to scan. Good table clustering leads to more efficient partition pruning &mdash; and faster, cheaper queries.</p>
+
+                <h2>The problem: manual clustering key tuning doesn't scale</h2>
+                <p>While clustering keys can significantly improve Snowflake performance, manually managing them presents serious challenges:</p>
+                <ul>
+                    <li><strong>Evolving query patterns.</strong> Query patterns constantly evolve &mdash; new reports, dashboards, and ad-hoc queries appear every day. What was optimal yesterday may not be optimal tomorrow.</li>
+                    <li><strong>Visibility gaps.</strong> Without detailed query analysis, it's almost impossible to know which columns users are actually filtering or joining on most frequently.</li>
+                    <li><strong>Time and expertise.</strong> Identifying target tables, analyzing query history, testing clustering keys &mdash; all require significant time and expertise, often from senior data engineers.</li>
+                    <li><strong>High cost of missed opportunities.</strong> Poor or outdated clustering leads directly to higher compute costs and slower user experiences.</li>
+                    <li><strong>Lack of scalability as workloads evolve.</strong> As new applications are built, new reports are added, and business needs shift, query patterns change constantly. Manual tuning becomes a game of endless catch-up &mdash; making it impossible to optimize proactively at scale.</li>
+                </ul>
+                <p>Yet today, tuning clustering keys remains a manual, time-consuming process &mdash; one that simply can't keep pace as query workloads evolve and expand.</p>
+
+                <h2>Introducing Insights: automated, adaptive clustering key recommendations</h2>
+                <p>At Goldilox Technology, we built Insights to solve exactly these challenges. Instead of relying on manual analysis and static tuning, Insights continuously monitors real-world query patterns, analyzes table access behavior, and surfaces <strong>data-driven clustering key recommendations</strong>.</p>
+                <p>Insights's engine is designed to:</p>
+                <ul>
+                    <li>Analyze live query profiles and metadata to understand how tables are actually used.</li>
+                    <li>Identify tables where clustering can have the greatest impact on performance.</li>
+                    <li>Recommend optimal clustering keys based on query patterns.</li>
+                    <li>Adapt over time as workloads shift, new recommendations are created, and application usage evolves.</li>
+                </ul>
+                <p>By automating what was previously a labor-intensive and reactive process, Insights enables Snowflake environments to stay optimized &mdash; improving query performance and lowering compute costs without human intervention. In the next section, we'll walk through our first real-world demonstration of Insights in action, applied to a Snowflake TPC-DS dataset.</p>
+
+                <h2>Use case: optimizing TPC-DS datasets</h2>
+                <p>The <strong>TPC-DS</strong> (Transaction Processing Performance Council &ndash; Decision Support) benchmark is an industry-standard dataset and workload used to evaluate the performance of analytical database systems. It's used by leading data warehouse platforms &mdash; such as Snowflake, Databricks, and Redshift &mdash; to demonstrate and validate system performance at scale. It reflects a wide range of real-world decision-support scenarios including complex joins, filters, aggregations, and large table scans.</p>
+                <p>Snowflake includes a TPC-DS-based sample schema (<code>SNOWFLAKE_SAMPLE_DATA.TPCDS_SF10TCL</code>) which provides a well-structured, yet non-trivially large dataset (scale factor 10). Our use case is based on this <a href="https://docs.snowflake.com/en/user-guide/sample-data-tpcds" target="_blank" rel="noopener">official dataset and queries</a>.</p>
+
+                <h3>Step 1. Copy the data</h3>
+                <p>Since we'll be modifying the tables after the baseline run, we copied the data into our own database:</p>
+                <pre><code>CREATE OR REPLACE TABLE sample_clone.tpcds_sf10tcl.CATALOG_PAGE AS SELECT * FROM snowflake_sample_data.tpcds_sf10tcl.CATALOG_PAGE;
+CREATE OR REPLACE TABLE sample_clone.tpcds_sf10tcl.PROMOTION   AS SELECT * FROM snowflake_sample_data.tpcds_sf10tcl.PROMOTION;
+CREATE OR REPLACE TABLE sample_clone.tpcds_sf10tcl.WEB_PAGE    AS SELECT * FROM snowflake_sample_data.tpcds_sf10tcl.WEB_PAGE;
+-- ... repeated for the remaining tables ...</code></pre>
+                <p>This would ideally maintain the original table structure. (Later in validation we noticed certain table ordering may have changed during the copy process &mdash; but this does not impact the result.)</p>
+
+                <h3>Step 2. Execute queries (baseline)</h3>
+                <p>The queries are provided by Snowflake, based on the <a href="https://docs.snowflake.com/en/user-guide/sample-data-tpcds" target="_blank" rel="noopener">TPC-DS benchmarks</a>. We disabled cached results and tagged each run with a dynamic timestamp so we could compare baseline against post-tuning runs:</p>
+                <pre><code>USE SCHEMA sample_clone.tpcds_sf10tcl;
+ALTER SESSION SET use_cached_result = FALSE;
+SET start_time = CURRENT_TIMESTAMP();
+ALTER WAREHOUSE goldilox_app_client_wh SET warehouse_size = '2x-large';
+
+-- Set a variable with the dynamic query tag value
+SET query_tag_val = (SELECT 'GOLDILOX_INSIGHTS_TEST_RUN_TPCDS_' || TO_VARCHAR(CURRENT_TIMESTAMP, 'YYYYMMDD_HH24MISS'));
+ALTER SESSION SET query_tag = $query_tag_val;
+
+-- ... then run the 99 TPC-DS benchmark queries ...</code></pre>
+                <p><strong>Thoughts on baseline performance:</strong> after executing all 99 queries as the baseline, we saw 5.6M partitions scanned out of 9.6M partitions total &mdash; roughly a <strong>41% pruning rate</strong>, which is excellent compared to most real-world scenarios. We suspect this is the outcome of careful tuning by the Snowflake team to boost TPC-DS benchmark performance.</p>
+                <figure>
+                    <img src="benchmark-baseline-summary.png" alt="Baseline query_history summary: 103 queries, 1,004,202 ms total execution, 5,624,753 of 9,695,796 partitions scanned, 0.4199 pruning rate">
+                    <figcaption>Baseline summary from <code>query_history</code> — 41.99% pruning rate before tuning</figcaption>
+                </figure>
+
+                <h3>Step 3. Trigger the Insights update task and apply recommendations</h3>
+                <p>The Insights update task is scheduled to run periodically. For this use case, we manually triggered it, which analyzes the workload and applies the pre-trained recommendation model. In the Insights app (delivered through Snowflake Native Apps), the model recommended a set of clustering keys:</p>
+                <figure>
+                    <img src="benchmark-recommendations.png" alt="Clustering key recommendations table in the Insights app, showing per-table dollar savings, partitions scanned vs. predicted, and recommended clustering keys">
+                    <figcaption>Clustering key recommendations provided by Insights</figcaption>
+                </figure>
+                <p>Based on the report, we picked 8 high-impact tables and applied the recommended keys:</p>
+                <pre><code>ALTER TABLE SAMPLE_CLONE.TPCDS_SF10TCL.STORE_SALES      CLUSTER BY (SS_SOLD_DATE_SK, SS_STORE_SK);
+ALTER TABLE SAMPLE_CLONE.TPCDS_SF10TCL.STORE_RETURNS    CLUSTER BY (SR_RETURNED_DATE_SK, SR_ITEM_SK);
+ALTER TABLE SAMPLE_CLONE.TPCDS_SF10TCL.CUSTOMER_ADDRESS CLUSTER BY (CA_GMT_OFFSET, CA_STATE);
+-- ... 8 high-impact tables in total ...</code></pre>
+                <p>Then we waited for auto-clustering to complete on the Snowflake side.</p>
+
+                <h3>Step 4. Re-run the benchmark and view results</h3>
+                <p>We ran the benchmark query script again, this time tagged with a different timestamp (and repeated the test again a couple of days later). The following view shows the partition pruning ratio over time across all tables. We only updated 8 tables, but the improvement is clearly visible &mdash; pruning ratios jump on the re-run:</p>
+                <figure>
+                    <img src="benchmark-pruning-overview.png" alt="Line chart of partition pruning ratio over time across all TPC-DS tables, showing a sharp increase after clustering keys are applied">
+                    <figcaption>Partition pruning ratio over time, across all tables</figcaption>
+                </figure>
+                <p>Zooming in on <code>STORE_SALES</code> &mdash; the largest table, which scans millions of partitions across these queries &mdash; the pruning ratio improved from <strong>40% to 69%</strong>. The largest, most-scanned tables seeing the biggest gains is exactly what you want, because those tables cost the most to scan.</p>
+                <figure>
+                    <img src="benchmark-pruning-store-sales.png" alt="Partition pruning ratio over time with STORE_SALES highlighted, climbing to roughly 69% after tuning">
+                    <figcaption>STORE_SALES pruning ratio climbing to ~69% after tuning</figcaption>
+                </figure>
+                <p>Pulling it together from <code>query_history</code> &mdash; row 1 is the baseline; rows 2 and 3 are the runs after the recommended keys were applied:</p>
+                <figure>
+                    <img src="benchmark-query-history.png" alt="query_history summary comparing baseline (1,004,202 ms, 0.4199 pruning) against two post-tuning runs (~868,000 ms, 0.5935 pruning)">
+                    <figcaption>Baseline vs. post-tuning runs in <code>query_history</code></figcaption>
+                </figure>
+                <table class="results-table">
+                    <thead>
+                        <tr><th>Metric</th><th>Before</th><th>After</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Overall pruning rate</td><td>41%</td><td>59%</td></tr>
+                        <tr><td>Total query execution time</td><td>1,004 s</td><td>870 s (&minus;12%)</td></tr>
+                        <tr><td>STORE_SALES pruning</td><td>40%</td><td>69%</td></tr>
+                    </tbody>
+                </table>
+                <p>The overall pruning rate improved from 41% to 59%, which directly translated into better execution time &mdash; a 12% improvement. Because Snowflake compute is billed by warehouse runtime, those 12% faster queries mean roughly <strong>12% savings</strong> on Snowflake cost across this workload.</p>
+
+                <h2>Disclaimer on benchmark comparison</h2>
+                <p>We feel it's important to clarify a couple of points. The Snowflake TPC-DS sample data we used was copied using standard <code>SELECT * FROM</code> operations and may not be as finely tuned as the datasets used in Snowflake's published performance benchmarks. Our goal here was to simulate a realistic customer scenario using industry-standard sample data &mdash; not to match official benchmark scores.</p>
+
+                <h2>Conclusion: smarter optimization, scaled automatically</h2>
+                <p>This use case demonstrates what we built Insights to do: turn Snowflake query optimization from a manual, one-time task into a continuous, intelligent system. Despite starting with a dataset that was already well-optimized, Insights delivered:</p>
+                <ul>
+                    <li><strong>18% increase in pruning efficiency</strong></li>
+                    <li><strong>12% reduction in total execution time</strong> (from 1,004 seconds to 870 seconds)</li>
+                    <li><strong>Zero manual analysis or tuning effort</strong></li>
+                </ul>
+                <p>In many real-world Snowflake environments, initial pruning rates are often much lower than 41% &mdash; especially in large, evolving datasets without consistent tuning. This means the performance and cost improvements from Insights would likely be even more dramatic.</p>
+                <p>Most importantly, these gains were achieved through automation. No trial-and-error. No manual SQL rewrites. No dashboards to babysit. Insights makes it possible for Snowflake performance to continuously adapt to evolving workloads, stay optimized without heavy manual intervention, and unlock better performance at lower cost. Stay tuned &mdash; this is just the beginning.</p>
+
+                <div class="article-cta">
+                    <p><strong>Want to see what Insights recommends for your tables?</strong> Install from the Snowflake Marketplace and preview the dashboard for free. If you run a Snowflake environment &mdash; or you're a Snowflake-focused service provider or consultancy &mdash; we'd love to connect.</p>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" rel="noopener" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="index.html#products">Products</a>
+                    <a href="resources.html">Resources</a>
+                    <a href="index.html#faqs">FAQs</a>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>

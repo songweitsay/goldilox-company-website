@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="analytics.js"></script>
+    <title>Resources - Goldilox</title>
+    <meta name="description" content="Benchmarks, deep dives, and technical analysis from Goldilox on Snowflake performance">
+    <link rel="canonical" href="https://www.goldilox.com/resources.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .blog-page { padding: 120px 0 80px; }
+        .blog-header { max-width: 740px; margin: 0 auto 3rem; }
+        .blog-header h1 { font-size: 2.75rem; margin-bottom: 0.75rem; }
+        .blog-header p { color: var(--color-text-light); font-size: 1.125rem; line-height: 1.7; }
+        .post-list { max-width: 740px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .post-card { display: block; padding: 28px; background: #fff; border: 1px solid var(--color-border); border-radius: 16px; transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease; }
+        .post-card:hover { border-color: #d5dce5; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); }
+        .post-card-eyebrow { color: var(--color-primary); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .post-card h2 { font-size: 1.375rem; margin: 0.5rem 0 0.5rem; line-height: 1.3; }
+        .post-card-meta { color: var(--color-text-light); font-size: 0.875rem; margin-bottom: 0.75rem; }
+        .post-card p { color: var(--color-text-light); line-height: 1.7; margin-bottom: 1rem; }
+        .post-card-readmore { color: var(--color-primary); font-weight: 600; font-size: 0.9375rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 500; margin-bottom: 2rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#products">Products</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="index.html#faqs">FAQs</a></li>
+                    <li><a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a></li>
+                    <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="blog-page">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Home
+            </a>
+            <div class="blog-header">
+                <h1>Resources</h1>
+                <p>Benchmarks, deep dives, and technical analysis on Snowflake performance</p>
+            </div>
+
+            <div class="post-list">
+                <a href="getting-started.html" class="post-card">
+                    <span class="post-card-eyebrow">Guide</span>
+                    <h2>Getting Started with Goldilox Insights</h2>
+                    <p class="post-card-meta">Setup guide</p>
+                    <p>Install Insights from the Snowflake Marketplace, grant permissions, select tables, review clustering key recommendations, and apply changes &mdash; typically in under 15 minutes, entirely inside your Snowflake account.</p>
+                    <span class="post-card-readmore">Read guide &rarr;</span>
+                </a>
+                <a href="optimizing-clustering-keys.html" class="post-card">
+                    <span class="post-card-eyebrow">Benchmark</span>
+                    <h2>Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights</h2>
+                    <p class="post-card-meta">April 29, 2025</p>
+                    <p>Our first published benchmark: on a 10&nbsp;TB TPC-DS dataset, applying the clustering keys Insights recommended &mdash; with zero manual tuning &mdash; lifted partition pruning from 41% to 59% and cut query time 12%, with the largest fact table improving most.</p>
+                    <span class="post-card-readmore">Read article &rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="index.html#products">Products</a>
+                    <a href="resources.html">Resources</a>
+                    <a href="index.html#faqs">FAQs</a>
+                    <a href="https://forms.gle/bhB9XKnbhfofMrXq6" target="_blank" rel="noopener">Contact</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>
