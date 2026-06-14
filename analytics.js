@@ -27,6 +27,15 @@
             gtag('event', 'marketplace_cta_click', { link_text: label, link_url: href, page: location.pathname });
         } else if (href.indexOf('forms.gle') !== -1) {
             gtag('event', 'lead_form_click', { link_text: label, link_url: href, page: location.pathname });
+        } else if (a.classList && a.classList.contains('post-card')) {
+            var eyebrow = a.querySelector('.post-card-eyebrow');
+            var heading = a.querySelector('h2');
+            gtag('event', 'resource_click', {
+                resource_type: eyebrow ? eyebrow.textContent.trim() : '',
+                resource_title: heading ? heading.textContent.replace(/\s+/g, ' ').trim().slice(0, 100) : '',
+                link_url: href,
+                page: location.pathname
+            });
         }
     });
 })();
