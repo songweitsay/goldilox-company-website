@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="analytics.js"></script>
+    <title>Contact - Goldilox</title>
+    <meta name="description" content="Get in touch with Goldilox about Snowflake performance optimization.">
+    <link rel="canonical" href="https://www.goldilox.com/contact.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .contact-page { padding: 120px 0 80px; }
+        .contact-wrap { max-width: 600px; margin: 0 auto; }
+        .contact-wrap h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .contact-lede { color: var(--color-text-light); font-size: 1.0625rem; line-height: 1.7; margin-bottom: 2.5rem; }
+        .contact-form { display: flex; flex-direction: column; gap: 18px; }
+        .field label { display: block; font-weight: 500; font-size: 0.9375rem; margin-bottom: 6px; }
+        .field input, .field textarea {
+            width: 100%; font-family: var(--font-family); font-size: 1rem; color: var(--color-text);
+            padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 10px;
+            background: #fff; transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .field input:focus, .field textarea:focus {
+            outline: none; border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(35, 131, 226, 0.12);
+        }
+        .field textarea { resize: vertical; min-height: 130px; }
+        /* Honeypot — hidden from humans, bots tend to fill it */
+        .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        #turnstile-wrap { margin-top: 4px; }
+        .contact-submit { align-self: flex-start; border: none; cursor: pointer; }
+        .contact-submit[disabled] { opacity: 0.6; cursor: default; }
+        .form-status { font-size: 0.9375rem; line-height: 1.6; padding: 14px 16px; border-radius: 10px; display: none; }
+        .form-status.show { display: block; }
+        .form-status.success { background: rgba(21, 128, 61, 0.08); color: #15803d; border: 1px solid rgba(21, 128, 61, 0.25); }
+        .form-status.error { background: rgba(220, 38, 38, 0.06); color: #b91c1c; border: 1px solid rgba(220, 38, 38, 0.25); }
+        .form-status.note { background: var(--color-background-alt); color: var(--color-text-light); border: 1px solid var(--color-border); }
+        .contact-alt { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); font-size: 0.9375rem; line-height: 1.7; }
+        .contact-alt a { color: var(--color-primary); }
+        .contact-alt a:hover { text-decoration: underline; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 500; margin-bottom: 2rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#products">Products</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="index.html#faqs">FAQs</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="contact-page">
+        <div class="container">
+            <div class="contact-wrap">
+                <a href="index.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Home
+                </a>
+                <h1>Get in touch</h1>
+                <p class="contact-lede">Questions about Goldilox Insights, pricing, or partnerships? Send us a note and we'll get back to you. Looking for a walkthrough? You can also <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" rel="noopener">try it free on the Snowflake Marketplace</a>.</p>
+
+                <form class="contact-form" id="contactForm" novalidate>
+                    <div class="field">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" autocomplete="name" required>
+                    </div>
+                    <div class="field">
+                        <label for="email">Work email</label>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
+                    </div>
+                    <div class="field">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company" autocomplete="organization" required>
+                    </div>
+                    <div class="field">
+                        <label for="message">How can we help?</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <!-- Honeypot: leave empty. Hidden from people; bots often fill it. -->
+                    <div class="hp-field" aria-hidden="true">
+                        <label for="website">Website</label>
+                        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <div id="turnstile-wrap"></div>
+
+                    <button type="submit" class="btn btn-primary contact-submit" id="submitBtn">Send message</button>
+                    <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+                </form>
+
+                <p class="contact-alt">Prefer email? Reach us at <a href="mailto:contact@goldilox.com">contact@goldilox.com</a>.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="index.html#products">Products</a>
+                    <a href="resources.html">Resources</a>
+                    <a href="index.html#faqs">FAQs</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        //  CONFIG — fill these in to go live (both can stay empty for preview)
+        // ============================================================
+        var CONFIG = {
+            // Apps Script web-app deployment URL (…/exec). Empty = preview mode (no send).
+            APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyi8VahEB2tHJtFXY4iIgpmPCyCeSDKb34UzHTZ7iw2W-9RK-4NuqOyu_gqxGh_eZQ0wQ/exec',
+            // Cloudflare Turnstile SITE key (public). Empty = no CAPTCHA shown.
+            TURNSTILE_SITE_KEY: ''
+        };
+        // ============================================================
+
+        var form = document.getElementById('contactForm');
+        var statusEl = document.getElementById('formStatus');
+        var submitBtn = document.getElementById('submitBtn');
+        var turnstileToken = '';
+
+        function setStatus(kind, msg) {
+            statusEl.className = 'form-status show ' + kind;
+            statusEl.textContent = msg;
+        }
+
+        // Load Cloudflare Turnstile only when a site key is configured.
+        if (CONFIG.TURNSTILE_SITE_KEY) {
+            var ts = document.createElement('script');
+            ts.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+            ts.async = true; ts.defer = true;
+            ts.onload = function () {
+                window.turnstile.render('#turnstile-wrap', {
+                    sitekey: CONFIG.TURNSTILE_SITE_KEY,
+                    callback: function (t) { turnstileToken = t; },
+                    'expired-callback': function () { turnstileToken = ''; }
+                });
+            };
+            document.head.appendChild(ts);
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Honeypot tripped → silently accept and stop (don't tip off the bot).
+            if (form.website.value) { setStatus('success', "Thanks — we'll be in touch."); form.reset(); return; }
+
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+
+            if (CONFIG.TURNSTILE_SITE_KEY && !turnstileToken) {
+                setStatus('error', 'Please complete the verification check.');
+                return;
+            }
+
+            if (!CONFIG.APPS_SCRIPT_URL) {
+                setStatus('note', 'Preview mode — the form is not connected to a backend yet, so nothing was sent.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            setStatus('note', 'Sending…');
+
+            var body = new URLSearchParams({
+                name: form.name.value,
+                email: form.email.value,
+                company: form.company.value,
+                message: form.message.value,
+                'cf-turnstile-response': turnstileToken,
+                page: location.pathname
+            });
+
+            // Apps Script web apps don't send CORS headers, so we POST as a
+            // "simple request" (form-urlencoded) in no-cors mode. The request
+            // reaches the script; the response is opaque, so we treat a
+            // resolved fetch as success and a network error as failure.
+            fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: body })
+                .then(function () {
+                    setStatus('success', "Thanks — we'll be in touch shortly.");
+                    form.reset();
+                    if (CONFIG.TURNSTILE_SITE_KEY && window.turnstile) { window.turnstile.reset(); turnstileToken = ''; }
+                    if (window.gtag) { gtag('event', 'contact_form_submit', { page: location.pathname }); }
+                })
+                .catch(function () {
+                    setStatus('error', "Something went wrong. Please email us instead at contact@goldilox.com.");
+                })
+                .finally(function () { submitBtn.disabled = false; });
+        });
+
+        // Mobile menu + header scroll (shared behavior)
+        var mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        var navLinks = document.querySelector('.nav-links');
+        mobileMenuBtn.addEventListener('click', function () {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+        window.addEventListener('scroll', function () {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>
