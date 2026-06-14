@@ -143,11 +143,15 @@ ALTER SESSION SET query_tag = $query_tag_val;
 
 -- ... then run the 99 TPC-DS benchmark queries ...</code></pre>
                 <p><strong>Thoughts on baseline performance:</strong> after executing all 99 queries as the baseline, we saw 5.6M partitions scanned out of 9.6M partitions total &mdash; roughly a <strong>41% pruning rate</strong>, which is excellent compared to most real-world scenarios. We suspect this is the outcome of careful tuning by the Snowflake team to boost TPC-DS benchmark performance.</p>
+                <figure>
+                    <img src="benchmark-baseline-summary.png" alt="Baseline query_history summary: 103 queries, 1,004,202 ms total execution, 5,624,753 of 9,695,796 partitions scanned, 0.4199 pruning rate">
+                    <figcaption>Baseline summary from <code>query_history</code> — 41.99% pruning rate before tuning</figcaption>
+                </figure>
 
                 <h3>Step 3. Trigger the Insights update task and apply recommendations</h3>
                 <p>The Insights update task is scheduled to run periodically. For this use case, we manually triggered it, which analyzes the workload and applies the pre-trained recommendation model. In the Insights app (delivered through Snowflake Native Apps), the model recommended a set of clustering keys:</p>
                 <figure>
-                    <img src="screenshot-recommendation.png" alt="Clustering key recommendations table in the Insights app, showing per-table savings and recommended keys">
+                    <img src="benchmark-recommendations.png" alt="Clustering key recommendations table in the Insights app, showing per-table dollar savings, partitions scanned vs. predicted, and recommended clustering keys">
                     <figcaption>Clustering key recommendations provided by Insights</figcaption>
                 </figure>
                 <p>Based on the report, we picked 8 high-impact tables and applied the recommended keys:</p>
@@ -158,17 +162,21 @@ ALTER TABLE SAMPLE_CLONE.TPCDS_SF10TCL.CUSTOMER_ADDRESS CLUSTER BY (CA_GMT_OFFSE
                 <p>Then we waited for auto-clustering to complete on the Snowflake side.</p>
 
                 <h3>Step 4. Re-run the benchmark and view results</h3>
-                <p>We ran the benchmark query script again, this time tagged with a different timestamp (and repeated the test again a couple of days later). The following view shows the pruning rate (scanned / total) across all tables. We only updated 8 tables, but the improvement is clearly visible:</p>
+                <p>We ran the benchmark query script again, this time tagged with a different timestamp (and repeated the test again a couple of days later). The following view shows the partition pruning ratio over time across all tables. We only updated 8 tables, but the improvement is clearly visible &mdash; pruning ratios jump on the re-run:</p>
                 <figure>
-                    <img src="screenshot-overview-1.png" alt="Insights dashboard showing partition pruning efficiency across all tables">
-                    <figcaption>Overview of all tables' pruning rate (scanned / total)</figcaption>
+                    <img src="benchmark-pruning-overview.png" alt="Line chart of partition pruning ratio over time across all TPC-DS tables, showing a sharp increase after clustering keys are applied">
+                    <figcaption>Partition pruning ratio over time, across all tables</figcaption>
                 </figure>
                 <p>Zooming in on <code>STORE_SALES</code> &mdash; the largest table, which scans millions of partitions across these queries &mdash; the pruning ratio improved from <strong>40% to 69%</strong>. The largest, most-scanned tables seeing the biggest gains is exactly what you want, because those tables cost the most to scan.</p>
                 <figure>
-                    <img src="screenshot-overview-2.png" alt="Insights table-level analysis highlighting the largest table's pruning improvement">
-                    <figcaption>Table-level view of partition pruning efficiency</figcaption>
+                    <img src="benchmark-pruning-store-sales.png" alt="Partition pruning ratio over time with STORE_SALES highlighted, climbing to roughly 69% after tuning">
+                    <figcaption>STORE_SALES pruning ratio climbing to ~69% after tuning</figcaption>
                 </figure>
-                <p>Pulling it together from <code>query_history</code> &mdash; baseline versus the runs after the recommended keys were applied:</p>
+                <p>Pulling it together from <code>query_history</code> &mdash; row 1 is the baseline; rows 2 and 3 are the runs after the recommended keys were applied:</p>
+                <figure>
+                    <img src="benchmark-query-history.png" alt="query_history summary comparing baseline (1,004,202 ms, 0.4199 pruning) against two post-tuning runs (~868,000 ms, 0.5935 pruning)">
+                    <figcaption>Baseline vs. post-tuning runs in <code>query_history</code></figcaption>
+                </figure>
                 <table class="results-table">
                     <thead>
                         <tr><th>Metric</th><th>Before</th><th>After</th></tr>
