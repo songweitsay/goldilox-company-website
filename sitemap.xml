@@ -16,6 +16,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.goldilox.com/iceberg-clustering.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.goldilox.com/optimizing-clustering-keys.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>

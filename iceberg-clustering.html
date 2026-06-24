@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="analytics.js"></script>
+    <title>Optimizing Snowflake Apache Iceberg Tables: Goldilox Clustering Recommendations Work on Iceberg, Too - Goldilox</title>
+    <meta name="description" content="Snowflake-managed Apache Iceberg tables get the same automated, workload-based clustering recommendations Goldilox Insights gives native tables. In our TPC-H SF100 benchmark, the optimized Iceberg table reached 32% partition pruning and scanned 40% less data, on par with native, with zero manual tuning.">
+    <link rel="canonical" href="https://www.goldilox.com/iceberg-clustering.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Optimizing Snowflake Apache Iceberg Tables with Goldilox Insights">
+    <meta property="og:description" content="Goldilox clustering recommendations work on Snowflake-managed Apache Iceberg tables. TPC-H SF100 benchmark: 0% to 32% partition pruning, 40% less data scanned, on par with native, with zero manual tuning.">
+    <meta property="og:image" content="https://www.goldilox.com/og-image.png">
+    <meta property="og:url" content="https://www.goldilox.com/iceberg-clustering.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .article-page { padding: 120px 0 80px; }
+        .article { max-width: 740px; margin: 0 auto; }
+        .article-eyebrow { color: var(--color-primary); font-weight: 700; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .article h1 { font-size: 2.5rem; line-height: 1.2; margin: 0.75rem 0 0.75rem; }
+        .article-lead { font-size: 1.1875rem; color: var(--color-text-light); line-height: 1.6; margin-bottom: 1.5rem; }
+        .article-meta { color: var(--color-text-light); font-size: 0.9375rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
+        .article h2 { font-size: 1.5rem; margin-top: 2.75rem; margin-bottom: 1rem; }
+        .article h3 { font-size: 1.125rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }
+        .article p { margin-bottom: 1.25rem; line-height: 1.85; font-size: 1.0625rem; }
+        .article ul, .article ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article li { margin-bottom: 0.625rem; line-height: 1.75; font-size: 1.0625rem; }
+        .article a:not(.btn) { color: var(--color-primary); }
+        .article a:hover { text-decoration: underline; }
+        .article pre { background: #0f172a; color: #e2e8f0; padding: 16px 20px; border-radius: 10px; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; margin: 1rem 0 1.5rem; }
+        .article pre code { font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; white-space: pre; }
+        .article :not(pre) > code { background: var(--color-background-alt); padding: 1px 6px; border-radius: 5px; font-size: 0.875em; font-family: 'SF Mono', Monaco, monospace; }
+        .article figure { margin: 1.5rem 0 2rem; }
+        .article figure img { width: 100%; border: 1px solid var(--color-border); border-radius: 12px; display: block; }
+        .article figcaption { color: var(--color-text-light); font-size: 0.875rem; text-align: center; margin-top: 10px; }
+        .editor-note { background: rgba(35, 131, 226, 0.06); border-left: 3px solid var(--color-primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 2.5rem; font-size: 0.9375rem; line-height: 1.7; color: var(--color-text-light); }
+        .editor-note strong { color: var(--color-text); }
+        .results-table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9375rem; }
+        .results-table th, .results-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--color-border); }
+        .results-table th { font-weight: 700; color: var(--color-text); background: var(--color-background-alt); }
+        .results-table td:last-child { color: var(--color-primary); font-weight: 600; }
+        /* result figure: a titled, screenshot-friendly card around a results table */
+        .result-card { border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; margin: 1.5rem 0 2rem; }
+        .result-card-title { background: var(--color-background-alt); padding: 14px 18px; font-weight: 700; font-size: 0.9375rem; border-bottom: 1px solid var(--color-border); }
+        .result-card .results-table { margin: 0; }
+        .result-card .results-table td:last-child { color: var(--color-primary); font-weight: 600; }
+        .result-card .results-table tr:last-child td { border-bottom: none; }
+        .article-cta { margin-top: 3rem; padding: 28px; background: var(--color-background-alt); border-radius: 16px; text-align: center; }
+        .article-cta p { margin-bottom: 1rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 500; margin-bottom: 2rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="Goldilox" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#products">Products</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="index.html#faqs">FAQs</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" class="nav-cta"><img src="snowflake-logo.svg" alt="Snowflake" height="18"> Get Insights</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="article-page">
+        <div class="container">
+            <article class="article">
+                <a href="resources.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    All resources
+                </a>
+
+                <span class="article-eyebrow">Benchmark</span>
+                <h1>Goldilox Optimizes Snowflake Iceberg Tables, Too</h1>
+                <p class="article-lead">Snowflake-managed Apache Iceberg tables get the same automated, workload-based clustering recommendations Goldilox Insights gives native tables. In our TPC-H SF100 benchmark, applying those recommendations to a managed Iceberg table delivered <strong>32% partition pruning</strong> and <strong>40% less data scanned</strong>, on par with native, all with zero manual tuning.</p>
+                <p class="article-meta">By Goldilox Technology &middot; June 2026</p>
+
+                <div class="editor-note">
+                    <strong>The short version:</strong> Open table formats like Apache Iceberg don't remove the need for good clustering. An Iceberg table written in load order still scans far more data than it needs to. Goldilox analyzes your actual query workload and recommends the right clustering keys for Iceberg exactly as it does for native Snowflake tables, and the performance gains are just as real.
+                </div>
+
+                <h2>Why Snowflake's Apache Iceberg support matters</h2>
+                <p><a href="https://iceberg.apache.org/" target="_blank" rel="noopener">Apache Iceberg</a> is an open table format for large analytic tables, and it's quickly becoming the standard for the open data lakehouse. In Snowflake, Iceberg tables pair Snowflake's query engine and table semantics with data stored as open <strong>Parquet files plus Iceberg metadata</strong>, either in Snowflake-managed storage or in your own cloud storage through an external volume.</p>
+                <p>For Snowflake-managed Iceberg tables that use Snowflake as the catalog, the appeal is real:</p>
+                <ul>
+                    <li><strong>No lock-in.</strong> Your data stays in the open Iceberg table format with Parquet files, rather than Snowflake's native proprietary table format. Depending on configuration, those files live in Snowflake-managed storage or customer-managed cloud storage.</li>
+                    <li><strong>Interoperability.</strong> Through Snowflake Horizon Catalog and the Iceberg REST Catalog API, the same tables can be read by external engines such as Spark, Trino, Flink, and DuckDB under supported configurations. One copy of the data, many engines.</li>
+                    <li><strong>Snowflake performance and maintenance.</strong> Snowflake provides read/write access, lifecycle maintenance such as compaction, and table optimization including Automatic Clustering. (Some Snowflake features have Iceberg-specific limitations, and externally-managed Iceberg tables, where another system is the catalog, have more.)</li>
+                </ul>
+                <p>You get much of the openness of a data lake with the performance and simplicity of Snowflake. But that performance point comes with a catch most teams overlook.</p>
+
+                <h2>Iceberg tables still need good clustering</h2>
+                <p>Adopting an open format doesn't change the physics of query execution. Table scanning is still the most expensive part of most analytical queries, and an Iceberg table written in arrival order, with no thought given to physical layout, still forces queries to read nearly every file to answer a selective filter. That's wasted I/O and wasted compute, exactly as it would be on an unclustered native table.</p>
+                <p>The good news: Snowflake-managed Iceberg tables that use Snowflake as the catalog support clustering keys and Automatic Clustering, just like native tables. (Externally-managed Iceberg tables, where another system owns the catalog, don't currently support Snowflake clustering.) So for the common managed case, the <em>opportunity</em> is identical: physically organize the data around how it's actually queried, and Snowflake prunes away the files it doesn't need. The hard part, as always, is knowing <em>which</em> keys to choose, and keeping that choice current as workloads evolve.</p>
+
+                <h2>Goldilox recommends clustering keys for Iceberg automatically</h2>
+                <p>This is exactly the kind of recommendation <a href="index.html#products">Goldilox Insights</a> produces. Insights analyzes your <strong>actual Snowflake workload</strong>, the real query history, query profiles, filters, joins, and scan patterns that show how each table is genuinely used, and recommends clustering keys from that evidence rather than from generic rules of thumb. Because those workload signals are captured the same way for Iceberg and native tables, the same engine produces clustering key recommendations for Snowflake-managed Iceberg tables, which is exactly what we put to the test below. The recommended key is applied by setting it on the table:</p>
+                <pre><code>-- Apply the recommended clustering key to a managed Iceberg table
+ALTER ICEBERG TABLE analytics.public.lineitem CLUSTER BY (l_shipmode, l_shipdate);</code></pre>
+                <p>Setting a clustering key is a simple DDL change. Snowflake then performs the physical reorganization asynchronously through Automatic Clustering, so existing readers keep working while it runs. That keeps the workflow operationally simple. As with native auto-clustering, the reorganization runs as a separate, billed maintenance process rather than a pure metadata flip.</p>
+
+                <h2>The benchmark: TPC-H SF100, native vs. Iceberg, same keys</h2>
+                <p>To measure this directly, we used the industry-standard <strong>TPC-H</strong> benchmark at scale factor 100 (a 600-million-row <code>LINEITEM</code> table). We loaded the data into both a native Snowflake schema and a Snowflake-managed Iceberg schema, then applied the <strong>same</strong> Goldilox-recommended clustering keys to both formats, so the only variable is the storage format itself. We ran the 22 TPC-H queries with result caching disabled and measured partition pruning, data scanned, and query time.</p>
+                <p class="article-meta" style="border:none; padding:0; margin-bottom:1.5rem;"><em>Goldilox internal benchmark &middot; TPC-H SF100 &middot; Small warehouse &middot; result cache disabled &middot; figures derived from Snowflake query history and query profiles.</em></p>
+
+                <h2>Result 1: Goldilox optimization on Iceberg</h2>
+                <p>Starting from an unoptimized Iceberg table (load order, effectively zero pruning), applying the Goldilox-recommended keys delivered:</p>
+                <div class="result-card">
+                    <div class="result-card-title">Goldilox on a Snowflake-managed Iceberg table (TPC-H SF100)</div>
+                    <table class="results-table">
+                        <thead>
+                            <tr><th>Metric (22-query workload)</th><th>Unoptimized Iceberg</th><th>Goldilox-optimized</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Partition pruning</td><td>0%</td><td>32%</td></tr>
+                            <tr><td>Data scanned</td><td>450 GB</td><td>268 GB (&minus;40%)</td></tr>
+                            <tr><td>Query time (Small warehouse)</td><td>108 s</td><td>91 s (&minus;15%)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Partition pruning went from effectively zero to <strong>32%</strong>, and the workload scanned <strong>40% less data</strong>, achieved entirely from Goldilox's workload-based recommendation, with no manual analysis.</p>
+
+                <h2>Result 2: Iceberg keeps pace with native at the same keys</h2>
+                <p>The natural worry with any open format is whether you give up performance for openness. With the <em>identical</em> clustering keys applied to both, the Iceberg table kept pace with native, scanning essentially the same data in comparable time:</p>
+                <div class="result-card">
+                    <div class="result-card-title">Same clustering keys, native vs. Iceberg (TPC-H SF100, Small warehouse)</div>
+                    <table class="results-table">
+                        <thead>
+                            <tr><th>Metric (22-query workload)</th><th>Native table</th><th>Iceberg table</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Partition pruning</td><td>29.6%</td><td>32.4%</td></tr>
+                            <tr><td>Data scanned</td><td>271 GB</td><td>268 GB</td></tr>
+                            <tr><td>Query time</td><td>93.8 s</td><td>91.3 s</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The differences here, a few percent on data scanned and time, are within the run-to-run variance you'd expect from rebuilding and re-clustering tables this large (clustering relies on sampling, so each rebuild lands a little differently). The point isn't that one format wins. It's the reassurance that matters: <strong>you don't trade query performance for the open format.</strong> Iceberg keeps pace with native, and Goldilox's workload-based optimization works the same on both.</p>
+
+                <h2>How to read these numbers</h2>
+                <p>Partition pruning and data scanned are the <strong>most stable</strong> measures of this optimization because they're primarily driven by physical layout and query predicates, not warehouse size. Wall-clock time and cost conversion depend more heavily on warehouse size, cache state, concurrency, and how scan-heavy the workload is. The time savings are largest when scanning dominates query runtime. We report Small-warehouse times above.</p>
+
+                <h2>Takeaways</h2>
+                <ul>
+                    <li><strong>Iceberg gives you openness without giving up performance.</strong> One open copy of your data, with full Snowflake query performance.</li>
+                    <li><strong>Iceberg tables still benefit from clustering.</strong> The open format doesn't remove the pruning problem; well-chosen clustering keys cut data scanned by a third or more.</li>
+                    <li><strong>Goldilox optimizes Iceberg exactly like native.</strong> The same automated, workload-based recommendations, the same real gains, with zero manual tuning, so your lakehouse stays fast and cost-efficient as it grows.</li>
+                </ul>
+
+                <div class="article-cta">
+                    <p><strong>Running Iceberg or native tables on Snowflake?</strong> Install Goldilox Insights from the Snowflake Marketplace and preview clustering key recommendations for your own tables, free, entirely inside your Snowflake account.</p>
+                    <a href="https://app.snowflake.com/marketplace/listing/GZTYZ1S4Y14/goldilox-technology-goldilox-insights" target="_blank" rel="noopener" class="btn btn-primary">Try Free on Snowflake Marketplace</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Goldilox" height="32" class="footer-logo">
+                    <p>&copy; 2026 Goldilox Technology LLC</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="index.html#products">Products</a>
+                    <a href="resources.html">Resources</a>
+                    <a href="index.html#faqs">FAQs</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>
