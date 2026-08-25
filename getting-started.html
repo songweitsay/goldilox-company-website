@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <style>
         .docs-page { padding: 120px 0 80px; }
         .docs-layout { display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
@@ -97,6 +97,7 @@
                     <h2 id="overview">Overview</h2>
                     <p>Goldilox Insights is a Snowflake Native App. It studies how your queries actually read your tables, then recommends clustering keys that improve partition pruning — so queries scan less data, run faster, and cost less. Because compute is billed by warehouse runtime, a faster query is a cheaper query.</p>
                     <p>Insights never moves your data. It runs as an app inside your Snowflake account and reads only query metadata and table statistics — never the contents of your tables.</p>
+                    <p>If you'd rather see the whole loop before installing anything, we recorded a <a href="tpcds-benchmark-walkthrough.html">15-minute walkthrough of these steps against a 10&nbsp;TB TPC-DS benchmark</a>, from the unclustered baseline through to the measured results.</p>
 
                     <h2 id="requirements">Requirements</h2>
                     <ul>

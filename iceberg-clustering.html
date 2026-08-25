@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <style>
         .article-page { padding: 120px 0 80px; }
         .article { max-width: 740px; margin: 0 auto; }
@@ -163,6 +163,8 @@ ALTER ICEBERG TABLE analytics.public.lineitem CLUSTER BY (l_shipmode, l_shipdate
                     <li><strong>Iceberg tables still benefit from clustering.</strong> The open format doesn't remove the pruning problem; well-chosen clustering keys cut data scanned by a third or more.</li>
                     <li><strong>Goldilox optimizes Iceberg exactly like native.</strong> The same automated, workload-based recommendations, the same real gains, with zero manual tuning, so your lakehouse stays fast and cost-efficient as it grows.</li>
                 </ul>
+
+                <p>Want to see the methodology end to end? We recorded a <a href="tpcds-benchmark-walkthrough.html">full walkthrough of our 10&nbsp;TB TPC-DS benchmark on Snowflake</a> &mdash; the unclustered baseline, the workload analysis, the recommended clustering keys, and the rerun.</p>
 
                 <div class="article-cta">
                     <p><strong>Running Iceberg or native tables on Snowflake?</strong> Install Goldilox Insights from the Snowflake Marketplace and preview clustering key recommendations for your own tables, free, entirely inside your Snowflake account.</p>

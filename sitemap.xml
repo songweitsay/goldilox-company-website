@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://www.goldilox.com/</loc>
     <changefreq>monthly</changefreq>
@@ -14,6 +15,25 @@
     <loc>https://www.goldilox.com/resources.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.goldilox.com/tpcds-benchmark-walkthrough.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <video:video>
+      <video:thumbnail_loc>https://www.goldilox.com/video-tpcds-poster.jpg</video:thumbnail_loc>
+      <video:title>How we run the 10 TB TPC-DS benchmark on Snowflake</video:title>
+      <video:description>A full screen-recorded walkthrough of a 10 TB TPC-DS benchmark on Snowflake: the unclustered baseline across all 99 queries, Goldilox Insights analyzing the workload, the clustering key strategy it recommends, applying it, and re-running the identical workload to compare data scanned, query time, and credits consumed.</video:description>
+      <video:content_loc>https://www.youtube.com/watch?v=fivvQ3hh_rY</video:content_loc>
+      <video:player_loc>https://www.youtube.com/embed/fivvQ3hh_rY</video:player_loc>
+      <video:duration>921</video:duration>
+      <video:publication_date>2026-08-20T14:46:38-07:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://www.goldilox.com">Goldilox Technology LLC</video:uploader>
+    </video:video>
   </url>
   <url>
     <loc>https://www.goldilox.com/iceberg-clustering.html</loc>

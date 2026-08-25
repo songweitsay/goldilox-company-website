@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="analytics.js"></script>
     <title>Resources - Goldilox</title>
-    <meta name="description" content="Benchmarks, deep dives, and technical analysis from Goldilox on Snowflake performance">
+    <meta name="description" content="Goldilox benchmark results on Snowflake clustering keys, the methodology behind them, and what it takes to run Goldilox Insights on your own tables.">
     <link rel="canonical" href="https://www.goldilox.com/resources.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <style>
         .blog-page { padding: 120px 0 80px; }
         .blog-header { max-width: 740px; margin: 0 auto 3rem; }
@@ -61,29 +61,36 @@
             </a>
             <div class="blog-header">
                 <h1>Resources</h1>
-                <p>Benchmarks, deep dives, and technical analysis on Snowflake performance</p>
+                <p>Benchmarks you can check yourself, and a guide to running Goldilox Insights on your own tables.</p>
             </div>
 
             <div class="post-list">
+                <a href="tpcds-benchmark-walkthrough.html" class="post-card">
+                    <span class="post-card-eyebrow">Video</span>
+                    <h2>Watch us run the 10&nbsp;TB TPC-DS benchmark</h2>
+                    <p class="post-card-meta">15 min watch &middot; August 2026</p>
+                    <p>If you want to check our numbers before you trust them, this is the run they came from, uncut. The tables start with no clustering, the 99 TPC-DS queries go through once, Goldilox Insights reads the workload and picks keys, then the same queries run again. Data scanned fell 81%, runtime 51%, credits 50%.</p>
+                    <span class="post-card-readmore">Watch walkthrough &rarr;</span>
+                </a>
                 <a href="getting-started.html" class="post-card">
                     <span class="post-card-eyebrow">Guide</span>
-                    <h2>Getting Started with Goldilox Insights</h2>
+                    <h2>Getting started with Goldilox Insights</h2>
                     <p class="post-card-meta">Setup guide</p>
-                    <p>Install Insights from the Snowflake Marketplace, grant permissions, select tables, review clustering key recommendations, and apply changes &mdash; typically in under 15 minutes, entirely inside your Snowflake account.</p>
+                    <p>What installing Goldilox Insights actually involves. You get it from the Snowflake Marketplace, point it at the tables you care about, and review the keys it suggests before anything is applied. Most teams are done in about 15 minutes, and no data leaves their account.</p>
                     <span class="post-card-readmore">Read guide &rarr;</span>
                 </a>
                 <a href="iceberg-clustering.html" class="post-card">
                     <span class="post-card-eyebrow">Benchmark</span>
-                    <h2>Goldilox Optimizes Snowflake Iceberg Tables, Too</h2>
+                    <h2>Goldilox works on Iceberg tables too</h2>
                     <p class="post-card-meta">June 2026</p>
-                    <p>Apache Iceberg gives you an open format without giving up Snowflake performance, but Iceberg tables still need good clustering. On a TPC-H SF100 benchmark, the keys Goldilox recommended from the actual query workload lifted partition pruning to 32% and cut data scanned by 40% on a managed Iceberg table, on par with native, with zero manual tuning.</p>
+                    <p>If you've moved tables to Iceberg, clustering still matters there. An unclustered Iceberg table reads just as much as an unclustered native one. We ran TPC-H SF100 on a Snowflake-managed Iceberg table and let Goldilox Insights pick the keys. Pruning reached 32% and data scanned fell 40%, close enough to native to call it even.</p>
                     <span class="post-card-readmore">Read article &rarr;</span>
                 </a>
                 <a href="optimizing-clustering-keys.html" class="post-card">
                     <span class="post-card-eyebrow">Benchmark</span>
-                    <h2>Optimizing Snowflake Table Clustering Keys Automatically: First Results from Insights</h2>
+                    <h2>Choosing Snowflake clustering keys automatically</h2>
                     <p class="post-card-meta">April 2025</p>
-                    <p>Our first published benchmark: on a 10&nbsp;TB TPC-DS dataset, applying the clustering keys Insights recommended &mdash; with zero manual tuning &mdash; lifted partition pruning from 41% to 59% and cut query time 12%, with the largest fact table improving most.</p>
+                    <p>Our first published benchmark, from April 2025, kept here for the record. On 10&nbsp;TB of TPC-DS data the keys Goldilox Insights chose lifted partition pruning from 41% to 59% and cut query time by 12%. The engine has moved on a long way since. The walkthrough above shows where it stands now.</p>
                     <span class="post-card-readmore">Read article &rarr;</span>
                 </a>
             </div>
