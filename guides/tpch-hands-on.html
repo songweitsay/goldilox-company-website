@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../analytics.js"></script>
+<meta name="robots" content="noindex">
+<title>Test Goldilox on TPC-H SF100 in your Snowflake account - Goldilox</title>
+<meta name="description" content="Run TPC-H SF100 in your own Snowflake account, apply the clustering keys Goldilox Insights recommends, and rerun the 22 queries. Our run scanned 39% fewer partitions.">
+<link rel="canonical" href="https://www.goldilox.com/guides/tpch-hands-on.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Test Goldilox on TPC-H SF100 in your own Snowflake account">
+<meta property="og:description" content="Copy Snowflake's TPC-H SF100 sample data, run the 22 standard queries, apply the clustering keys Goldilox Insights recommends, and compare. In our run, partitions and data scanned both fell about 39%.">
+<meta property="og:url" content="https://www.goldilox.com/guides/tpch-hands-on.html">
+<meta property="og:image" content="https://www.goldilox.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Goldilox">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Test Goldilox on TPC-H SF100 in your own Snowflake account">
+<meta name="twitter:description" content="Copy Snowflake's TPC-H SF100 sample data, run the 22 standard queries, apply the clustering keys Goldilox Insights recommends, and compare. In our run, partitions and data scanned both fell about 39%.">
+<meta name="twitter:image" content="https://www.goldilox.com/og-image.png">
+<link rel="icon" type="image/png" href="../favicon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Test Goldilox on TPC-H SF100 in your own Snowflake account",
+  "description": "Run TPC-H SF100 in your own Snowflake account, apply the clustering keys Goldilox Insights recommends, and rerun the 22 queries. Our run scanned 39% fewer partitions.",
+  "url": "https://www.goldilox.com/guides/tpch-hands-on.html",
+  "image": "https://www.goldilox.com/og-image.png",
+  "datePublished": "2026-10-14",
+  "proficiencyLevel": "Expert",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Goldilox Technology LLC",
+    "url": "https://www.goldilox.com",
+    "logo": { "@type": "ImageObject", "url": "https://www.goldilox.com/logo.png" }
+  }
+}
+</script>
+<style>
+:root {
+  --bg: #fbfaf8;
+  --surface: #ffffff;
+  --surface-2: #f3f1ed;
+  --text: #1d1b19;
+  --muted: #625d57;
+  --border: #e3dfd8;
+  --accent: #c8312a;
+  --accent-soft: #fbeceb;
+  --code-bg: #f6f4f0;
+  --code-text: #23201d;
+  --ok: #2f7d4f;
+  --ok-soft: #e8f4ec;
+  --warn: #8a5a00;
+  --warn-soft: #fdf3dc;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161514;
+    --surface: #1e1c1b;
+    --surface-2: #262422;
+    --text: #ece8e3;
+    --muted: #a59f97;
+    --border: #36322f;
+    --accent: #ef6a5f;
+    --accent-soft: #3a2220;
+    --code-bg: #121110;
+    --code-text: #e6e1db;
+    --ok: #6fc28f;
+    --ok-soft: #1d3326;
+    --warn: #e5b45a;
+    --warn-soft: #362a12;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161514;
+  --surface: #1e1c1b;
+  --surface-2: #262422;
+  --text: #ece8e3;
+  --muted: #a59f97;
+  --border: #36322f;
+  --accent: #ef6a5f;
+  --accent-soft: #3a2220;
+  --code-bg: #121110;
+  --code-text: #e6e1db;
+  --ok: #6fc28f;
+  --ok-soft: #1d3326;
+  --warn: #e5b45a;
+  --warn-soft: #362a12;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+}
+a { color: var(--accent); }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+p code, li code, td code {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0 4px;
+  font-size: 0.88em;
+  overflow-wrap: anywhere;
+}
+.layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 16px 80px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+@media (min-width: 1000px) {
+  .layout { grid-template-columns: 230px minmax(0, 1fr); }
+}
+nav.toc { display: none; }
+@media (min-width: 1000px) {
+  nav.toc {
+    display: block;
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding-top: 40px;
+    font-size: 14px;
+  }
+}
+nav.toc ol { list-style: none; margin: 0; padding: 0; }
+nav.toc li { margin: 2px 0; }
+nav.toc a {
+  display: block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+nav.toc a:hover { color: var(--text); background: var(--surface-2); }
+nav.toc a.current { color: var(--text); border-left-color: var(--accent); background: var(--surface-2); }
+main { min-width: 0; }
+header.hero { padding: 40px 0 8px; }
+.eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+h1 { font-size: clamp(28px, 4vw, 38px); line-height: 1.15; margin: 8px 0 12px; }
+h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+h3 { font-size: 17px; margin: 24px 0 8px; }
+.lede { font-size: 18px; color: var(--muted); max-width: 720px; margin: 0; }
+section.step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 20px 0;
+  scroll-margin-top: 16px;
+}
+@media (max-width: 600px) { section.step { padding: 18px 16px; } }
+.num {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  transform: translateY(-2px);
+}
+.meta { color: var(--muted); font-size: 14px; margin: -4px 0 12px; }
+.why {
+  border-left: 3px solid var(--border);
+  padding: 2px 0 2px 14px;
+  color: var(--muted);
+  margin: 12px 0;
+}
+.note, .warn, .good {
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-size: 15px;
+}
+.note { background: var(--surface-2); }
+.warn { background: var(--warn-soft); color: var(--text); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
+.warn strong { color: var(--warn); }
+.good { background: var(--ok-soft); border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); }
+.good strong { color: var(--ok); }
+.code {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+  background: var(--code-bg);
+}
+.code-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px 6px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface-2);
+}
+.copy {
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 12px;
+  cursor: pointer;
+}
+.copy:hover { border-color: var(--accent); }
+.copy.done { color: var(--ok); border-color: var(--ok); }
+.code pre {
+  margin: 0;
+  padding: 12px 14px;
+  overflow: auto;
+  max-height: 420px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--code-text);
+}
+.tabs { margin: 14px 0; }
+.tab-bar { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
+.tab {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  padding: 8px 12px;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+.tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.pane { padding-top: 6px; }
+.settings {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.settings h2 { font-size: 18px; }
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px 16px;
+  margin-top: 12px;
+}
+.fields label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.fields input {
+  width: 100%;
+  font: 14px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+.fields input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.fields small { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+.flow {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  counter-reset: flow;
+}
+.flow li {
+  counter-increment: flow;
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+.flow li::before {
+  content: counter(flow);
+  font-weight: 700;
+  color: var(--accent);
+  margin-right: 6px;
+}
+.flow li.wait { background: var(--warn-soft); }
+.flow li span { display: block; color: var(--muted); font-size: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+.table-wrap { overflow-x: auto; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 13px; }
+td.num-cell { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+.option {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: var(--bg);
+}
+.option h3 { margin-top: 0; }
+.option.primary { border-color: var(--accent); }
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+ul.checklist { list-style: none; padding: 0; }
+ul.checklist li { padding-left: 28px; position: relative; margin: 8px 0; }
+ul.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 5px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+}
+.theme-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  font: inherit;
+  font-size: 13px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+footer { color: var(--muted); font-size: 13px; margin-top: 32px; }
+@media print {
+  nav.toc, .theme-toggle, .copy { display: none; }
+  .code pre { max-height: none; white-space: pre-wrap; }
+  .pane[hidden] { display: block !important; }
+  section.step { break-inside: avoid-page; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="Steps">
+  <ol>
+    <li><a href="#start">Before you start</a></li>
+    <li><a href="#s1">1 · Copy TPC-H data</a></li>
+    <li><a href="#s2">2 · Grant access</a></li>
+    <li><a href="#s3">3 · Lower minimum table size</a></li>
+    <li><a href="#s4">4 · Run baseline queries</a></li>
+    <li><a href="#s5">5 · Wait for query history</a></li>
+    <li><a href="#s6">6 · Monitor the tables</a></li>
+    <li><a href="#s7">7 · Load data</a></li>
+    <li><a href="#s8">8 · Generate recommendations</a></li>
+    <li><a href="#s9">9 · Review recommendations</a></li>
+    <li><a href="#s10">10 · Apply the keys</a></li>
+    <li><a href="#s11">11 · Re-run the queries</a></li>
+    <li><a href="#s12">12 · Compare results</a></li>
+    <li><a href="#s13">13 · Clean up</a></li>
+    <li><a href="#trouble">Troubleshooting</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="eyebrow">Goldilox · Hands-on guide</div>
+  <h1>See Goldilox work end to end on TPC-H</h1>
+  <p class="lede">Copy the TPC-H SF100 sample tables into your account, run the 22 standard
+  queries, let Goldilox recommend clustering keys, apply them, and measure the difference.
+  This guide is for an account where Goldilox is already installed.</p>
+</header>
+
+<div class="settings" id="settings">
+  <h2>Your names</h2>
+  <p class="meta">Every SQL block on this page uses these values. Change them here and the SQL
+  updates, including what the Copy buttons copy.</p>
+  <p class="warn"><strong>Don't start the database name with GOLDILOX.</strong> Goldilox skips
+  tables in databases named that way, so the test would end with no recommendations.</p>
+  <div class="fields">
+    <div><label for="f-APP">Goldilox application</label>
+      <input id="f-APP" data-field="APP" value="GOLDILOX_INSIGHTS" spellcheck="false">
+      <small>Name chosen at install. <code>SHOW APPLICATIONS;</code> lists it.</small></div>
+    <div><label for="f-ROLE">Role</label>
+      <input id="f-ROLE" data-field="ROLE" value="ACCOUNTADMIN" spellcheck="false">
+      <small>See the role requirements below.</small></div>
+    <div><label for="f-WH">Test warehouse</label>
+      <input id="f-WH" data-field="WH" value="TPCH_TEST_WH" spellcheck="false">
+      <small>Created in step 1.</small></div>
+    <div><label for="f-DB">Test database</label>
+      <input id="f-DB" data-field="DB" value="TPCH_TEST" spellcheck="false">
+      <small>Created in step 1, dropped in step 13.</small></div>
+    <div><label for="f-SCHEMA">Test schema</label>
+      <input id="f-SCHEMA" data-field="SCHEMA" value="TPCH_SF100" spellcheck="false"></div>
+  </div>
+</div>
+
+<section class="step" id="overview">
+  <h2>How it fits together</h2>
+  <p>Goldilox looks at the columns your queries filter on and how many micro-partitions they
+  scan, then recommends the clustering key that would let Snowflake skip the most. This test
+  runs that on a known dataset and workload:</p>
+  <ol class="flow">
+    <li>Copy TPC-H SF100<span>~15 min</span></li>
+    <li>Grant access<span>~2 min</span></li>
+    <li>Lower minimum table size<span>~1 min</span></li>
+    <li>Run 22 baseline queries<span>~3 min</span></li>
+    <li class="wait">Wait for query history<span>15–45 min</span></li>
+    <li>Monitor the 8 tables<span>~2 min</span></li>
+    <li>Load data<span>~5 min</span></li>
+    <li class="wait">Generate recommendations<span>10–20 min</span></li>
+    <li>Review recommendations<span>~5 min</span></li>
+    <li>Apply the keys<span>~5 min</span></li>
+    <li>Re-run the 22 queries<span>~3 min</span></li>
+    <li class="wait">Wait, then compare<span>15–45 min</span></li>
+    <li>Clean up<span>~2 min</span></li>
+  </ol>
+  <p class="meta" style="margin-top:12px">Allow about 2½ hours end to end, most of it waiting for
+  Snowflake's <code>ACCOUNT_USAGE</code> views to catch up. Do steps 4–8 on the same day: each
+  data load reads only recent query history (the last 24 hours by default).</p>
+</section>
+
+<section class="step" id="start">
+  <h2>Before you start</h2>
+  <ul class="checklist">
+    <li><b>Goldilox is installed and opens.</b> Its first-run access screen has been completed, so
+    the app can read query history.</li>
+    <li><b>Room for 8 monitored tables.</b> Open <b>Recommendations → Monitored Targets</b>.
+    The heading <b>Target Tables (used/limit)</b> shows your limit. The free plan monitors one
+    table. Ask your Goldilox contact to raise the limit to at least 8 for the test.</li>
+    <li><b>A role that can do the setup.</b> <code>ACCOUNTADMIN</code> is simplest. Any other
+    role must be able to create a warehouse and a database, grant to the app, and read
+    <code>SNOWFLAKE_SAMPLE_DATA</code> and <code>SNOWFLAKE.ACCOUNT_USAGE</code>. To call the
+    app's SQL procedures it also needs the app's <code>GOLDILOX_APP_USER</code> application
+    role.</li>
+    <li><b>Cost.</b> Expect a few credits of warehouse time, mostly for shuffling the data in
+    step 1 and rebuilding it in step 10, plus Goldilox's own pipeline runs. The copied tables
+    hold about 23&nbsp;GB until you drop them in step 13.</li>
+  </ul>
+</section>
+
+<section class="step" id="s1">
+  <h2><span class="num">1</span>Copy the TPC-H SF100 tables</h2>
+  <p class="meta">Warehouse: MEDIUM for the copy · the slowest setup step</p>
+  <p>Create a dedicated warehouse and copy the eight TPC-H tables into a database you own, in
+  random row order.</p>
+  <div class="why">Why copy, and why random? <code>SNOWFLAKE_SAMPLE_DATA</code> is a read-only
+  share, so it can't be re-sorted later. The sample tables were also loaded in an order that
+  already favours some filters. Copying them in random order removes that, so the "before"
+  run starts from a neutral layout and the "after" run shows what the recommended keys
+  add.</div>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="USE ROLE {{ROLE}};
+
+-- A warehouse just for this test, so its queries and cost are easy to isolate.
+CREATE WAREHOUSE IF NOT EXISTS {{WH}}
+  WAREHOUSE_SIZE = &#x27;SMALL&#x27; AUTO_SUSPEND = 60 AUTO_RESUME = TRUE INITIALLY_SUSPENDED = TRUE;
+USE WAREHOUSE {{WH}};
+-- Shuffling 600M LINEITEM rows is the heaviest part of the setup; use MEDIUM for it.
+ALTER WAREHOUSE {{WH}} SET WAREHOUSE_SIZE = &#x27;MEDIUM&#x27;;
+
+CREATE DATABASE IF NOT EXISTS {{DB}};
+CREATE SCHEMA IF NOT EXISTS {{DB}}.{{SCHEMA}};
+
+-- ORDER BY RANDOM() removes any ordering the sample data was loaded with, so the
+-- before-and-after comparison starts from a neutral layout.
+
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.LINEITEM AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.LINEITEM ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.ORDERS AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.ORDERS ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.PARTSUPP AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.PARTSUPP ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.PART AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.PART ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.CUSTOMER AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.CUSTOMER ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.SUPPLIER AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.SUPPLIER ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.NATION AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.NATION ORDER BY RANDOM();
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.REGION AS
+  SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF100.REGION ORDER BY RANDOM();
+
+ALTER WAREHOUSE {{WH}} SET WAREHOUSE_SIZE = &#x27;SMALL&#x27;;"><code></code></pre></div>
+  <p>If <code>SNOWFLAKE_SAMPLE_DATA</code> doesn't exist in your account, create it from the
+  inbound share first:</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Only if SNOWFLAKE_SAMPLE_DATA is missing from your account.
+SHOW SHARES LIKE &#x27;%SAMPLE_DATA%&#x27;;
+-- Use the owner_account and name from the INBOUND row, for example SFC_SAMPLES.SAMPLE_DATA:
+CREATE DATABASE SNOWFLAKE_SAMPLE_DATA FROM SHARE &lt;owner_account&gt;.SAMPLE_DATA;
+GRANT IMPORTED PRIVILEGES ON DATABASE SNOWFLAKE_SAMPLE_DATA TO ROLE {{ROLE}};"><code></code></pre></div>
+</section>
+
+<section class="step" id="s2">
+  <h2><span class="num">2</span>Give Goldilox access</h2>
+  <p>Goldilox needs to read the test tables and the query profiles on the test warehouse.</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="USE ROLE {{ROLE}};
+
+-- 1. Read access to the test tables. Same script the app shows under
+--    Monitored Targets → Grant Access SQL Statements → By Database.
+CREATE DATABASE ROLE IF NOT EXISTS {{DB}}.GOLDILOX_APP_VIEWER;
+GRANT DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER TO APPLICATION {{APP}};
+GRANT USAGE ON DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+GRANT SELECT ON ALL TABLES IN DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+GRANT SELECT ON FUTURE TABLES IN DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+-- Iceberg tables are not covered by GRANT … ON ALL/FUTURE TABLES; grant them explicitly.
+GRANT SELECT ON ALL ICEBERG TABLES IN DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+GRANT SELECT ON FUTURE ICEBERG TABLES IN DATABASE {{DB}} TO DATABASE ROLE {{DB}}.GOLDILOX_APP_VIEWER;
+
+-- 2. MONITOR on the warehouse the queries run on. Without it Goldilox cannot read
+--    the query profiles and returns no recommendations.
+GRANT MONITOR ON WAREHOUSE {{WH}} TO APPLICATION {{APP}};
+
+-- Check: expect MONITOR on {{WH}}.
+SHOW GRANTS TO APPLICATION {{APP}};"><code></code></pre></div>
+  <p class="note">The app shows the same table grants. After you add the tables in step 6, any
+  table Goldilox can't read yet is marked <b>🔴 Need Access</b> under <b>Recommendations →
+  Monitored Targets</b>, and <b>📋 Grant Access SQL Statements</b> there gives the script.
+  It doesn't include the MONITOR grant below, so run that one from here.</p>
+</section>
+
+<section class="step" id="s3">
+  <h2><span class="num">3</span>Lower the minimum table size</h2>
+  <p>In Goldilox, open <b>Settings → Manage App → Advanced settings</b>. Find
+  <b>Minimum table size to analyze, in micro-partitions</b> and <b>write down the current
+  value</b>. If it is above 10, click <b>Update</b> and set it to <b>10</b>. If it is already 10
+  or lower, leave it.</p>
+  <div class="why">Goldilox leaves out queries on tables smaller than this threshold, and sets the value
+  from your own query history. It's often above what the TPC-H queries reach after initial installation.</div>
+</section>
+
+<section class="step" id="s4">
+  <h2><span class="num">4</span>Run the 22 baseline queries</h2>
+  <p class="meta">Warehouse: SMALL · about 2–3 minutes</p>
+  <p>Paste the script into one Snowsight worksheet and run all of it. Every query is tagged
+  <code>GOLDILOX_TPCH_BEFORE</code>, so the run is easy to find later, and result caching is
+  turned off so each query really scans the table.</p>
+  <div class="code"><div class="code-bar"><span>SQL · 22 TPC-H queries</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Run this whole worksheet in one go (Snowsight: Run All, or Ctrl/Cmd+Shift+Enter).
+USE ROLE {{ROLE}};
+USE WAREHOUSE {{WH}};
+ALTER WAREHOUSE {{WH}} SET WAREHOUSE_SIZE = &#x27;SMALL&#x27;;
+USE SCHEMA {{DB}}.{{SCHEMA}};
+ALTER SESSION SET QUERY_TAG = &#x27;GOLDILOX_TPCH_BEFORE&#x27;;
+-- Cached results scan nothing, so the comparison would be meaningless.
+ALTER SESSION SET USE_CACHED_RESULT = FALSE;
+
+-- TPC-H 1
+select
+    l_returnflag,
+    l_linestatus,
+    sum(l_quantity) as sum_qty,
+    sum(l_extendedprice) as sum_base_price,
+    sum(l_extendedprice * (1 - l_discount)) as sum_disc_price,
+    sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) as sum_charge,
+    avg(l_quantity) as avg_qty,
+    avg(l_extendedprice) as avg_price,
+    avg(l_discount) as avg_disc,
+    count(*) as count_order
+from
+    lineitem
+where
+    l_shipdate &lt;= DATEADD(day, 90, &#x27;1998-12-01&#x27;)
+group by
+    l_returnflag,
+    l_linestatus
+order by
+    l_returnflag,
+    l_linestatus;
+
+-- TPC-H 2
+select
+    s_acctbal,
+    s_name,
+    n_name,
+    p_partkey,
+    p_mfgr,
+    s_address,
+    s_phone,
+    s_comment
+from
+    part,
+    supplier,
+    partsupp,
+    nation,
+    region
+where
+    p_partkey = ps_partkey
+    and s_suppkey = ps_suppkey
+    and p_size = 15
+    and p_type like &#x27;%BRASS&#x27;
+    and s_nationkey = n_nationkey
+    and n_regionkey = r_regionkey
+    and r_name = &#x27;EUROPE&#x27;
+    and ps_supplycost = (
+        select
+            min(ps_supplycost)
+        from
+            partsupp,
+            supplier,
+            nation,
+            region
+        where
+            p_partkey = ps_partkey
+            and s_suppkey = ps_suppkey
+            and s_nationkey = n_nationkey
+            and n_regionkey = r_regionkey
+            and r_name = &#x27;EUROPE&#x27;
+    )
+order by
+    s_acctbal desc,
+    n_name,
+    s_name,
+    p_partkey LIMIT 100;
+
+-- TPC-H 3
+select
+    l_orderkey,
+    sum(l_extendedprice * (1 - l_discount)) as revenue,
+    o_orderdate,
+    o_shippriority
+from
+    customer,
+    orders,
+    lineitem
+where
+    c_mktsegment = &#x27;BUILDING&#x27;
+    and c_custkey = o_custkey
+    and l_orderkey = o_orderkey
+    and o_orderdate &lt; date &#x27;1995-03-15&#x27;
+    and l_shipdate &gt; date &#x27;1995-03-15&#x27;
+group by
+    l_orderkey,
+    o_orderdate,
+    o_shippriority
+order by
+    revenue desc,
+    o_orderdate limit 10;
+
+-- TPC-H 4
+select
+    o_orderpriority,
+    count(*) as order_count
+from
+    orders
+where
+    o_orderdate &gt;= date &#x27;1993-07-01&#x27;
+    AND o_orderdate &lt; DATEADD(month, 3, &#x27;1993-07-01&#x27;)
+    and exists (
+        select
+            *
+        from
+            lineitem
+        where
+            l_orderkey = o_orderkey
+            and l_commitdate &lt; l_receiptdate
+    )
+group by
+    o_orderpriority
+order by
+    o_orderpriority;
+
+-- TPC-H 5
+select
+    n_name,
+    sum(l_extendedprice * (1 - l_discount)) as revenue
+from
+    customer,
+    orders,
+    lineitem,
+    supplier,
+    nation,
+    region
+where
+    c_custkey = o_custkey
+    and l_orderkey = o_orderkey
+    and l_suppkey = s_suppkey
+    and c_nationkey = s_nationkey
+    and s_nationkey = n_nationkey
+    and n_regionkey = r_regionkey
+    and r_name = &#x27;ASIA&#x27;
+    and o_orderdate &gt;= date &#x27;1994-01-01&#x27;
+    AND o_orderdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+group by
+    n_name
+order by
+    revenue desc;
+
+-- TPC-H 6
+select
+    sum(l_extendedprice * l_discount) as revenue
+from
+    lineitem
+where
+    l_shipdate &gt;= date &#x27;1994-01-01&#x27;
+    AND l_shipdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+    and l_discount between .06 - 0.01 and .06 + 0.01
+    and l_quantity &lt; 24;
+
+-- TPC-H 7
+select
+    supp_nation,
+    cust_nation,
+    l_year,
+    sum(volume) as revenue
+from
+    (
+        select
+            n1.n_name as supp_nation,
+            n2.n_name as cust_nation,
+            extract(year from l_shipdate) as l_year,
+            l_extendedprice * (1 - l_discount) as volume
+        from
+            supplier,
+            lineitem,
+            orders,
+            customer,
+            nation n1,
+            nation n2
+        where
+            s_suppkey = l_suppkey
+            and o_orderkey = l_orderkey
+            and c_custkey = o_custkey
+            and s_nationkey = n1.n_nationkey
+            and c_nationkey = n2.n_nationkey
+            and (
+                (n1.n_name = &#x27;FRANCE&#x27; and n2.n_name = &#x27;GERMANY&#x27;)
+                or (n1.n_name = &#x27;GERMANY&#x27; and n2.n_name = &#x27;FRANCE&#x27;)
+            )
+            and l_shipdate between date &#x27;1995-01-01&#x27; and date &#x27;1996-12-31&#x27;
+    ) as shipping
+group by
+    supp_nation,
+    cust_nation,
+    l_year
+order by
+    supp_nation,
+    cust_nation,
+    l_year;
+
+-- TPC-H 8
+select
+    o_year,
+    sum(case
+        when nation = &#x27;BRAZIL&#x27; then volume
+        else 0
+    end) / sum(volume) as mkt_share
+from
+    (
+        select
+            extract(year from o_orderdate) as o_year,
+            l_extendedprice * (1 - l_discount) as volume,
+            n2.n_name as nation
+        from
+            part,
+            supplier,
+            lineitem,
+            orders,
+            customer,
+            nation n1,
+            nation n2,
+            region
+        where
+            p_partkey = l_partkey
+            and s_suppkey = l_suppkey
+            and l_orderkey = o_orderkey
+            and o_custkey = c_custkey
+            and c_nationkey = n1.n_nationkey
+            and n1.n_regionkey = r_regionkey
+            and r_name = &#x27;AMERICA&#x27;
+            and s_nationkey = n2.n_nationkey
+            and o_orderdate between date &#x27;1995-01-01&#x27; and date &#x27;1996-12-31&#x27;
+            and p_type = &#x27;ECONOMY ANODIZED STEEL&#x27;
+    ) as all_nations
+group by
+    o_year
+order by
+    o_year;
+
+-- TPC-H 9
+select
+    nation,
+    o_year,
+    sum(amount) as sum_profit
+from
+    (
+        select
+            n_name as nation,
+            extract(year from o_orderdate) as o_year,
+            l_extendedprice * (1 - l_discount) - ps_supplycost * l_quantity as amount
+        from
+            part,
+            supplier,
+            lineitem,
+            partsupp,
+            orders,
+            nation
+        where
+            s_suppkey = l_suppkey
+            and ps_suppkey = l_suppkey
+            and ps_partkey = l_partkey
+            and p_partkey = l_partkey
+            and o_orderkey = l_orderkey
+            and s_nationkey = n_nationkey
+            and p_name like &#x27;%green%&#x27;
+    ) as profit
+group by
+    nation,
+    o_year
+order by
+    nation,
+    o_year desc;
+
+-- TPC-H 10
+select
+    c_custkey,
+    c_name,
+    sum(l_extendedprice * (1 - l_discount)) as revenue,
+    c_acctbal,
+    n_name,
+    c_address,
+    c_phone,
+    c_comment
+from
+    customer,
+    orders,
+    lineitem,
+    nation
+where
+    c_custkey = o_custkey
+    and l_orderkey = o_orderkey
+    and o_orderdate &gt;= date &#x27;1993-10-01&#x27;
+    AND o_orderdate &lt; DATEADD(month, 3, &#x27;1993-10-01&#x27;)
+    and l_returnflag = &#x27;R&#x27;
+    and c_nationkey = n_nationkey
+group by
+    c_custkey,
+    c_name,
+    c_acctbal,
+    c_phone,
+    n_name,
+    c_address,
+    c_comment
+order by
+    revenue desc limit 20;
+
+-- TPC-H 11
+select
+    ps_partkey,
+    sum(ps_supplycost * ps_availqty) as value
+from
+    partsupp,
+    supplier,
+    nation
+where
+    ps_suppkey = s_suppkey
+    and s_nationkey = n_nationkey
+    and n_name = &#x27;GERMANY&#x27;
+group by
+    ps_partkey having
+        sum(ps_supplycost * ps_availqty) &gt; (
+            select
+                sum(ps_supplycost * ps_availqty) * 0.0001000000
+            from
+                partsupp,
+                supplier,
+                nation
+            where
+                ps_suppkey = s_suppkey
+                and s_nationkey = n_nationkey
+                and n_name = &#x27;GERMANY&#x27;
+        )
+order by
+    value desc;
+
+-- TPC-H 12
+select
+    l_shipmode,
+    sum(case
+        when o_orderpriority = &#x27;1-URGENT&#x27;
+            or o_orderpriority = &#x27;2-HIGH&#x27;
+            then 1
+        else 0
+    end) as high_line_count,
+    sum(case
+        when o_orderpriority &lt;&gt; &#x27;1-URGENT&#x27;
+            and o_orderpriority &lt;&gt; &#x27;2-HIGH&#x27;
+            then 1
+        else 0
+    end) as low_line_count
+from
+    orders,
+    lineitem
+where
+    o_orderkey = l_orderkey
+    and l_shipmode in (&#x27;MAIL&#x27;, &#x27;SHIP&#x27;)
+    and l_commitdate &lt; l_receiptdate
+    and l_shipdate &lt; l_commitdate
+    and l_receiptdate &gt;= date &#x27;1994-01-01&#x27;
+    AND o_orderdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+group by
+    l_shipmode
+order by
+    l_shipmode;
+
+-- TPC-H 13
+select
+    c_count,
+    count(*) as custdist
+from
+    (
+        select
+            c_custkey,
+            count(o_orderkey)
+        from
+            customer left outer join orders on
+                c_custkey = o_custkey
+                and o_comment not like &#x27;%special%requests%&#x27;
+        group by
+            c_custkey
+    ) as c_orders (c_custkey, c_count)
+group by
+    c_count
+order by
+    custdist desc,
+    c_count desc;
+
+-- TPC-H 14
+select
+    100.00 * sum(case
+        when p_type like &#x27;PROMO%&#x27;
+            then l_extendedprice * (1 - l_discount)
+        else 0
+    end) / sum(l_extendedprice * (1 - l_discount)) as promo_revenue
+from
+    lineitem,
+    part
+where
+    l_partkey = p_partkey
+    and l_shipdate &gt;= date &#x27;1995-09-01&#x27;
+    AND l_shipdate &lt; DATEADD(month, 1, &#x27;1995-09-01&#x27;);
+
+-- TPC-H 15-create
+with revenue_view as (
+    select
+        l_suppkey as supplier_no,
+        sum(l_extendedprice * (1 - l_discount)) as total_revenue
+    from
+        lineitem
+    where
+        l_shipdate &gt;= date &#x27;1996-01-01&#x27;
+    AND l_shipdate &lt; DATEADD(month, 3, &#x27;1996-01-01&#x27;)
+    group by
+        l_suppkey)
+select
+    s_suppkey,
+    s_name,
+    s_address,
+    s_phone,
+    total_revenue
+from
+    supplier,
+    revenue_view
+where
+    s_suppkey = supplier_no
+    and total_revenue = (
+        select
+            max(total_revenue)
+        from
+            revenue_view
+    )
+order by
+    s_suppkey;
+
+-- TPC-H 16
+select
+    p_brand,
+    p_type,
+    p_size,
+    count(distinct ps_suppkey) as supplier_cnt
+from
+    partsupp,
+    part
+where
+    p_partkey = ps_partkey
+    and p_brand &lt;&gt; &#x27;Brand#45&#x27;
+    and p_type not like &#x27;MEDIUM POLISHED%&#x27;
+    and p_size in (49, 14, 23, 45, 19, 3, 36, 9)
+    and ps_suppkey not in (
+        select
+            s_suppkey
+        from
+            supplier
+        where
+            s_comment like &#x27;%Customer%Complaints%&#x27;
+    )
+group by
+    p_brand,
+    p_type,
+    p_size
+order by
+    supplier_cnt desc,
+    p_brand,
+    p_type,
+    p_size;
+
+-- TPC-H 17
+select
+    sum(l_extendedprice) / 7.0 as avg_yearly
+from
+    lineitem,
+    part
+where
+    p_partkey = l_partkey
+    and p_brand = &#x27;Brand#23&#x27;
+    and p_container = &#x27;MED BOX&#x27;
+    and l_quantity &lt; (
+        select
+            0.2 * avg(l_quantity)
+        from
+            lineitem
+        where
+            l_partkey = p_partkey
+    );
+
+
+-- TPC-H 18
+select
+    c_name,
+    c_custkey,
+    o_orderkey,
+    o_orderdate,
+    o_totalprice,
+    sum(l_quantity)
+from
+    customer,
+    orders,
+    lineitem
+where
+    o_orderkey in (
+        select
+            l_orderkey
+        from
+            lineitem
+        group by
+            l_orderkey having
+                sum(l_quantity) &gt; 300
+    )
+    and c_custkey = o_custkey
+    and o_orderkey = l_orderkey
+group by
+    c_name,
+    c_custkey,
+    o_orderkey,
+    o_orderdate,
+    o_totalprice
+order by
+    o_totalprice desc,
+    o_orderdate
+limit 100;
+
+
+-- TPC-H 19
+select
+    sum(l_extendedprice* (1 - l_discount)) as revenue
+from
+    lineitem,
+    part
+where
+    (
+        p_partkey = l_partkey
+        and p_brand = &#x27;Brand#12&#x27;
+        and p_container in (&#x27;SM CASE&#x27;, &#x27;SM BOX&#x27;, &#x27;SM PACK&#x27;, &#x27;SM PKG&#x27;)
+        and l_quantity &gt;= 1 and l_quantity &lt;= 1 + 10
+        and p_size between 1 and 5
+        and l_shipmode in (&#x27;AIR&#x27;, &#x27;AIR REG&#x27;)
+        and l_shipinstruct = &#x27;DELIVER IN PERSON&#x27;
+    )
+    or
+    (
+        p_partkey = l_partkey
+        and p_brand = &#x27;Brand#23&#x27;
+        and p_container in (&#x27;MED BAG&#x27;, &#x27;MED BOX&#x27;, &#x27;MED PKG&#x27;, &#x27;MED PACK&#x27;)
+        and l_quantity &gt;= 10 and l_quantity &lt;= 10 + 10
+        and p_size between 1 and 10
+        and l_shipmode in (&#x27;AIR&#x27;, &#x27;AIR REG&#x27;)
+        and l_shipinstruct = &#x27;DELIVER IN PERSON&#x27;
+    )
+    or
+    (
+        p_partkey = l_partkey
+        and p_brand = &#x27;Brand#34&#x27;
+        and p_container in (&#x27;LG CASE&#x27;, &#x27;LG BOX&#x27;, &#x27;LG PACK&#x27;, &#x27;LG PKG&#x27;)
+        and l_quantity &gt;= 20 and l_quantity &lt;= 20 + 10
+        and p_size between 1 and 15
+        and l_shipmode in (&#x27;AIR&#x27;, &#x27;AIR REG&#x27;)
+        and l_shipinstruct = &#x27;DELIVER IN PERSON&#x27;
+    );
+
+
+-- TPC-H 20
+select
+    s_name,
+    s_address
+from
+    supplier,
+    nation
+where
+    s_suppkey in (
+        select
+            ps_suppkey
+        from
+            partsupp
+        where
+            ps_partkey in (
+                select
+                    p_partkey
+                from
+                    part
+                where
+                    p_name like &#x27;forest%&#x27;
+            )
+            and ps_availqty &gt; (
+                select
+                    0.5 * sum(l_quantity)
+                from
+                    lineitem
+                where
+                    l_partkey = ps_partkey
+                    and l_suppkey = ps_suppkey
+                    and l_shipdate &gt;= date &#x27;1994-01-01&#x27;
+                    AND l_shipdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+            )
+    )
+    and s_nationkey = n_nationkey
+    and n_name = &#x27;CANADA&#x27;
+order by
+    s_name;
+
+-- TPC-H 21
+select
+    s_name,
+    count(*) as numwait
+from
+    supplier,
+    lineitem l1,
+    orders,
+    nation
+where
+    s_suppkey = l1.l_suppkey
+    and o_orderkey = l1.l_orderkey
+    and o_orderstatus = &#x27;F&#x27;
+    and l1.l_receiptdate &gt; l1.l_commitdate
+    and exists (
+        select
+            *
+        from
+            lineitem l2
+        where
+            l2.l_orderkey = l1.l_orderkey
+            and l2.l_suppkey &lt;&gt; l1.l_suppkey
+    )
+    and not exists (
+        select
+            *
+        from
+            lineitem l3
+        where
+            l3.l_orderkey = l1.l_orderkey
+            and l3.l_suppkey &lt;&gt; l1.l_suppkey
+            and l3.l_receiptdate &gt; l3.l_commitdate
+    )
+    and s_nationkey = n_nationkey
+    and n_name = &#x27;SAUDI ARABIA&#x27;
+group by
+    s_name
+order by
+    numwait desc,
+    s_name limit 100;
+
+
+-- TPC-H 22
+select
+    cntrycode,
+    count(*) as numcust,
+    sum(c_acctbal) as totacctbal
+from
+    (
+        select
+      SUBSTRING(c_phone, 1, 2) AS cntrycode,
+            c_acctbal
+        from
+            customer
+        where
+          SUBSTRING(c_phone, 1, 2) IN
+                (&#x27;13&#x27;, &#x27;31&#x27;, &#x27;23&#x27;, &#x27;29&#x27;, &#x27;30&#x27;, &#x27;18&#x27;, &#x27;17&#x27;)
+            and c_acctbal &gt; (
+                select
+                    avg(c_acctbal)
+                from
+                    customer
+                where
+                    c_acctbal &gt; 0.00
+                    AND SUBSTRING(c_phone, 1, 2) IN
+                        (&#x27;13&#x27;, &#x27;31&#x27;, &#x27;23&#x27;, &#x27;29&#x27;, &#x27;30&#x27;, &#x27;18&#x27;, &#x27;17&#x27;)
+            )
+            and not exists (
+                select
+                    *
+                from
+                    orders
+                where
+                    o_custkey = c_custkey
+            )
+    ) as custsale
+group by
+    cntrycode
+order by
+    cntrycode;
+
+-- Reset the session.
+ALTER SESSION UNSET QUERY_TAG;
+ALTER SESSION SET USE_CACHED_RESULT = TRUE;
+"><code></code></pre></div>
+  <div class="note">Use the same SMALL warehouse for both runs so the two sides are
+  comparable. Partitions and data scanned don't depend on warehouse size.</div>
+</section>
+
+<section class="step" id="s5">
+  <h2><span class="num">5</span>Wait for the queries to reach query history</h2>
+  <p class="meta">Usually 15–45 minutes</p>
+  <p>Goldilox reads <code>SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY</code>, which Snowflake fills
+  in with a delay. Continue only when all 22 queries are visible.</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Repeat every few minutes until QUERIES_VISIBLE = 22 (usually 15–45 minutes).
+-- Counts each TPC-H query once and only queries that read the test tables, so
+-- re-runs and the worksheet&#x27;s own background calls don&#x27;t inflate it.
+SELECT COUNT(DISTINCT QUERY_HASH) AS QUERIES_VISIBLE
+FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+WHERE QUERY_TAG = &#x27;GOLDILOX_TPCH_BEFORE&#x27;
+  AND DATABASE_NAME = &#x27;{{DB}}&#x27;
+  AND QUERY_TYPE = &#x27;SELECT&#x27;
+  AND EXECUTION_STATUS = &#x27;SUCCESS&#x27;
+  AND PARTITIONS_TOTAL &gt; 0;"><code></code></pre></div>
+  <div class="why">Make sure all 22 queries are visible before next step, so Goldilox can analyze full workload and recommend the best key.</div>
+</section>
+
+<section class="step" id="s6">
+  <h2><span class="num">6</span>Add all eight TPC-H tables to monitoring</h2>
+  <p>Use the SQL tab for this step if you can. The app's table search reads Snowflake's
+  account metadata, which can take up to about 90 minutes to include tables created in
+  step 1.</p>
+  <div class="tabs"><div class="tab-bar" role="tablist"><button class="tab active" type="button" data-pane="ui">In the app</button><button class="tab" type="button" data-pane="sql">With SQL</button></div><div class="pane" data-pane="ui"><ol><li>Open <b>Recommendations</b> and scroll to <b>Monitored Targets</b>.</li><li>Expand <b>Add Targets</b> and type <code class="tok" data-tok="SCHEMA"></code> in <b>Search table</b>.</li><li>Tick <b>Add</b> on all eight TPC-H tables: LINEITEM, ORDERS, PARTSUPP, PART, CUSTOMER, SUPPLIER, NATION and REGION. Then click <b>Add selected to monitoring</b>.</li><li>Check that <b>Target Tables</b> lists all eight with <b>✅ Granted</b>. If one shows <b>🔴 Need Access</b>, re-run the grants from step 2 and click <b>Refresh Access Status</b>.</li></ol><p class="note">If search shows none of the tables, they haven't reached the account metadata yet. Use the SQL tab instead.</p></div><div class="pane" data-pane="sql" hidden><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="CALL {{APP}}.CONSUMER_API.ADD_MONITORED_TARGETS([
+  &#x27;{{DB}}.{{SCHEMA}}.LINEITEM&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.ORDERS&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.PARTSUPP&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.PART&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.CUSTOMER&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.SUPPLIER&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.NATION&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.REGION&#x27;
+]);
+-- Expect &quot;status&quot;: &quot;OK&quot;, &quot;added&quot;: 8, &quot;failed&quot;: 0, and &quot;access&quot;: &quot;SELECT_TABLE&quot; for every table.
+-- &quot;NOT_ADDED&quot; means your table limit was reached; see Before you start."><code></code></pre></div></div></div>
+</section>
+
+<section class="step" id="s7">
+  <h2><span class="num">7</span>Load Goldilox's data</h2>
+  <p class="meta">About 5 minutes</p>
+  <p>Normally, Goldilox loads data on a schedule. For this guide, start it by hand.
+    This pulls recent query history into Goldilox, including the 22 test queries, and
+  matches it to the tables you just added.</p>
+  <div class="tabs"><div class="tab-bar" role="tablist"><button class="tab active" type="button" data-pane="ui">In the app</button><button class="tab" type="button" data-pane="sql">With SQL</button></div><div class="pane" data-pane="ui"><ol><li>Open <b>Settings</b> and scroll to <b>Data Refresh</b>.</li><li>Click <b>Update <i>N</i>h Data</b>. <i>N</i> is your refresh window, 24 by default.</li><li>Watch <b>Job History</b> below the buttons. <b>Refresh Jobs</b> only reloads that table; it doesn't start anything. The data load is done when the list shows a row named <code>TABLE_AND_COLUMN_INFO_PIPELINE_COMPLETION</code> with an end time, and no row says <b>In Progress</b>.</li></ol><p class="note">If Job History stops changing, or a button does nothing after the app has sat idle, reload the app page in your browser.</p>
+    </div><div class="pane" data-pane="sql" hidden><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="CALL {{APP}}.CONSUMER_API.RUN_PIPELINE(&#x27;QUERY_HISTORY&#x27;);
+-- Returns {&quot;status&quot;: &quot;OK&quot;, ...}. &quot;ALREADY_RUNNING&quot; means a run is in progress: wait for it."><code></code></pre></div><p>Done when this log query shows <code>Task TABLE_AND_COLUMN_INFO_PIPELINE_COMPLETION completed</code>:</p><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Goldilox writes a log line when each stage finishes (times are UTC).
+SELECT TIMESTAMP AS LOGGED_AT_UTC, VALUE::STRING AS MESSAGE
+FROM SNOWFLAKE.TELEMETRY.EVENTS
+WHERE RESOURCE_ATTRIBUTES:&quot;snow.database.name&quot;::STRING = &#x27;{{APP}}&#x27;
+  AND TIMESTAMP &gt;= DATEADD(hour, -3, SYSDATE())
+  AND VALUE::STRING ILIKE &#x27;Task %&#x27;
+ORDER BY TIMESTAMP DESC
+LIMIT 50;"><code></code></pre></div></div></div>
+</section>
+
+<section class="step" id="s8">
+  <h2><span class="num">8</span>Generate recommendations</h2>
+  <p class="meta">10–20 minutes</p>
+  <p>Normally, Goldilox generates recommendations on a schedule. For this guide, start it by
+  hand, once the data load in step 7 has finished. A data load never
+  generates recommendations on its own.</p>
+  <div class="tabs"><div class="tab-bar" role="tablist"><button class="tab active" type="button" data-pane="ui">In the app</button><button class="tab" type="button" data-pane="sql">With SQL</button></div><div class="pane" data-pane="ui"><ol><li>Open <b>Settings → Data Refresh</b> and click <b>Generate Recommendations</b>.</li><li>Done when <b>Job History</b> shows a row named <code>GENERATE_RECOMMENDATIONS</code> with an end time.</li></ol></div><div class="pane" data-pane="sql" hidden><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="CALL {{APP}}.CONSUMER_API.RUN_PIPELINE(&#x27;RECOMMENDATION&#x27;);"><code></code></pre></div><p>Done when the log query shows <code>Task GENERATE_RECOMMENDATIONS completed</code>:</p><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Goldilox writes a log line when each stage finishes (times are UTC).
+SELECT TIMESTAMP AS LOGGED_AT_UTC, VALUE::STRING AS MESSAGE
+FROM SNOWFLAKE.TELEMETRY.EVENTS
+WHERE RESOURCE_ATTRIBUTES:&quot;snow.database.name&quot;::STRING = &#x27;{{APP}}&#x27;
+  AND TIMESTAMP &gt;= DATEADD(hour, -3, SYSDATE())
+  AND VALUE::STRING ILIKE &#x27;Task %&#x27;
+ORDER BY TIMESTAMP DESC
+LIMIT 50;"><code></code></pre></div></div></div>
+  <div class="warn"><strong>Wait for the data load to finish first.</strong> Starting the
+  recommendation run while the data load is still going can leave the tables with no
+  recommendation. If that happens, see <a href="#trouble">Troubleshooting</a>.</div>
+</section>
+
+<section class="step" id="s9">
+  <h2><span class="num">9</span>Review the recommendations</h2>
+  <div class="tabs"><div class="tab-bar" role="tablist"><button class="tab active" type="button" data-pane="ui">In the app</button><button class="tab" type="button" data-pane="sql">With SQL</button></div><div class="pane" data-pane="ui"><p>Open <b>Recommendations → Clustering Key Recommendations</b>. Each test table shows its recommended key.</p></div><div class="pane" data-pane="sql" hidden><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="SELECT FULL_TABLE_NAME,
+       STATUS,
+       RECOMMENDED_CONFIGURATION AS RECOMMENDED_COLUMNS_IN_ORDER
+FROM {{APP}}.SHARED_VIEWS.RECOMMENDATION_RESULT
+WHERE FULL_TABLE_NAME LIKE &#x27;{{DB}}.{{SCHEMA}}.%&#x27;
+ORDER BY FULL_TABLE_NAME;"><code></code></pre></div></div></div>
+  <p>Note each table's recommended columns <b>in the order shown</b>. The order matters:
+  Snowflake sorts by the first column, then by the second within it, so
+  <code>L_SHIPMODE, L_SHIPDATE</code> and <code>L_SHIPDATE, L_SHIPMODE</code> give different
+  layouts.</p>
+  <p>Example output from one of our runs:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Table</th><th>Recommended columns, in order</th></tr></thead>
+    <tbody>
+      <tr><td>LINEITEM</td><td><code>L_SHIPMODE, L_SHIPDATE</code></td></tr>
+      <tr><td>ORDERS</td><td><code>O_ORDERSTATUS, O_ORDERKEY</code></td></tr>
+      <tr><td>PART</td><td><code>P_SIZE, P_BRAND</code></td></tr>
+      <tr><td>CUSTOMER</td><td><code>C_NATIONKEY, C_MKTSEGMENT</code></td></tr>
+      <tr><td>SUPPLIER</td><td><code>S_NATIONKEY, S_SUPPKEY</code></td></tr>
+      <tr><td>PARTSUPP, NATION, REGION</td><td>No key</td></tr>
+    </tbody>
+  </table></div>
+  <p>A table with an empty key means Goldilox found no key that would pay for itself. That's expected for
+  tiny tables like NATION and REGION, and for PARTSUPP, which the TPC-H queries only join on.
+  Leave those tables as they are.</p>
+</section>
+
+<section class="step" id="s10">
+  <h2><span class="num">10</span>Apply the recommended keys</h2>
+  <p>Use <code>CREATE OR REPLACE TABLE</code>. It rewrites the table fully sorted by the
+  recommended columns, so the new layout is in place as soon as the statement finishes.
+  <code>ALTER TABLE … CLUSTER BY</code> also works, but it is slower and less thorough.</p>
+  <div class="compare">
+    <div class="option primary">
+      <h3>Rebuild sorted, with the key <span class="badge">Recommended</span></h3>
+      <p><code>CREATE OR REPLACE TABLE … CLUSTER BY (…) COPY GRANTS AS SELECT … ORDER BY …</code></p>
+      <ul>
+        <li>One-time cost. The table is fully sorted when the statement finishes.</li>
+        <li><code>COPY GRANTS</code> keeps the app's read access.</li>
+        <li>The table also gets the clustering key, so Automatic Clustering keeps it ordered
+        as data changes.</li>
+      </ul>
+    </div>
+    <div class="option">
+      <h3>Add the key to the existing table</h3>
+      <p><code>ALTER TABLE … CLUSTER BY (…)</code></p>
+      <ul>
+        <li>Snowflake re-sorts the table gradually in the background with Automatic
+        Clustering, billed as serverless credits.</li>
+        <li>Takes hours to settle on tables this size, so the comparison must wait.</li>
+        <li>Background clustering improves the layout step by step and doesn't aim for a full
+        sort, so the result is usually less well ordered than a rebuild.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Option A · Rebuild sorted (recommended)</h3>
+  <p>Generate the statements from your own recommendations:</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Generates one rebuild statement per table that has a recommended key.
+-- Copy the APPLY_SQL column into a worksheet and run it.
+SELECT FULL_TABLE_NAME,
+       &#x27;CREATE OR REPLACE TABLE &#x27; || FULL_TABLE_NAME
+         || &#x27; CLUSTER BY (&#x27; || KEY_COLS || &#x27;) COPY GRANTS AS SELECT * FROM &#x27;
+         || FULL_TABLE_NAME || &#x27; ORDER BY &#x27; || KEY_COLS || &#x27;;&#x27; AS APPLY_SQL
+FROM (
+  SELECT FULL_TABLE_NAME,
+         REGEXP_REPLACE(RECOMMENDED_CONFIGURATION, &#x27;[\\[\\]&quot;]&#x27;, &#x27;&#x27;) AS KEY_COLS
+  FROM {{APP}}.SHARED_VIEWS.RECOMMENDATION_RESULT
+  WHERE STATUS = &#x27;RECOMMENDED&#x27;
+    AND FULL_TABLE_NAME LIKE &#x27;{{DB}}.{{SCHEMA}}.%&#x27;
+)
+WHERE KEY_COLS &lt;&gt; &#x27;&#x27;
+ORDER BY FULL_TABLE_NAME;"><code></code></pre></div>
+  <p>Run them on a MEDIUM warehouse. Keep each table's columns in the recommended order.
+  Each statement looks like this:</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="USE ROLE {{ROLE}};
+-- Sorting the largest table is the heaviest step; MEDIUM finishes it in a few minutes.
+ALTER WAREHOUSE {{WH}} SET WAREHOUSE_SIZE = &#x27;MEDIUM&#x27;;
+USE WAREHOUSE {{WH}};
+
+-- Example only. Use the key Goldilox recommended for your run.
+CREATE OR REPLACE TABLE {{DB}}.{{SCHEMA}}.LINEITEM
+  CLUSTER BY (L_SHIPMODE, L_SHIPDATE)
+  COPY GRANTS
+AS SELECT * FROM {{DB}}.{{SCHEMA}}.LINEITEM
+   ORDER BY L_SHIPMODE, L_SHIPDATE;
+
+-- ...one statement per recommended table...
+
+-- Optional: suspend Automatic Clustering. The table is already sorted, so this
+-- avoids background cost during the test.
+ALTER TABLE {{DB}}.{{SCHEMA}}.LINEITEM SUSPEND RECLUSTER;
+
+ALTER WAREHOUSE {{WH}} SET WAREHOUSE_SIZE = &#x27;SMALL&#x27;;"><code></code></pre></div>
+
+  <h3>Option B · Add the key with ALTER TABLE (slower)</h3>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Snowflake re-sorts the table gradually in the background (Automatic Clustering).
+ALTER TABLE {{DB}}.{{SCHEMA}}.LINEITEM CLUSTER BY (L_SHIPMODE, L_SHIPDATE);
+
+-- Check progress. Re-run the queries only once average_depth has dropped and levelled off.
+SELECT SYSTEM$CLUSTERING_INFORMATION(&#x27;{{DB}}.{{SCHEMA}}.LINEITEM&#x27;);"><code></code></pre></div>
+  <p>The Goldilox dashboard shows ready-made <code>ALTER TABLE</code> statements under
+  <b>Recommendations → Clustering Key Recommendations → Apply Recommended Clustering Key</b>.
+  The column order there is the order to use in either option.</p>
+
+  <h3>Then confirm Goldilox can still read the tables</h3>
+  <div class="tabs"><div class="tab-bar" role="tablist"><button class="tab active" type="button" data-pane="ui">In the app</button><button class="tab" type="button" data-pane="sql">With SQL</button></div><div class="pane" data-pane="ui"><p>In <b>Recommendations → Monitored Targets</b>, all eight tables should still show <b>✅ Granted</b>. If any shows <b>🔴 Need Access</b>, re-run the step 2 grants and click the <b>Refresh Access Status</b> button that appears above the list.</p></div><div class="pane" data-pane="sql" hidden><div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Confirms the app can still read every rebuilt table.
+CALL {{APP}}.CONSUMER_API.REFRESH_MONITORED_TARGET_ACCESS();
+SELECT TARGET_NAME, STATUS, ACCESS_GRANTED
+FROM {{APP}}.SHARED_VIEWS.MONITORED_TARGETS
+WHERE TARGET_NAME LIKE &#x27;{{DB}}.{{SCHEMA}}.%&#x27;;"><code></code></pre></div></div></div>
+</section>
+
+<section class="step" id="s11">
+  <h2><span class="num">11</span>Re-run the 22 queries</h2>
+  <p class="meta">Warehouse: SMALL · about 2–3 minutes</p>
+  <p>The same script with a different tag, <code>GOLDILOX_TPCH_AFTER</code>.</p>
+  <div class="code"><div class="code-bar"><span>SQL · 22 TPC-H queries</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Run this whole worksheet in one go (Snowsight: Run All, or Ctrl/Cmd+Shift+Enter).
+USE ROLE {{ROLE}};
+USE WAREHOUSE {{WH}};
+ALTER WAREHOUSE {{WH}} SET WAREHOUSE_SIZE = &#x27;SMALL&#x27;;
+USE SCHEMA {{DB}}.{{SCHEMA}};
+ALTER SESSION SET QUERY_TAG = &#x27;GOLDILOX_TPCH_AFTER&#x27;;
+-- Cached results scan nothing, so the comparison would be meaningless.
+ALTER SESSION SET USE_CACHED_RESULT = FALSE;
+
+-- TPC-H 1
+select
+    l_returnflag,
+    l_linestatus,
+    sum(l_quantity) as sum_qty,
+    sum(l_extendedprice) as sum_base_price,
+    sum(l_extendedprice * (1 - l_discount)) as sum_disc_price,
+    sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) as sum_charge,
+    avg(l_quantity) as avg_qty,
+    avg(l_extendedprice) as avg_price,
+    avg(l_discount) as avg_disc,
+    count(*) as count_order
+from
+    lineitem
+where
+    l_shipdate &lt;= DATEADD(day, 90, &#x27;1998-12-01&#x27;)
+group by
+    l_returnflag,
+    l_linestatus
+order by
+    l_returnflag,
+    l_linestatus;
+
+-- TPC-H 2
+select
+    s_acctbal,
+    s_name,
+    n_name,
+    p_partkey,
+    p_mfgr,
+    s_address,
+    s_phone,
+    s_comment
+from
+    part,
+    supplier,
+    partsupp,
+    nation,
+    region
+where
+    p_partkey = ps_partkey
+    and s_suppkey = ps_suppkey
+    and p_size = 15
+    and p_type like &#x27;%BRASS&#x27;
+    and s_nationkey = n_nationkey
+    and n_regionkey = r_regionkey
+    and r_name = &#x27;EUROPE&#x27;
+    and ps_supplycost = (
+        select
+            min(ps_supplycost)
+        from
+            partsupp,
+            supplier,
+            nation,
+            region
+        where
+            p_partkey = ps_partkey
+            and s_suppkey = ps_suppkey
+            and s_nationkey = n_nationkey
+            and n_regionkey = r_regionkey
+            and r_name = &#x27;EUROPE&#x27;
+    )
+order by
+    s_acctbal desc,
+    n_name,
+    s_name,
+    p_partkey LIMIT 100;
+
+-- TPC-H 3
+select
+    l_orderkey,
+    sum(l_extendedprice * (1 - l_discount)) as revenue,
+    o_orderdate,
+    o_shippriority
+from
+    customer,
+    orders,
+    lineitem
+where
+    c_mktsegment = &#x27;BUILDING&#x27;
+    and c_custkey = o_custkey
+    and l_orderkey = o_orderkey
+    and o_orderdate &lt; date &#x27;1995-03-15&#x27;
+    and l_shipdate &gt; date &#x27;1995-03-15&#x27;
+group by
+    l_orderkey,
+    o_orderdate,
+    o_shippriority
+order by
+    revenue desc,
+    o_orderdate limit 10;
+
+-- TPC-H 4
+select
+    o_orderpriority,
+    count(*) as order_count
+from
+    orders
+where
+    o_orderdate &gt;= date &#x27;1993-07-01&#x27;
+    AND o_orderdate &lt; DATEADD(month, 3, &#x27;1993-07-01&#x27;)
+    and exists (
+        select
+            *
+        from
+            lineitem
+        where
+            l_orderkey = o_orderkey
+            and l_commitdate &lt; l_receiptdate
+    )
+group by
+    o_orderpriority
+order by
+    o_orderpriority;
+
+-- TPC-H 5
+select
+    n_name,
+    sum(l_extendedprice * (1 - l_discount)) as revenue
+from
+    customer,
+    orders,
+    lineitem,
+    supplier,
+    nation,
+    region
+where
+    c_custkey = o_custkey
+    and l_orderkey = o_orderkey
+    and l_suppkey = s_suppkey
+    and c_nationkey = s_nationkey
+    and s_nationkey = n_nationkey
+    and n_regionkey = r_regionkey
+    and r_name = &#x27;ASIA&#x27;
+    and o_orderdate &gt;= date &#x27;1994-01-01&#x27;
+    AND o_orderdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+group by
+    n_name
+order by
+    revenue desc;
+
+-- TPC-H 6
+select
+    sum(l_extendedprice * l_discount) as revenue
+from
+    lineitem
+where
+    l_shipdate &gt;= date &#x27;1994-01-01&#x27;
+    AND l_shipdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+    and l_discount between .06 - 0.01 and .06 + 0.01
+    and l_quantity &lt; 24;
+
+-- TPC-H 7
+select
+    supp_nation,
+    cust_nation,
+    l_year,
+    sum(volume) as revenue
+from
+    (
+        select
+            n1.n_name as supp_nation,
+            n2.n_name as cust_nation,
+            extract(year from l_shipdate) as l_year,
+            l_extendedprice * (1 - l_discount) as volume
+        from
+            supplier,
+            lineitem,
+            orders,
+            customer,
+            nation n1,
+            nation n2
+        where
+            s_suppkey = l_suppkey
+            and o_orderkey = l_orderkey
+            and c_custkey = o_custkey
+            and s_nationkey = n1.n_nationkey
+            and c_nationkey = n2.n_nationkey
+            and (
+                (n1.n_name = &#x27;FRANCE&#x27; and n2.n_name = &#x27;GERMANY&#x27;)
+                or (n1.n_name = &#x27;GERMANY&#x27; and n2.n_name = &#x27;FRANCE&#x27;)
+            )
+            and l_shipdate between date &#x27;1995-01-01&#x27; and date &#x27;1996-12-31&#x27;
+    ) as shipping
+group by
+    supp_nation,
+    cust_nation,
+    l_year
+order by
+    supp_nation,
+    cust_nation,
+    l_year;
+
+-- TPC-H 8
+select
+    o_year,
+    sum(case
+        when nation = &#x27;BRAZIL&#x27; then volume
+        else 0
+    end) / sum(volume) as mkt_share
+from
+    (
+        select
+            extract(year from o_orderdate) as o_year,
+            l_extendedprice * (1 - l_discount) as volume,
+            n2.n_name as nation
+        from
+            part,
+            supplier,
+            lineitem,
+            orders,
+            customer,
+            nation n1,
+            nation n2,
+            region
+        where
+            p_partkey = l_partkey
+            and s_suppkey = l_suppkey
+            and l_orderkey = o_orderkey
+            and o_custkey = c_custkey
+            and c_nationkey = n1.n_nationkey
+            and n1.n_regionkey = r_regionkey
+            and r_name = &#x27;AMERICA&#x27;
+            and s_nationkey = n2.n_nationkey
+            and o_orderdate between date &#x27;1995-01-01&#x27; and date &#x27;1996-12-31&#x27;
+            and p_type = &#x27;ECONOMY ANODIZED STEEL&#x27;
+    ) as all_nations
+group by
+    o_year
+order by
+    o_year;
+
+-- TPC-H 9
+select
+    nation,
+    o_year,
+    sum(amount) as sum_profit
+from
+    (
+        select
+            n_name as nation,
+            extract(year from o_orderdate) as o_year,
+            l_extendedprice * (1 - l_discount) - ps_supplycost * l_quantity as amount
+        from
+            part,
+            supplier,
+            lineitem,
+            partsupp,
+            orders,
+            nation
+        where
+            s_suppkey = l_suppkey
+            and ps_suppkey = l_suppkey
+            and ps_partkey = l_partkey
+            and p_partkey = l_partkey
+            and o_orderkey = l_orderkey
+            and s_nationkey = n_nationkey
+            and p_name like &#x27;%green%&#x27;
+    ) as profit
+group by
+    nation,
+    o_year
+order by
+    nation,
+    o_year desc;
+
+-- TPC-H 10
+select
+    c_custkey,
+    c_name,
+    sum(l_extendedprice * (1 - l_discount)) as revenue,
+    c_acctbal,
+    n_name,
+    c_address,
+    c_phone,
+    c_comment
+from
+    customer,
+    orders,
+    lineitem,
+    nation
+where
+    c_custkey = o_custkey
+    and l_orderkey = o_orderkey
+    and o_orderdate &gt;= date &#x27;1993-10-01&#x27;
+    AND o_orderdate &lt; DATEADD(month, 3, &#x27;1993-10-01&#x27;)
+    and l_returnflag = &#x27;R&#x27;
+    and c_nationkey = n_nationkey
+group by
+    c_custkey,
+    c_name,
+    c_acctbal,
+    c_phone,
+    n_name,
+    c_address,
+    c_comment
+order by
+    revenue desc limit 20;
+
+-- TPC-H 11
+select
+    ps_partkey,
+    sum(ps_supplycost * ps_availqty) as value
+from
+    partsupp,
+    supplier,
+    nation
+where
+    ps_suppkey = s_suppkey
+    and s_nationkey = n_nationkey
+    and n_name = &#x27;GERMANY&#x27;
+group by
+    ps_partkey having
+        sum(ps_supplycost * ps_availqty) &gt; (
+            select
+                sum(ps_supplycost * ps_availqty) * 0.0001000000
+            from
+                partsupp,
+                supplier,
+                nation
+            where
+                ps_suppkey = s_suppkey
+                and s_nationkey = n_nationkey
+                and n_name = &#x27;GERMANY&#x27;
+        )
+order by
+    value desc;
+
+-- TPC-H 12
+select
+    l_shipmode,
+    sum(case
+        when o_orderpriority = &#x27;1-URGENT&#x27;
+            or o_orderpriority = &#x27;2-HIGH&#x27;
+            then 1
+        else 0
+    end) as high_line_count,
+    sum(case
+        when o_orderpriority &lt;&gt; &#x27;1-URGENT&#x27;
+            and o_orderpriority &lt;&gt; &#x27;2-HIGH&#x27;
+            then 1
+        else 0
+    end) as low_line_count
+from
+    orders,
+    lineitem
+where
+    o_orderkey = l_orderkey
+    and l_shipmode in (&#x27;MAIL&#x27;, &#x27;SHIP&#x27;)
+    and l_commitdate &lt; l_receiptdate
+    and l_shipdate &lt; l_commitdate
+    and l_receiptdate &gt;= date &#x27;1994-01-01&#x27;
+    AND o_orderdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+group by
+    l_shipmode
+order by
+    l_shipmode;
+
+-- TPC-H 13
+select
+    c_count,
+    count(*) as custdist
+from
+    (
+        select
+            c_custkey,
+            count(o_orderkey)
+        from
+            customer left outer join orders on
+                c_custkey = o_custkey
+                and o_comment not like &#x27;%special%requests%&#x27;
+        group by
+            c_custkey
+    ) as c_orders (c_custkey, c_count)
+group by
+    c_count
+order by
+    custdist desc,
+    c_count desc;
+
+-- TPC-H 14
+select
+    100.00 * sum(case
+        when p_type like &#x27;PROMO%&#x27;
+            then l_extendedprice * (1 - l_discount)
+        else 0
+    end) / sum(l_extendedprice * (1 - l_discount)) as promo_revenue
+from
+    lineitem,
+    part
+where
+    l_partkey = p_partkey
+    and l_shipdate &gt;= date &#x27;1995-09-01&#x27;
+    AND l_shipdate &lt; DATEADD(month, 1, &#x27;1995-09-01&#x27;);
+
+-- TPC-H 15-create
+with revenue_view as (
+    select
+        l_suppkey as supplier_no,
+        sum(l_extendedprice * (1 - l_discount)) as total_revenue
+    from
+        lineitem
+    where
+        l_shipdate &gt;= date &#x27;1996-01-01&#x27;
+    AND l_shipdate &lt; DATEADD(month, 3, &#x27;1996-01-01&#x27;)
+    group by
+        l_suppkey)
+select
+    s_suppkey,
+    s_name,
+    s_address,
+    s_phone,
+    total_revenue
+from
+    supplier,
+    revenue_view
+where
+    s_suppkey = supplier_no
+    and total_revenue = (
+        select
+            max(total_revenue)
+        from
+            revenue_view
+    )
+order by
+    s_suppkey;
+
+-- TPC-H 16
+select
+    p_brand,
+    p_type,
+    p_size,
+    count(distinct ps_suppkey) as supplier_cnt
+from
+    partsupp,
+    part
+where
+    p_partkey = ps_partkey
+    and p_brand &lt;&gt; &#x27;Brand#45&#x27;
+    and p_type not like &#x27;MEDIUM POLISHED%&#x27;
+    and p_size in (49, 14, 23, 45, 19, 3, 36, 9)
+    and ps_suppkey not in (
+        select
+            s_suppkey
+        from
+            supplier
+        where
+            s_comment like &#x27;%Customer%Complaints%&#x27;
+    )
+group by
+    p_brand,
+    p_type,
+    p_size
+order by
+    supplier_cnt desc,
+    p_brand,
+    p_type,
+    p_size;
+
+-- TPC-H 17
+select
+    sum(l_extendedprice) / 7.0 as avg_yearly
+from
+    lineitem,
+    part
+where
+    p_partkey = l_partkey
+    and p_brand = &#x27;Brand#23&#x27;
+    and p_container = &#x27;MED BOX&#x27;
+    and l_quantity &lt; (
+        select
+            0.2 * avg(l_quantity)
+        from
+            lineitem
+        where
+            l_partkey = p_partkey
+    );
+
+
+-- TPC-H 18
+select
+    c_name,
+    c_custkey,
+    o_orderkey,
+    o_orderdate,
+    o_totalprice,
+    sum(l_quantity)
+from
+    customer,
+    orders,
+    lineitem
+where
+    o_orderkey in (
+        select
+            l_orderkey
+        from
+            lineitem
+        group by
+            l_orderkey having
+                sum(l_quantity) &gt; 300
+    )
+    and c_custkey = o_custkey
+    and o_orderkey = l_orderkey
+group by
+    c_name,
+    c_custkey,
+    o_orderkey,
+    o_orderdate,
+    o_totalprice
+order by
+    o_totalprice desc,
+    o_orderdate
+limit 100;
+
+
+-- TPC-H 19
+select
+    sum(l_extendedprice* (1 - l_discount)) as revenue
+from
+    lineitem,
+    part
+where
+    (
+        p_partkey = l_partkey
+        and p_brand = &#x27;Brand#12&#x27;
+        and p_container in (&#x27;SM CASE&#x27;, &#x27;SM BOX&#x27;, &#x27;SM PACK&#x27;, &#x27;SM PKG&#x27;)
+        and l_quantity &gt;= 1 and l_quantity &lt;= 1 + 10
+        and p_size between 1 and 5
+        and l_shipmode in (&#x27;AIR&#x27;, &#x27;AIR REG&#x27;)
+        and l_shipinstruct = &#x27;DELIVER IN PERSON&#x27;
+    )
+    or
+    (
+        p_partkey = l_partkey
+        and p_brand = &#x27;Brand#23&#x27;
+        and p_container in (&#x27;MED BAG&#x27;, &#x27;MED BOX&#x27;, &#x27;MED PKG&#x27;, &#x27;MED PACK&#x27;)
+        and l_quantity &gt;= 10 and l_quantity &lt;= 10 + 10
+        and p_size between 1 and 10
+        and l_shipmode in (&#x27;AIR&#x27;, &#x27;AIR REG&#x27;)
+        and l_shipinstruct = &#x27;DELIVER IN PERSON&#x27;
+    )
+    or
+    (
+        p_partkey = l_partkey
+        and p_brand = &#x27;Brand#34&#x27;
+        and p_container in (&#x27;LG CASE&#x27;, &#x27;LG BOX&#x27;, &#x27;LG PACK&#x27;, &#x27;LG PKG&#x27;)
+        and l_quantity &gt;= 20 and l_quantity &lt;= 20 + 10
+        and p_size between 1 and 15
+        and l_shipmode in (&#x27;AIR&#x27;, &#x27;AIR REG&#x27;)
+        and l_shipinstruct = &#x27;DELIVER IN PERSON&#x27;
+    );
+
+
+-- TPC-H 20
+select
+    s_name,
+    s_address
+from
+    supplier,
+    nation
+where
+    s_suppkey in (
+        select
+            ps_suppkey
+        from
+            partsupp
+        where
+            ps_partkey in (
+                select
+                    p_partkey
+                from
+                    part
+                where
+                    p_name like &#x27;forest%&#x27;
+            )
+            and ps_availqty &gt; (
+                select
+                    0.5 * sum(l_quantity)
+                from
+                    lineitem
+                where
+                    l_partkey = ps_partkey
+                    and l_suppkey = ps_suppkey
+                    and l_shipdate &gt;= date &#x27;1994-01-01&#x27;
+                    AND l_shipdate &lt; DATEADD(year, 1, &#x27;1994-01-01&#x27;)
+            )
+    )
+    and s_nationkey = n_nationkey
+    and n_name = &#x27;CANADA&#x27;
+order by
+    s_name;
+
+-- TPC-H 21
+select
+    s_name,
+    count(*) as numwait
+from
+    supplier,
+    lineitem l1,
+    orders,
+    nation
+where
+    s_suppkey = l1.l_suppkey
+    and o_orderkey = l1.l_orderkey
+    and o_orderstatus = &#x27;F&#x27;
+    and l1.l_receiptdate &gt; l1.l_commitdate
+    and exists (
+        select
+            *
+        from
+            lineitem l2
+        where
+            l2.l_orderkey = l1.l_orderkey
+            and l2.l_suppkey &lt;&gt; l1.l_suppkey
+    )
+    and not exists (
+        select
+            *
+        from
+            lineitem l3
+        where
+            l3.l_orderkey = l1.l_orderkey
+            and l3.l_suppkey &lt;&gt; l1.l_suppkey
+            and l3.l_receiptdate &gt; l3.l_commitdate
+    )
+    and s_nationkey = n_nationkey
+    and n_name = &#x27;SAUDI ARABIA&#x27;
+group by
+    s_name
+order by
+    numwait desc,
+    s_name limit 100;
+
+
+-- TPC-H 22
+select
+    cntrycode,
+    count(*) as numcust,
+    sum(c_acctbal) as totacctbal
+from
+    (
+        select
+      SUBSTRING(c_phone, 1, 2) AS cntrycode,
+            c_acctbal
+        from
+            customer
+        where
+          SUBSTRING(c_phone, 1, 2) IN
+                (&#x27;13&#x27;, &#x27;31&#x27;, &#x27;23&#x27;, &#x27;29&#x27;, &#x27;30&#x27;, &#x27;18&#x27;, &#x27;17&#x27;)
+            and c_acctbal &gt; (
+                select
+                    avg(c_acctbal)
+                from
+                    customer
+                where
+                    c_acctbal &gt; 0.00
+                    AND SUBSTRING(c_phone, 1, 2) IN
+                        (&#x27;13&#x27;, &#x27;31&#x27;, &#x27;23&#x27;, &#x27;29&#x27;, &#x27;30&#x27;, &#x27;18&#x27;, &#x27;17&#x27;)
+            )
+            and not exists (
+                select
+                    *
+                from
+                    orders
+                where
+                    o_custkey = c_custkey
+            )
+    ) as custsale
+group by
+    cntrycode
+order by
+    cntrycode;
+
+-- Reset the session.
+ALTER SESSION UNSET QUERY_TAG;
+ALTER SESSION SET USE_CACHED_RESULT = TRUE;
+"><code></code></pre></div>
+</section>
+
+<section class="step" id="s12">
+  <h2><span class="num">12</span>Compare before and after</h2>
+  <p class="meta">Usually 15–45 minutes for the second run to reach query history</p>
+  <p>Wait for the second run to be fully visible:</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Repeat every few minutes until QUERIES_VISIBLE = 22 (usually 15–45 minutes).
+-- Counts each TPC-H query once and only queries that read the test tables, so
+-- re-runs and the worksheet&#x27;s own background calls don&#x27;t inflate it.
+SELECT COUNT(DISTINCT QUERY_HASH) AS QUERIES_VISIBLE
+FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+WHERE QUERY_TAG = &#x27;GOLDILOX_TPCH_AFTER&#x27;
+  AND DATABASE_NAME = &#x27;{{DB}}&#x27;
+  AND QUERY_TYPE = &#x27;SELECT&#x27;
+  AND EXECUTION_STATUS = &#x27;SUCCESS&#x27;
+  AND PARTITIONS_TOTAL &gt; 0;"><code></code></pre></div>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- Uses the latest successful run of each of the 22 queries on each side, so
+-- re-runs and the worksheet&#x27;s own background calls don&#x27;t skew the totals.
+WITH runs AS (
+  SELECT QUERY_TAG, PARTITIONS_SCANNED, BYTES_SCANNED, TOTAL_ELAPSED_TIME
+  FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+  WHERE QUERY_TAG IN (&#x27;GOLDILOX_TPCH_BEFORE&#x27;, &#x27;GOLDILOX_TPCH_AFTER&#x27;)
+    AND DATABASE_NAME = &#x27;{{DB}}&#x27;
+    AND QUERY_TYPE = &#x27;SELECT&#x27;
+    AND EXECUTION_STATUS = &#x27;SUCCESS&#x27;
+    AND PARTITIONS_TOTAL &gt; 0
+  QUALIFY ROW_NUMBER() OVER (PARTITION BY QUERY_TAG, QUERY_HASH ORDER BY START_TIME DESC) = 1
+),
+totals AS (
+  SELECT QUERY_TAG,
+         COUNT(*)                AS QUERIES,
+         SUM(PARTITIONS_SCANNED) AS PARTITIONS_SCANNED,
+         SUM(BYTES_SCANNED)      AS BYTES_SCANNED,
+         SUM(TOTAL_ELAPSED_TIME) AS ELAPSED_MS
+  FROM runs
+  GROUP BY QUERY_TAG
+)
+SELECT b.QUERIES                                      AS QUERIES_BEFORE,
+       a.QUERIES                                      AS QUERIES_AFTER,
+       b.PARTITIONS_SCANNED                           AS PARTITIONS_BEFORE,
+       a.PARTITIONS_SCANNED                           AS PARTITIONS_AFTER,
+       ROUND(100 * (1 - a.PARTITIONS_SCANNED / b.PARTITIONS_SCANNED), 1) AS PCT_FEWER_PARTITIONS,
+       ROUND(b.BYTES_SCANNED / POWER(1024, 3), 1)     AS GB_BEFORE,
+       ROUND(a.BYTES_SCANNED / POWER(1024, 3), 1)     AS GB_AFTER,
+       ROUND(100 * (1 - a.BYTES_SCANNED / b.BYTES_SCANNED), 1) AS PCT_LESS_DATA,
+       ROUND(b.ELAPSED_MS / 1000, 1)                  AS SECONDS_BEFORE,
+       ROUND(a.ELAPSED_MS / 1000, 1)                  AS SECONDS_AFTER
+FROM totals b
+JOIN totals a
+  ON b.QUERY_TAG = &#x27;GOLDILOX_TPCH_BEFORE&#x27;
+ AND a.QUERY_TAG = &#x27;GOLDILOX_TPCH_AFTER&#x27;;"><code></code></pre></div>
+  <div class="good"><strong>What to expect.</strong> In our test run the recommended keys cut
+  partitions scanned and data scanned by ~39%.</div>
+  <p><b>Share your findings with us!</b> 
+    We'd love to hear about your result from this hands-on guide. And please reach out to us if you have any feedback or questions.</p>
+</section>
+
+<section class="step" id="s13">
+  <h2><span class="num">13</span>Clean up</h2>
+  <p>First, in <b>Settings → Manage App → Advanced settings</b>, set <b>Minimum table size to
+  analyze</b> back to the value you wrote down in step 3. Then remove the test tables from
+  monitoring and drop the test objects:</p>
+  <div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre data-template="-- 1. Stop monitoring the test tables (frees the slots for real tables).
+CALL {{APP}}.CONSUMER_API.REMOVE_MONITORED_TARGETS([
+  &#x27;{{DB}}.{{SCHEMA}}.LINEITEM&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.ORDERS&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.PARTSUPP&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.PART&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.CUSTOMER&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.SUPPLIER&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.NATION&#x27;,
+  &#x27;{{DB}}.{{SCHEMA}}.REGION&#x27;
+]);
+
+-- 2. Drop the test data and warehouse.
+USE ROLE {{ROLE}};
+DROP DATABASE IF EXISTS {{DB}};
+DROP WAREHOUSE IF EXISTS {{WH}};"><code></code></pre></div>
+  <p class="meta">For a while after cleanup, <b>Usage Overview</b> may still list the dropped
+  test warehouse as needing access, because its queries are still in the account's history.
+  You can ignore it.</p>
+  <p class="meta">In the app, you can also stop monitoring the test tables under
+  <b>Recommendations → Monitored Targets</b>: tick <b>Remove</b> on each, then click
+  <b>Remove Selected Target(s)</b>.</p>
+</section>
+
+<section class="step" id="trouble">
+  <h2>Troubleshooting</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>What you see</th><th>Likely cause</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Every table shows <b>No recommendation</b> right after step 8.</td>
+        <td>Goldilox can't read the query profiles because MONITOR on the test warehouse is
+        missing.</td>
+        <td>Run the step 2 grants, then repeat steps 7 and 8. You don't need to re-run the
+        queries.</td>
+      </tr>
+      <tr>
+        <td>Only some of the 22 queries count; Goldilox shows few queries per table.</td>
+        <td>The minimum table size from step 3 is still too high.</td>
+        <td>Lower it as in step 3, then repeat steps 7 and 8.</td>
+      </tr>
+      <tr>
+        <td>Every table shows <b>No recommendation</b> even though access and MONITOR are in
+        place.</td>
+        <td>The recommendation run started before the data load had finished.</td>
+        <td>Repeat steps 7 and 8, waiting for each run to finish. If it still shows nothing,
+        run the 22 queries again and repeat steps 4, 5, 7 and 8.</td>
+      </tr>
+      <tr>
+        <td>Every table shows <b>No recommendation</b> and the database name starts with
+        <code>GOLDILOX</code>.</td>
+        <td>Goldilox skips tables in databases whose names start with GOLDILOX.</td>
+        <td>Use a different database name and start again from step 1.</td>
+      </tr>
+      <tr>
+        <td><code>RUN_PIPELINE</code> returns <code>ALREADY_RUNNING</code>.</td>
+        <td>A run of that pipeline is in progress.</td>
+        <td>Wait for it to finish (step 7 shows how to check), then call it again.</td>
+      </tr>
+      <tr>
+        <td><code>ADD_MONITORED_TARGETS</code> returns <code>NOT_ADDED</code>.</td>
+        <td>The monitored-table limit is reached.</td>
+        <td>Ask your Goldilox contact to raise the limit to at least 8.</td>
+      </tr>
+      <tr>
+        <td>A table shows <b>🔴 Need Access</b> after step 10.</td>
+        <td>The table was rebuilt without <code>COPY GRANTS</code>.</td>
+        <td>Re-run the step 2 grants, then click <b>Refresh Access Status</b>.</td>
+      </tr>
+      <tr>
+        <td>The step 12 query shows fewer than 22 queries on a side.</td>
+        <td>Some queries failed, or aren't in query history yet.</td>
+        <td>Wait and run it again. If a query failed, run that query again with the same tag.</td>
+      </tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Goldilox · TPC-H hands-on guide. TPC-H data is from Snowflake's
+<code>SNOWFLAKE_SAMPLE_DATA</code> share.</footer>
+</main>
+</div>
+
+<button class="theme-toggle" type="button" id="theme-toggle">Dark mode</button>
+
+<script>
+(function () {
+  var DEFAULTS = {};
+  var inputs = Array.prototype.slice.call(document.querySelectorAll("[data-field]"));
+  inputs.forEach(function (i) { DEFAULTS[i.dataset.field] = i.value; });
+
+  function store(key, value) {
+    try { localStorage.setItem("goldilox-tpch-guide:v2:" + key, value); } catch (e) {}
+  }
+  function load(key) {
+    try { return localStorage.getItem("goldilox-tpch-guide:v2:" + key); } catch (e) { return null; }
+  }
+
+  function values() {
+    var v = {};
+    inputs.forEach(function (i) {
+      var s = i.value.trim();
+      v[i.dataset.field] = s || DEFAULTS[i.dataset.field];
+    });
+    return v;
+  }
+
+  function render() {
+    var v = values();
+    document.querySelectorAll("pre[data-template]").forEach(function (pre) {
+      pre.firstElementChild.textContent = pre.dataset.template.replace(
+        /\{\{(\w+)\}\}/g, function (m, k) { return v[k] !== undefined ? v[k] : m; });
+    });
+    document.querySelectorAll(".tok").forEach(function (el) {
+      el.textContent = v[el.dataset.tok] || "";
+    });
+  }
+
+  inputs.forEach(function (i) {
+    var saved = load(i.dataset.field);
+    if (saved) i.value = saved;
+    i.addEventListener("input", function () { store(i.dataset.field, i.value); render(); });
+  });
+  render();
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".copy");
+    if (btn) {
+      var text = btn.closest(".code").querySelector("pre").textContent;
+      var done = function () {
+        btn.textContent = "Copied";
+        btn.classList.add("done");
+        setTimeout(function () { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1500);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
+      } else { fallback(text); done(); }
+      return;
+    }
+    var tab = e.target.closest(".tab");
+    if (tab) {
+      var group = tab.closest(".tabs");
+      var pane = tab.dataset.pane;
+      // Keep every UI/SQL switch on the page in step, so a reader on one path stays on it.
+      document.querySelectorAll(".tabs").forEach(function (g) {
+        g.querySelectorAll(".tab").forEach(function (t) {
+          t.classList.toggle("active", t.dataset.pane === pane);
+        });
+        g.querySelectorAll(".pane").forEach(function (p) {
+          p.hidden = p.dataset.pane !== pane;
+        });
+      });
+      store("path", pane);
+      var top = group.getBoundingClientRect().top;
+      if (top < 0) group.scrollIntoView({ block: "start" });
+    }
+  });
+
+  function fallback(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  var path = load("path");
+  if (path === "sql") {
+    var first = document.querySelector('.tab[data-pane="sql"]');
+    if (first) first.click();
+    window.scrollTo(0, 0);
+  }
+
+  // Theme toggle: follows the system until the reader picks one.
+  var root = document.documentElement;
+  var toggle = document.getElementById("theme-toggle");
+  function isDark() {
+    var t = root.dataset.theme;
+    if (t) return t === "dark";
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function label() { toggle.textContent = isDark() ? "Light mode" : "Dark mode"; }
+  var savedTheme = load("theme");
+  if (savedTheme) root.dataset.theme = savedTheme;
+  label();
+  toggle.addEventListener("click", function () {
+    root.dataset.theme = isDark() ? "light" : "dark";
+    store("theme", root.dataset.theme);
+    label();
+  });
+
+  // Highlight the current step in the sidebar.
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  if ("IntersectionObserver" in window) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (a) {
+            a.classList.toggle("current", a.getAttribute("href") === "#" + en.target.id);
+          });
+        }
+      });
+    }, { rootMargin: "-20% 0px -70% 0px" });
+    document.querySelectorAll("section.step[id]").forEach(function (s) { obs.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
